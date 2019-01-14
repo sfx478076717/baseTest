@@ -1,0 +1,434 @@
+*** Settings ***
+Library           Selenium2Library
+Library           Screenshot
+Library           AutoItLibrary
+
+*** Keywords ***
+委托客户选择
+    [Arguments]    ${text}=
+    Click Element    xpath=//*[@id="main"]/div/div[3]/div/div/div/div[3]/div/div[2]/div[2]/div/div[2]/div[2]/div/div[1]/div[2]/div[1]/div/div[2]/div[1]/div/div/div/div[1]/div[1]/div/div[1]/div/div/div/div/div/input
+    Input Text    xpath=//*[@id="main"]/div/div[3]/div/div/div/div[3]/div/div[2]/div[2]/div/div[2]/div[2]/div/div[1]/div[2]/div[1]/div/div[2]/div[1]/div/div/div/div[1]/div[1]/div/div[1]/div/div/div/div/div/input    ${text}
+    sleep    1s
+    Click Element    xpath=/html/body/div[not(contains(@style,'display: none'))]//div[@class='options-item-label' and text()='${text}']
+    [Teardown]    sleep    1s
+
+销售选择
+    [Arguments]    ${text}=
+    Click Element    xpath=//*[@id="main"]/div/div[3]/div/div/div/div[3]/div/div[2]/div[2]/div/div[2]/div[2]/div/div[1]/div[2]/div[1]/div/div[2]/div[1]/div/div/div/div[3]/div/div[1]/div/div/div/div/div/input
+    Input Text    xpath=//*[@id="main"]/div/div[3]/div/div/div/div[3]/div/div[2]/div[2]/div/div[2]/div[2]/div/div[1]/div[2]/div[1]/div/div[2]/div[1]/div/div/div/div[3]/div/div[1]/div/div/div/div/div/input    ${text}
+    sleep    1s
+    Click Element    xpath=/html/body/div[not(contains(@style,'display: none'))]//div[@class='options-item-label' and text()='${text}']
+    [Teardown]    sleep    1s
+
+商务选择
+    [Arguments]    ${text}=
+    Click Element    xpath=//*[@id="main"]/div/div[3]/div/div/div/div[3]/div/div[2]/div[2]/div/div[2]/div[2]/div/div[1]/div[2]/div[1]/div/div[2]/div[1]/div/div/div/div[3]/div/div[3]/div/div/div/div/div/input
+    Input Text    xpath=//*[@id="main"]/div/div[3]/div/div/div/div[3]/div/div[2]/div[2]/div/div[2]/div[2]/div/div[1]/div[2]/div[1]/div/div[2]/div[1]/div/div/div/div[3]/div/div[3]/div/div/div/div/div/input    ${text}
+    sleep    1s
+    Click Element    xpath=/html/body/div[not(contains(@style,'display: none'))]//div[@class='options-item-label' and text()='${text}']
+    [Teardown]    sleep    1s
+
+客服选择
+    [Arguments]    ${text}=
+    Click Element    xpath=//*[@id="main"]/div/div[3]/div/div/div/div[3]/div/div[2]/div[2]/div/div[2]/div[2]/div/div[1]/div[2]/div[1]/div/div[2]/div[1]/div/div/div/div[5]/div[1]/div/div/div/div/div/input
+    Input Text    xpath=//*[@id="main"]/div/div[3]/div/div/div/div[3]/div/div[2]/div[2]/div/div[2]/div[2]/div/div[1]/div[2]/div[1]/div/div[2]/div[1]/div/div/div/div[5]/div[1]/div/div/div/div/div/input    ${text}
+    sleep    1s
+    Click Element    xpath=/html/body/div[not(contains(@style,'display: none'))]//div[@class='options-item-label' and text()='${text}']
+    [Teardown]    sleep    1s
+
+业务来源选择
+    [Arguments]    ${text}=    ${customer}=
+    #选择业务来源
+    Click Element    xpath=//*[@id="main"]/div/div[3]/div/div/div/div[3]/div/div[2]/div[2]/div/div[2]/div[2]/div/div[1]/div[2]/div[1]/div/div[2]/div[1]/div/div/div/div[5]/div[3]/div/div/div/div/span[2]
+    sleep    1s
+    Click Element    xpath=/html/body/div[not(contains(@style,'display: none'))]//li[contains(@class,'ivu-select-item') and text()='${text}']
+    sleep    1s
+    #选择来源客户
+    Run Keyword If    '${customer}'!=''    Click Element    xpath=//*[@id="main"]/div/div[3]/div/div/div/div[3]/div/div[2]/div[2]/div/div[2]/div[2]/div/div[1]/div[2]/div[1]/div/div[2]/div[1]/div/div/div/div[5]/div[4]/div/div/div/div/div/input
+    Run Keyword If    '${customer}'!=''    Input Text    xpath=//*[@id="main"]/div/div[3]/div/div/div/div[3]/div/div[2]/div[2]/div/div[2]/div[2]/div/div[1]/div[2]/div[1]/div/div[2]/div[1]/div/div/div/div[5]/div[4]/div/div/div/div/div/input    ${customer}
+    Run Keyword If    '${customer}'!=''    sleep    1s
+    Run Keyword If    '${customer}'!=''    Click Element    xpath=/html/body/div[not(contains(@style,'display: none'))]//div[@class='flex-auto label-box' and text()='${customer}']
+    [Teardown]    sleep    1s
+
+主业务类型选择
+    [Arguments]    ${text}=
+    Click Element    xpath=//*[@id="main"]/div/div[3]/div/div/div/div[3]/div/div[2]/div[2]/div/div[2]/div[2]/div/div[1]/div[2]/div[1]/div/div[2]/div[2]/div/div/div/div[1]/div/div/div/div/div
+    sleep    1s
+    Click Element    xpath=/html/body/div[not(contains(@style,'display: none'))]//li[contains(@class,'ivu-select-item') and text()='${text}']
+    [Teardown]    sleep    1s
+
+箱类型选择
+    [Arguments]    ${text}=
+    Click Element    xpath=//*[@id="main"]/div/div[3]/div/div/div/div[3]/div/div[2]/div[2]/div/div[2]/div[2]/div/div[1]/div[2]/div[1]/div/div[2]/div[2]/div/div/div/div[2]/div/div/div/div/div
+    sleep    1s
+    Click Element    xpath=/html/body/div[not(contains(@style,'display: none'))]//li[contains(@class,'ivu-select-item') and text()='${text}']
+    [Teardown]    sleep    1s
+
+主单号输入
+    [Arguments]    ${text}=
+    Input Text    xpath=//*[@id="main"]/div/div[3]/div/div/div/div[3]/div/div[2]/div[2]/div/div[2]/div[2]/div/div[1]/div[2]/div[1]/div/div[2]/div[2]/div/div/div/div[4]/div/div/input    ${text}
+    [Teardown]    sleep    1s
+
+RNO.A输入
+    [Arguments]    ${text}=
+    Input Text    xpath=//*[@id="main"]/div/div[3]/div/div/div/div[3]/div/div[2]/div[2]/div/div[2]/div[2]/div/div[1]/div[2]/div[1]/div/div[2]/div[2]/div/div/div/div[7]/div/div/input    ${text}
+    [Teardown]    sleep    1s
+
+RNO.B输入
+    [Arguments]    ${text}=
+    Input Text    xpath=//*[@id="main"]/div/div[3]/div/div/div/div[3]/div/div[2]/div[2]/div/div[2]/div[2]/div/div[1]/div[2]/div[1]/div/div[2]/div[2]/div/div/div/div[8]/div/div/input    ${text}
+    [Teardown]    sleep    1s
+
+要求装运日输入
+    [Arguments]    ${text}=
+    Click Element    xpath=//*[@id="main"]/div/div[3]/div/div/div/div[3]/div/div[2]/div[2]/div/div[2]/div[2]/div/div[1]/div[2]/div[1]/div/div[2]/div[2]/div/div/div/div[9]/div/div/div[1]/div/input
+    Click Element    xpath=//*[@id="main"]/div/div[3]/div/div/div/div[3]/div/div[2]/div[2]/div/div[2]/div[2]/div/div[1]/div[2]/div[1]/div/div[2]/div[2]/div/div/div/div[9]/div/div/div[1]/div/i
+    sleep    1s
+    Input Text    xpath=//*[@id="main"]/div/div[3]/div/div/div/div[3]/div/div[2]/div[2]/div/div[2]/div[2]/div/div[1]/div[2]/div[1]/div/div[2]/div[2]/div/div/div/div[9]/div/div/div[1]/div/input    ${text}
+    sleep    1s
+    send    {ENTER}
+    [Teardown]    sleep    1s
+
+预计离港日输入
+    [Arguments]    ${text}=
+    Click Element    xpath=//*[@id="main"]/div/div[3]/div/div/div/div[3]/div/div[2]/div[2]/div/div[2]/div[2]/div/div[1]/div[2]/div[1]/div/div[2]/div[2]/div/div/div/div[10]/div/div/div[1]/div/input
+    Click Element    xpath=//*[@id="main"]/div/div[3]/div/div/div/div[3]/div/div[2]/div[2]/div/div[2]/div[2]/div/div[1]/div[2]/div[1]/div/div[2]/div[2]/div/div/div/div[10]/div/div/div[1]/div/i
+    sleep    1s
+    Input Text    xpath=//*[@id="main"]/div/div[3]/div/div/div/div[3]/div/div[2]/div[2]/div/div[2]/div[2]/div/div[1]/div[2]/div[1]/div/div[2]/div[2]/div/div/div/div[10]/div/div/div[1]/div/input    ${text}
+    sleep    1s
+    send    {ENTER}
+    [Teardown]    sleep    1s
+
+场站选择
+    [Arguments]    ${text}=
+    Click Element    xpath=//*[@id="main"]/div/div[3]/div/div/div/div[3]/div/div[2]/div[2]/div/div[2]/div[2]/div/div[1]/div[2]/div[1]/div/div[2]/div[2]/div/div/div/div[17]/div/div/div/div/input
+    Input Text    xpath=//*[@id="main"]/div/div[3]/div/div/div/div[3]/div/div[2]/div[2]/div/div[2]/div[2]/div/div[1]/div[2]/div[1]/div/div[2]/div[2]/div/div/div/div[17]/div/div/div/div/input    ${text}
+    sleep    1s
+    Click Element    xpath=/html/body/div[not(contains(@style,'display: none'))]//div[@class='options-item-label' and text()='${text}']
+    [Teardown]    sleep    1s
+
+收货地选择
+    [Arguments]    ${text}=
+    Click Element    xpath=//*[@id="main"]/div/div[3]/div/div/div/div[3]/div/div[2]/div[2]/div/div[2]/div[2]/div/div[1]/div[2]/div[1]/div/div[2]/div[4]/div/div/div/div[1]/div/div/div[1]/div/div/input
+    Input Text    xpath=//*[@id="main"]/div/div[3]/div/div/div/div[3]/div/div[2]/div[2]/div/div[2]/div[2]/div/div[1]/div[2]/div[1]/div/div[2]/div[4]/div/div/div/div[1]/div/div/div[1]/div/div/input    ${text}
+    sleep    2s
+    Click Element    xpath=/html/body/div[not(contains(@style,'display: none'))]//div[@class='options-item-label' and text()='${text}']
+    [Teardown]    sleep    1s
+
+装货港选择
+    [Arguments]    ${text}=
+    Click Element    xpath=//*[@id="main"]/div/div[3]/div/div/div/div[3]/div/div[2]/div[2]/div/div[2]/div[2]/div/div[1]/div[2]/div[1]/div/div[2]/div[4]/div/div/div/div[2]/div/div/div[1]/div/div/input
+    Input Text    xpath=//*[@id="main"]/div/div[3]/div/div/div/div[3]/div/div[2]/div[2]/div/div[2]/div[2]/div/div[1]/div[2]/div[1]/div/div[2]/div[4]/div/div/div/div[2]/div/div/div[1]/div/div/input    ${text}
+    sleep    2s
+    Click Element    xpath=/html/body/div[not(contains(@style,'display: none'))]//div[@class='options-item-label' and text()='${text}']
+    [Teardown]    sleep    1s
+
+中转港选择
+    [Arguments]    ${text}=
+    Click Element    xpath=//*[@id="main"]/div/div[3]/div/div/div/div[3]/div/div[2]/div[2]/div/div[2]/div[2]/div/div[1]/div[2]/div[1]/div/div[2]/div[4]/div/div/div/div[3]/div/div/div[1]/div/div/input
+    Input Text    xpath=//*[@id="main"]/div/div[3]/div/div/div/div[3]/div/div[2]/div[2]/div/div[2]/div[2]/div/div[1]/div[2]/div[1]/div/div[2]/div[4]/div/div/div/div[3]/div/div/div[1]/div/div/input    ${text}
+    sleep    2s
+    Click Element    xpath=/html/body/div[not(contains(@style,'display: none'))]//div[@class='options-item-label' and text()='${text}']
+    [Teardown]    sleep    1s
+
+卸货港选择
+    [Arguments]    ${text}=
+    Click Element    xpath=//*[@id="main"]/div/div[3]/div/div/div/div[3]/div/div[2]/div[2]/div/div[2]/div[2]/div/div[1]/div[2]/div[1]/div/div[2]/div[4]/div/div/div/div[4]/div/div/div[1]/div/div/input
+    Input Text    xpath=//*[@id="main"]/div/div[3]/div/div/div/div[3]/div/div[2]/div[2]/div/div[2]/div[2]/div/div[1]/div[2]/div[1]/div/div[2]/div[4]/div/div/div/div[4]/div/div/div[1]/div/div/input    ${text}
+    sleep    2s
+    Click Element    xpath=/html/body/div[not(contains(@style,'display: none'))]//div[@class='options-item-label' and text()='${text}']
+    [Teardown]    sleep    1s
+
+交货地选择
+    [Arguments]    ${text}=
+    Click Element    xpath=//*[@id="main"]/div/div[3]/div/div/div/div[3]/div/div[2]/div[2]/div/div[2]/div[2]/div/div[1]/div[2]/div[1]/div/div[2]/div[4]/div/div/div/div[6]/div/div/div[1]/div/div/input
+    Input Text    xpath=//*[@id="main"]/div/div[3]/div/div/div/div[3]/div/div[2]/div[2]/div/div[2]/div[2]/div/div[1]/div[2]/div[1]/div/div[2]/div[4]/div/div/div/div[6]/div/div/div[1]/div/div/input    ${text}
+    sleep    2s
+    Click Element    xpath=/html/body/div[not(contains(@style,'display: none'))]//div[@class='options-item-label' and text()='${text}']
+    [Teardown]    sleep    1s
+
+目的地选择
+    [Arguments]    ${text}=
+    Click Element    xpath=//*[@id="main"]/div/div[3]/div/div/div/div[3]/div/div[2]/div[2]/div/div[2]/div[2]/div/div[1]/div[2]/div[1]/div/div[2]/div[4]/div/div/div/div[7]/div/div/div[1]/div/div/input
+    Input Text    xpath=//*[@id="main"]/div/div[3]/div/div/div/div[3]/div/div[2]/div[2]/div/div[2]/div[2]/div/div[1]/div[2]/div[1]/div/div[2]/div[4]/div/div/div/div[7]/div/div/div[1]/div/div/input    ${text}
+    sleep    2s
+    Click Element    xpath=/html/body/div[not(contains(@style,'display: none'))]//div[@class='options-item-label' and text()='${text}']
+    [Teardown]    sleep    1s
+
+中转运输输入
+    [Arguments]    ${text}=
+    Input Text    xpath=//*[@id="main"]/div/div[3]/div/div/div/div[3]/div/div[2]/div[2]/div/div[2]/div[2]/div/div[1]/div[2]/div[1]/div/div[2]/div[4]/div/div/div/div[8]/div/div/div/input    ${text}
+    [Teardown]    sleep    1s
+
+境外首港选择
+    [Arguments]    ${text}=
+    Click Element    xpath=//*[@id="main"]/div/div[3]/div/div/div/div[3]/div/div[2]/div[2]/div/div[2]/div[2]/div/div[1]/div[2]/div[1]/div/div[2]/div[4]/div/div/div/div[9]/div/div/div[1]/div/div/input
+    Input Text    xpath=//*[@id="main"]/div/div[3]/div/div/div/div[3]/div/div[2]/div[2]/div/div[2]/div[2]/div/div[1]/div[2]/div[1]/div/div[2]/div[4]/div/div/div/div[9]/div/div/div[1]/div/div/input    ${text}
+    sleep    2s
+    Click Element    xpath=/html/body/div[not(contains(@style,'display: none'))]//div[@class='options-item-label' and text()='${text}']
+    [Teardown]    sleep    1s
+
+服务项目选择
+    [Arguments]    ${text}=    ${customer}=
+    [Documentation]    保险、报关、报检、陆运、海外服务、熏蒸、提单
+    Click Element    xpath=//*[@id="main"]/div/div[3]/div/div/div/div[3]/div/div[2]/div[2]/div/div[2]/div[2]/div/div[1]/div[2]/div[1]/div/div[2]/div[7]/div/div/div[1]/div/div/div/label[contains(text(),'${text}')]
+    ${text}    Set Variable If    '${text}'=='保险'    保险公司    ${text}
+    ${text}    Set Variable If    '${text}'=='报关'    报关行    ${text}
+    ${text}    Set Variable If    '${text}'=='报检'    报关行    ${text}
+    ${text}    Set Variable If    '${text}'=='陆运'    车队    ${text}
+    ${text}    Set Variable If    '${text}'=='海外服务'    海外代理    ${text}
+    ${text}    Set Variable If    '${text}'=='熏蒸'    地面服务    ${text}
+    ${text}    Set Variable If    '${text}'=='提单'    海外代理    ${text}
+    sleep    1s
+    Run Keyword If    '${customer}'!=''    Click Element    xpath=//*[@id="main"]/div/div[3]/div/div/div/div[3]/div/div[2]/div[2]/div/div[2]/div[2]/div/div[1]/div[2]/div[1]/div/div[2]/div[7]/div/div//label[text()='${text}']/following::div[1]/div/div/div/input
+    Run Keyword If    '${customer}'!=''    Input Text    xpath=//*[@id="main"]/div/div[3]/div/div/div/div[3]/div/div[2]/div[2]/div/div[2]/div[2]/div/div[1]/div[2]/div[1]/div/div[2]/div[7]/div/div//label[text()='${text}']/following::div[1]/div/div/div/input    ${customer}
+    Run Keyword If    '${customer}'!=''    sleep    1s
+    Run Keyword If    '${text}'=='保险公司'    Run Keyword If    '${customer}'!=''    Click Element    xpath=/html/body/div[not(contains(@style,'display: none'))]//div[@class='flex-auto label-box' and contains(text(),'${customer}')]
+    Run Keyword If    '${text}'!='保险公司'    Run Keyword If    '${customer}'!=''    Click Element    xpath=/html/body/div[not(contains(@style,'display: none'))]//div[@class='options-item-label' and contains(text(),'${customer}')]
+    [Teardown]    sleep    1s
+
+船公司和订舱代理
+    [Arguments]    ${ship}=    ${customer}=
+    #点击订舱
+    Click Element    xpath=//*[@id="main"]/div/div[3]/div/div/div/div[3]/div/div[2]/div[2]/div/div[2]/div[2]/div/div[1]/div[2]/div[1]/div/div[2]/div[7]/div/div/div[1]/div/div/div/label[contains(text(),'订舱')]
+    sleep    1s
+    #选择船公司
+    Click Element    xpath=//*[@id="main"]/div/div[3]/div/div/div/div[3]/div/div[2]/div[2]/div/div[2]/div[2]/div/div[1]/div[2]/div[1]/div/div[2]/div[7]/div/div//label[text()='船公司']/following::div[1]/div/div/div/input
+    Input Text    xpath=//*[@id="main"]/div/div[3]/div/div/div/div[3]/div/div[2]/div[2]/div/div[2]/div[2]/div/div[1]/div[2]/div[1]/div/div[2]/div[7]/div/div//label[text()='船公司']/following::div[1]/div/div/div/input    ${ship}
+    sleep    1s
+    Click Element    xpath=/html/body/div[not(contains(@style,'display: none'))]//div[@class='options-item-label' and text()='${ship}']
+    #选择订舱代理
+    Click Element    xpath=//*[@id="main"]/div/div[3]/div/div/div/div[3]/div/div[2]/div[2]/div/div[2]/div[2]/div/div[1]/div[2]/div[1]/div/div[2]/div[7]/div/div//label[text()='订舱代理']/following::div[1]/div/div/div/input
+    Input Text    xpath=//*[@id="main"]/div/div[3]/div/div/div/div[3]/div/div[2]/div[2]/div/div[2]/div[2]/div/div[1]/div[2]/div[1]/div/div[2]/div[7]/div/div//label[text()='订舱代理']/following::div[1]/div/div/div/input    ${customer}
+    sleep    1s
+    Click Element    xpath=/html/body/div[not(contains(@style,'display: none'))]//div[@class='options-item-label' and text()='${customer}']
+    [Teardown]    sleep    1s
+
+件数输入
+    [Arguments]    ${text}=
+    Input Text    xpath=//*[@id="main"]/div/div[3]/div/div/div/div[3]/div/div[2]/div[2]/div/div[2]/div[2]/div/div[1]/div[2]/div[1]/div/div[2]/div[5]/div/div/div/div[1]/div[1]/div[2]/div[2]/input    ${text}
+    [Teardown]    sleep    1s
+
+包装种类选择
+    [Arguments]    ${text}=
+    Click Element    xpath=//*[@id="main"]/div/div[3]/div/div/div/div[3]/div/div[2]/div[2]/div/div[2]/div[2]/div/div[1]/div[2]/div[1]/div/div[2]/div[5]/div/div/div/div[1]/div[2]/div[2]/div/div/input
+    Input Text    xpath=//*[@id="main"]/div/div[3]/div/div/div/div[3]/div/div[2]/div[2]/div/div[2]/div[2]/div/div[1]/div[2]/div[1]/div/div[2]/div[5]/div/div/div/div[1]/div[2]/div[2]/div/div/input    ${text}
+    sleep    1s
+    Click Element    xpath=/html/body/div[not(contains(@style,'display: none'))]//div[@class='options-item-label' and text()='${text}']
+    [Teardown]    sleep    1s
+
+重量输入
+    [Arguments]    ${text}=
+    Input Text    xpath=//*[@id="main"]/div/div[3]/div/div/div/div[3]/div/div[2]/div[2]/div/div[2]/div[2]/div/div[1]/div[2]/div[1]/div/div[2]/div[5]/div/div/div/div[1]/div[3]/div[2]/div[2]/input    ${text}
+    [Teardown]    sleep    1s
+
+尺寸输入
+    [Arguments]    ${text}=
+    Input Text    xpath=//*[@id="main"]/div/div[3]/div/div/div/div[3]/div/div[2]/div[2]/div/div[2]/div[2]/div/div[1]/div[2]/div[1]/div/div[2]/div[5]/div/div/div/div[1]/div[4]/div[2]/div[2]/input    ${text}
+    [Teardown]    sleep    1s
+
+货物种类选择
+    [Arguments]    ${text}=
+    Click Element    xpath=//*[@id="main"]/div/div[3]/div/div/div/div[3]/div/div[2]/div[2]/div/div[2]/div[2]/div/div[1]/div[2]/div[1]/div/div[2]/div[5]/div/div/div/div[1]/div[5]/div[2]/div/input[2]
+    sleep    1s
+    Click Element    xpath=/html/body/div[not(contains(@style,'display: none'))]//li[contains(@class,'ivu-select-item') and text()='${text}']
+    [Teardown]    sleep    1s
+
+中文品名选择
+    [Arguments]    ${text}=
+    Click Element    xpath=//*[@id="main"]/div/div[3]/div/div/div/div[3]/div/div[2]/div[2]/div/div[2]/div[2]/div/div[1]/div[2]/div[1]/div/div[2]/div[5]/div/div/div/div[1]/div[6]/div[2]/div/span[1]
+    sleep    1s
+    Click Element    xpath=/html/body/div[not(contains(@style,'display: none'))]//li[contains(@class,'ivu-select-item') and text()='${text}']
+    [Teardown]    sleep    1s
+
+揽货类型选择
+    [Arguments]    ${text}=
+    Click Element    xpath=//*[@id="main"]/div/div[3]/div/div/div/div[3]/div/div[2]/div[2]/div/div[2]/div[2]/div/div[1]/div[2]/div[1]/div/div[2]/div[6]/div/div/div[1]/div/div[1]/div/div/div/div[1]/input[2]
+    sleep    1s
+    Run Keyword If    '${text}'=='自揽货'    Click Element    xpath=//*[@id="main"]/div/div[3]/div/div/div/div[3]/div/div[2]/div[2]/div/div[2]/div[2]/div/div[1]/div[2]/div[1]/div/div[2]/div[6]/div/div/div[1]/div/div[1]/div/div/div/div[2]/ul[2]/li[1]
+    Run Keyword If    '${text}'=='指定货'    Click Element    xpath=//*[@id="main"]/div/div[3]/div/div/div/div[3]/div/div[2]/div[2]/div/div[2]/div[2]/div/div[1]/div[2]/div[1]/div/div[2]/div[6]/div/div/div[1]/div/div[1]/div/div/div/div[2]/ul[2]/li[2]
+    [Teardown]    sleep    1s
+
+付费方式选择
+    [Arguments]    ${text}=
+    Click Element    xpath=//*[@id="main"]/div/div[3]/div/div/div/div[3]/div/div[2]/div[2]/div/div[2]/div[2]/div/div[1]/div[2]/div[1]/div/div[2]/div[6]/div/div/div[1]/div/div[2]/div/div/div/div/input[2]
+    sleep    1s
+    Click Element    xpath=/html/body/div[not(contains(@style,'display: none'))]//li[contains(@class,'ivu-select-item') and contains(text(),'${text}')]    #注意单引号的中英文 因为很小，所以不容易分辨
+    [Teardown]    sleep    1s
+
+预付地点选择
+    [Arguments]    ${text}=
+    Click Element    xpath=//*[@id="main"]/div/div[3]/div/div/div/div[3]/div/div[2]/div[2]/div/div[2]/div[2]/div/div[1]/div[2]/div[1]/div/div[2]/div[6]/div/div/div[1]/div/div[3]/div/div/div/div/div/input
+    Input Text    xpath=//*[@id="main"]/div/div[3]/div/div/div/div[3]/div/div[2]/div[2]/div/div[2]/div[2]/div/div[1]/div[2]/div[1]/div/div[2]/div[6]/div/div/div[1]/div/div[3]/div/div/div/div/div/input    ${text}
+    sleep    2s
+    Click Element    xpath=/html/body/div[not(contains(@style,'display: none'))]//div[@class='options-item-label' and text()='${text}']
+    [Teardown]    sleep    1s
+
+到付地点选择
+    [Arguments]    ${text}=
+    Click Element    xpath=//*[@id="main"]/div/div[3]/div/div/div/div[3]/div/div[2]/div[2]/div/div[2]/div[2]/div/div[1]/div[2]/div[1]/div/div[2]/div[6]/div/div/div[1]/div/div[4]/div/div/div/div/div/input
+    Input Text    xpath=//*[@id="main"]/div/div[3]/div/div/div/div[3]/div/div[2]/div[2]/div/div[2]/div[2]/div/div[1]/div[2]/div[1]/div/div[2]/div[6]/div/div/div[1]/div/div[4]/div/div/div/div/div/input    ${text}
+    sleep    2s
+    Click Element    xpath=/html/body/div[not(contains(@style,'display: none'))]//div[@class='options-item-label' and text()='${text}']
+    [Teardown]    sleep    1s
+
+贸易方式选择
+    [Arguments]    ${text}=
+    Click Element    xpath=//*[@id="main"]/div/div[3]/div/div/div/div[3]/div/div[2]/div[2]/div/div[2]/div[2]/div/div[1]/div[2]/div[1]/div/div[2]/div[6]/div/div/div[1]/div/div[5]/div/div/div/div/input[2]
+    sleep    1s
+    Click Element    xpath=/html/body/div[not(contains(@style,'display: none'))]//li[contains(@class,'ivu-select-item') and contains(text(),'${text}')]
+    [Teardown]    sleep    1s
+
+约号输入
+    [Arguments]    ${text}=
+    Input Text    xpath=//*[@id="main"]/div/div[3]/div/div/div/div[3]/div/div[2]/div[2]/div/div[2]/div[2]/div/div[1]/div[2]/div[1]/div/div[2]/div[6]/div/div/div[1]/div/div[6]/div/div/div/input    ${text}
+    [Teardown]    sleep    1s
+
+运输条款选择
+    [Arguments]    ${text}=
+    Click Element    xpath=//*[@id="main"]/div/div[3]/div/div/div/div[3]/div/div[2]/div[2]/div/div[2]/div[2]/div/div[1]/div[2]/div[1]/div/div[2]/div[6]/div/div/div[1]/div/div[7]/div/div/div/div/input[2]
+    sleep    1s
+    Click Element    xpath=/html/body/div[not(contains(@style,'display: none'))]//li[contains(@class,'ivu-select-item') and contains(text(),'${text}')]
+    [Teardown]    sleep    1s
+
+签单时间输入
+    [Arguments]    ${text}=
+    Click Element    xpath=//*[@id="main"]/div/div[3]/div/div/div/div[3]/div/div[2]/div[2]/div/div[2]/div[2]/div/div[1]/div[2]/div[1]/div/div[2]/div[6]/div/div/div[1]/div/div[8]/div/div/div/div[1]/div/input
+    Click Element    xpath=//*[@id="main"]/div/div[3]/div/div/div/div[3]/div/div[2]/div[2]/div/div[2]/div[2]/div/div[1]/div[2]/div[1]/div/div[2]/div[6]/div/div/div[1]/div/div[8]/div/div/div/div[1]/div/i
+    sleep    1s
+    Input Text    xpath=//*[@id="main"]/div/div[3]/div/div/div/div[3]/div/div[2]/div[2]/div/div[2]/div[2]/div/div[1]/div[2]/div[1]/div/div[2]/div[6]/div/div/div[1]/div/div[8]/div/div/div/div[1]/div/input    ${text}
+    sleep    1s
+    send    {ENTER}
+    [Teardown]    sleep    1s
+
+签单地点选择
+    [Arguments]    ${text}=
+    Click Element    xpath=//*[@id="main"]/div/div[3]/div/div/div/div[3]/div/div[2]/div[2]/div/div[2]/div[2]/div/div[1]/div[2]/div[1]/div/div[2]/div[6]/div/div/div[1]/div/div[9]/div/div/div[1]/div/div/input
+    Input Text    xpath=//*[@id="main"]/div/div[3]/div/div/div/div[3]/div/div[2]/div[2]/div/div[2]/div[2]/div/div[1]/div[2]/div[1]/div/div[2]/div[6]/div/div/div[1]/div/div[9]/div/div/div[1]/div/div/input    ${text}
+    sleep    2s
+    Click Element    xpath=/html/body/div[not(contains(@style,'display: none'))]//div[@class='options-item-label' and text()='${text}']
+    [Teardown]    sleep    1s
+
+签单方式选择
+    [Arguments]    ${text}=
+    Click Element    xpath=//*[@id="main"]/div/div[3]/div/div/div/div[3]/div/div[2]/div[2]/div/div[2]/div[2]/div/div[1]/div[2]/div[1]/div/div[2]/div[6]/div/div/div[1]/div/div[10]/div/div/div/div/input[2]
+    sleep    1s
+    Click Element    xpath=/html/body/div[not(contains(@style,'display: none'))]//li[contains(@class,'ivu-select-item') and contains(text(),'${text}')]
+    [Teardown]    sleep    1s
+
+正本提单份数选择
+    [Arguments]    ${text}=
+    Click Element    xpath=//*[@id="main"]/div/div[3]/div/div/div/div[3]/div/div[2]/div[2]/div/div[2]/div[2]/div/div[1]/div[2]/div[1]/div/div[2]/div[6]/div/div/div[1]/div/div[11]/div/div/div/div/input[2]
+    sleep    1s
+    Click Element    xpath=/html/body/div[not(contains(@style,'display: none'))]//li[contains(@class,'ivu-select-item') and contains(text(),'${text}')]
+    [Teardown]    sleep    1s
+
+副本提单份数选择
+    [Arguments]    ${text}=
+    Click Element    xpath=//*[@id="main"]/div/div[3]/div/div/div/div[3]/div/div[2]/div[2]/div/div[2]/div[2]/div/div[1]/div[2]/div[1]/div/div[2]/div[6]/div/div/div[1]/div/div[12]/div/div/div/div/input[2]
+    sleep    1s
+    Click Element    xpath=/html/body/div[not(contains(@style,'display: none'))]//li[contains(@class,'ivu-select-item') and contains(text(),'${text}')]
+    sleep    500ms
+    Click Element    xpath=//*[@id="main"]/div/div[3]/div/div/div/div[3]/div/div[2]/div[2]/div/div[2]/div[2]/div/div[1]/div[2]/div[1]/div/div[2]/div[6]/div/div/div[1]/div/div[12]/div/label
+    [Teardown]    sleep    1s
+
+数据1
+    [Arguments]    ${arg1}=    ${arg2}=    ${arg3}=    ${arg4}=    ${arg5}=    ${arg6}=
+    [Documentation]    委托客户、销售、商务、客服、业务来源、来源客户
+    委托客户选择    ${arg1}
+    销售选择    ${arg2}
+    商务选择    ${arg3}
+    客服选择    ${arg4}
+    业务来源选择    ${arg5}    ${arg6}
+
+数据2
+    [Arguments]    ${arg1}=    ${arg2}=    ${arg3}=    ${arg4}=    ${arg5}=    ${arg6}=
+    ...    ${arg7}=    ${arg8}=
+    [Documentation]    主业务类型、箱类型、主单号输入、RNO.A输入、RNO.B输入、要求装运日、预计离港日、场站
+    主业务类型选择    ${arg1}
+    箱类型选择    ${arg2}
+    主单号输入    ${arg3}
+    RNO.A输入    ${arg4}
+    RNO.B输入    ${arg5}
+    要求装运日输入    ${arg6}
+    预计离港日输入    ${arg7}
+    场站 选择    ${arg8}
+
+数据3
+    [Arguments]    ${arg1}=    ${arg2}=    ${arg3}=    ${arg4}=    ${arg5}=    ${arg6}=
+    ...    ${arg7}=    ${arg8}=
+    [Documentation]    收货地、装货港、中转港、卸货港、交货地、目的地、中转运输输入、境外首港
+    收货地选择    ${arg1}
+    装货港选择    ${arg2}
+    中转港选择    ${arg3}
+    卸货港选择    ${arg4}
+    交货地选择    ${arg5}
+    目的地选择    ${arg6}
+    中转运输输入    ${arg7}
+    境外首港选择    ${arg8}
+
+数据4
+    [Arguments]    ${arg1}=    ${arg2}=    ${arg3}=    ${arg4}=    ${arg5}=    ${arg6}=
+    [Documentation]    件数输入、包装种类、重量输入、尺寸输入、货物种类、中文品名
+    件数输入    ${arg1}
+    包装种类选择    ${arg2}
+    重量输入    ${arg3}
+    尺寸输入    ${arg4}
+    货物种类选择    ${arg5}
+    中文品名选择    ${arg6}
+
+数据5
+    [Arguments]    ${arg1}=    ${arg2}=    ${arg3}=    ${arg4}=    ${arg5}=    ${arg6}=
+    [Documentation]    揽货类型、付费方式、预付地点、到付地点、贸易方式、约号输入
+    揽货类型选择    ${arg1}
+    付费方式选择    ${arg2}
+    预付地点选择    ${arg3}
+    到付地点选择    ${arg4}
+    贸易方式选择    ${arg5}
+    约号输入    ${arg6}
+
+数据6
+    [Arguments]    ${arg1}=    ${arg2}=    ${arg3}=    ${arg4}=    ${arg5}=    ${arg6}=
+    [Documentation]    运输条款、签单时间输入、签单地点、签单方式、正本提单份数、副本提单份数
+    运输条款选择    ${arg1}
+    签单时间输入    ${arg2}
+    签单地点选择    ${arg3}
+    签单方式选择    ${arg4}
+    正本提单份数选择    ${arg5}
+    副本提单份数选择    ${arg6}
+
+列表数据验证
+    [Arguments]    ${start}=    ${text}=    ${arg}=
+    : FOR    ${i}    IN RANGE    ${start}    66
+    \    #过滤掉箱量20和40的 因为单引号不能比较
+    \    ${i}    Set Variable If    '${i}'=='26'    28    ${i}
+    \    ${i}    Set Variable If    '${i}'=='27'    28    ${i}
+    \    #固定${i}的值 因为要两次获取text文本
+    \    ${row}    Set Variable    ${i}
+    \    #第一次获取 判断它是否为空
+    \    ${th}    Get Text    xpath=//*[@id="main"]/div/div[3]/div/div/div/div[3]/div/div[2]/div/div/div[4]/div/div[2]/div[2]//tr/th[${row}]/div
+    \    #5次往右滑动
+    \    Run Keyword If    '${th}'==''    send    {RIGHT}
+    \    Run Keyword If    '${th}'==''    send    {RIGHT}
+    \    Run Keyword If    '${th}'==''    send    {RIGHT}
+    \    Run Keyword If    '${th}'==''    send    {RIGHT}
+    \    Run Keyword If    '${th}'==''    send    {RIGHT}
+    \    #再次获取该文本
+    \    ${th}    Get Text    xpath=//*[@id="main"]/div/div[3]/div/div/div/div[3]/div/div[2]/div/div/div[4]/div/div[2]/div[2]//tr/th[${row}]/div
+    \    Exit For Loop If    '${text}' == '${th.strip()}'    # .strip()去除空格
+    ${td}    Get Text    xpath=//*[@id="main"]/div/div[3]/div/div/div/div[3]/div/div[2]/div/div/div[4]/div/div[2]/div[3]/table/tbody/tr[1]/td[${i}]/div
+    #验证数据
+    Should Be Equal    ${td}    ${arg}
+    #最终行数赋值
+    ${end}    Set Variable    ${row}
+    [Return]    ${end}
+
+已存在服务项目修改
+    [Arguments]    ${text}=    ${customer}=
+    [Documentation]    包括：船公司、订舱代理、报关行、地面服务、海外代理、保险公司。
+    Run Keyword If    '${customer}'!=''    Click Element    xpath=//*[@id="main"]/div/div[3]/div/div/div/div[3]/div/div[2]/div[2]/div/div[2]/div[2]/div/div[1]/div[2]/div[1]/div/div[2]/div[7]/div/div//label[text()='${text}']/following::div[1]/div/div/div/input
+    Run Keyword If    '${customer}'!=''    Input Text    xpath=//*[@id="main"]/div/div[3]/div/div/div/div[3]/div/div[2]/div[2]/div/div[2]/div[2]/div/div[1]/div[2]/div[1]/div/div[2]/div[7]/div/div//label[text()='${text}']/following::div[1]/div/div/div/input    ${customer}
+    Run Keyword If    '${customer}'!=''    sleep    1500ms
+    Run Keyword If    '${text}'=='保险公司'    Run Keyword If    '${customer}'!=''    Click Element    xpath=/html/body/div[not(contains(@style,'display: none'))]//div[@class='flex-auto label-box' and contains(text(),'${customer}')]
+    Run Keyword If    '${text}'!='保险公司'    Run Keyword If    '${customer}'!=''    Click Element    xpath=/html/body/div[not(contains(@style,'display: none'))]//div[@class='options-item-label' and contains(text(),'${customer}')]
+    [Teardown]    sleep    1s

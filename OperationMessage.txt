@@ -1,0 +1,50 @@
+*** Settings ***
+Library           Screenshot
+Library           Selenium2Library
+Resource          OperationResource.txt
+
+*** Keywords ***
+主业务类型
+    [Arguments]    ${text}
+    [Documentation]    下货纸右侧填写栏。
+    ...
+    ...    包括：海运网络合作项目、第三方运输管理、全球物流供应链服务、航空公司代理销售项目
+    Click Element    xpath=//*[@id="main"]/div/div[3]/div/div/div/div[3]/div/div[2]/div[2]/div/div[2]/div[2]/div/div[1]/div[2]/div[1]/div/div[2]/div[2]/div/div/div/div[1]/div/div/div/div/div/span[1]    #未填写为span[1]    #已填写为span[2]
+    sleep    500ms
+    #: FOR    ${i}    IN RANGE    5
+    #    ${thisText}    get text    xpath=/html/body/div[133]/ul[2]/li[1+${i}]
+    #    Exit For Loop If    '${text}'=='${thisText}'
+    #Click Element    xpath=/html/body/div[133]/ul[2]/li[1+${i}]
+    Click Element    xpath=/html/body/div[not(contains(@style,'display: none'))]//li[contains(@class,'ivu-select-item') and text()='${text}']
+    [Teardown]    sleep    1s
+
+贸易方式
+    [Arguments]    ${text}
+    [Documentation]    贸易方式包括：进料加工、一般贸易。
+    Click Element    xpath=//*[@id="main"]/div/div[3]/div/div/div/div[3]/div/div[2]/div[2]/div/div[2]/div[2]/div/div[1]/div[2]/div[1]/div/div[2]/div[6]/div/div/div[1]/div/div[5]/div/div/div/div/input[2]
+    sleep    1s
+    #Run Keyword If    '${text}'=='进料加工'    Click Element    xpath=/html/body/div[157]/ul[2]/li[1]
+    #Run Keyword If    '${text}'=='一般贸易'    Click Element    xpath=/html/body/div[157]/ul[2]/li[2]
+    Click Element    xpath=/html/body/div[not(contains(@style,'display: none'))]//li[contains(@class,'ivu-select-item') and text()=' ${text}']
+    [Teardown]    sleep    1s
+
+场站
+    [Arguments]    ${text}
+    #Click Element    xpath=//*[@id="main"]/div/div[3]/div/div/div/div[3]/div/div[2]/div[2]/div/div[2]/div[2]/div/div[1]/div[2]/div[1]/div/div[2]/div[2]/div/div/div/div[17]/div/div/div/div/input
+    Input Text    xpath=//*[@id="main"]/div/div[3]/div/div/div/div[3]/div/div[2]/div[2]/div/div[2]/div[2]/div/div[1]/div[2]/div[1]/div/div[2]/div[2]/div/div/div/div[17]/div/div/div/div/input    ${text}
+    sleep    2s
+    Click Element    xpath=/html/body/div[not(contains(@style,'display: none'))]/ul[2]/div/li
+    #Click Element    xpath=/html/body/div[not(contains(@style,'display: none'))]//li[contains(@class,'ivu-select-item') and text()='${text}']
+    [Teardown]    sleep    1s
+
+下货纸数据
+    [Arguments]    ${arg1}    ${arg2}    ${arg3}    ${arg4}    ${arg5}    ${arg6}
+    ...    ${arg7}    ${arg8}
+    [Documentation]    依次为：主单号、主业务类型、贸易方式、场站。
+    ...
+    ...    船名、航次、离港日、船代。
+    下货纸主单号输入    ${arg1}
+    主业务类型    ${arg2}
+    贸易方式    ${arg3}
+    场站    ${arg4}
+    下货纸船名选择    ${arg5}    ${arg6}    ${arg7}    ${arg8}

@@ -1,0 +1,193 @@
+*** Settings ***
+Library           Selenium2Library
+Library           ExcelLibrary
+
+*** Keywords ***
+打开浏览器
+    [Arguments]    ${url}
+    [Documentation]    传入网址，指定要打开的浏览器。
+    Open Browser    ${url}    Chrome    #前者是输入的网址    #后者是使用的浏览器Chrome
+    Maximize Browser Window    #浏览器最大化
+    [Teardown]    sleep    500ms
+
+选择分公司
+    [Arguments]    ${company}
+    [Documentation]    1.点击下拉框，把下拉框打开
+    ...
+    ...    2.循环所有新出现的<li>标签
+    ...
+    ...    3.如果标签里面的内容和传入的内容相同，就退出循环，然后点击。
+    Click Element    xpath =//*[@id="main"]/div/div/div/div[2]/div/div/div[1]/div/div/div[1]    #点击下拉框，把下拉框打开
+    : FOR    ${i}    IN RANGE    10    #循环所有新出现的<li>标签
+    \    ${name}    Get Text    xpath =//*[@id="main"]/div/div/div/div[2]/div/div/div[1]/div/div/div[2]/ul[2]/li[${i+1}]    #<li>标签内容赋给一个变量
+    \    Run Keyword If    '${name}'=='${company}'    Exit For Loop
+    \    ...    ELSE    log    ${name}    #如果传入的分公司名和 当前循环到的相同就退出循环    #如果不相同 就打印输出本次循环的name
+    CLick Element    xpath =//*[@id="main"]/div/div/div/div[2]/div/div/div[1]/div/div/div[2]/ul[2]/li[${i+1}]    #点击选中分公司
+    [Teardown]    sleep    500ms
+
+输入用户名和密码
+    [Arguments]    ${username}    ${password}
+    [Documentation]    输入用户名和密码
+    Input Text    xpath=//*[@id="main"]/div/div/div/div[2]/div/div/div[2]/div/div/input    ${username}    #定位输入框，输入搜索关键字    #复制xpath过来
+    Input Text    xpath=//*[@id="main"]/div/div/div/div[2]/div/div/div[3]/div/div/input    ${password}    #定位输入框，输入搜索关键字    #复制xpath过来
+    [Teardown]    sleep    500ms
+
+点击按钮
+    [Arguments]    ${company}=
+    [Documentation]    点击“登录”按钮
+    Click Button    xpath=//*[@id="main"]/div/div/div/div[2]/div/div/div[4]/div/button    #定位登录按钮
+    Sleep    3s    #休眠3秒
+    Wait Until Page Contains Element    xpath=//*[@id="main"]/div/div[1]/div/div[1]/img[1]
+    [Teardown]    sleep    500ms
+
+校验标题
+    [Arguments]    ${search}
+    [Documentation]    校验标题中是否包含想要包含的数据。
+    ${title}    Get Title    #获取页面的标题
+    Should Contain    ${title}    ${search}    #检查标题 是否包含想要校验的数据
+
+校验用户名
+    [Arguments]    ${username}
+    [Documentation]    页面校验，校验用户名显示的地方是否正确
+    ${name1}    Get Text    xpath=//*[@id="main"]/div/div[2]/div[1]/div[3]/div[5]/div/div/div/a/span    #需要先定义值，才能比较
+    ${name2}    Get Text    xpath=//*[@id="main"]/div/div[3]/div/div/div[1]/div[1]/div/div[1]/div/div/div[1]/div[2]/div/div[1]/b    #需要先定义值，才能比较
+    Should Be Equal    ${username}    ${name1}    #这里只能跟变量 不能加任何其他关键字
+    Should Be Equal    ${username}    ${name2}    #这里只能跟变量 不能加任何其他关键字
+
+关闭浏览器
+    [Documentation]    关闭浏览器
+    Close All Browsers    #关闭浏览器
+
+用户登出
+    [Documentation]    用户登出流程。
+    Click Element    xpath=//*[@id="main"]/div/div[2]/div[1]/div[3]/div[5]/div/div/div/a    #点击下拉框，把下拉框打开
+    sleep    2s
+    Click Element    xpath=/html/body/div[5]/ul/li[2]    #点击退出登录    #这里可能会出现元素找不到 的情况，可能是因为每次点击 出现的位置不同
+
+login
+    [Arguments]    ${url}    ${username}    ${password}    ${company}
+    [Documentation]    登录流程。
+    ...
+    ...    参数依次为url、用户名、密码、分公司名。
+    打开浏览器    ${url}
+    选择分公司    ${company}
+    输入用户名和密码    ${username}    ${password}
+    点击按钮    ${company}
+    校验标题    货代管理平台
+    [Teardown]    sleep    500ms
+
+页面刷新
+    [Arguments]    ${text}=
+    [Documentation]    页面刷新，可以传入需要等待页面包含的数据文本。
+    ...
+    ...    海运出口(全部)、海运出口(、查看托单、结费协议描述
+    Reload Page
+    Run Keyword If    '${text}' != ''    Wait Until Page Contains    ${text}
+    [Teardown]    sleep    2s
+
+选择页面标签
+    [Arguments]    ${button}
+    [Documentation]    最上方标签选择。不包括首页。
+    : FOR    ${i}    IN RANGE    10
+    \    ${text}    Get Text    xpath=//*[@id="main"]/div/div[2]/div[2]/div/div[2]/span/div[${i}+2]/span[2]
+    \    Exit For Loop If    '${text}'=='${button}'    #如果当前循环是传入的按钮名 就退出循环 ${i}的值保留
+    Click Element    xpath=//*[@id="main"]/div/div[2]/div[2]/div/div[2]/span/div[${i}+2]/span[2]
+    [Teardown]    sleep    2s
+
+选择页面标签退出
+    [Arguments]    ${button}
+    [Documentation]    最上方标签选择，点击该标签的退出叉号。不包括首页。
+    : FOR    ${i}    IN RANGE    10
+    \    ${text}    Get Text    xpath=//*[@id="main"]/div/div[2]/div[2]/div/div[2]/span/div[${i}+2]/span[2]
+    \    Exit For Loop If    '${text}'=='${button}'    #如果当前循环是传入的按钮名 就退出循环 ${i}的值保留
+    Click Element    xpath=//*[@id="main"]/div/div[2]/div[2]/div/div[2]/span/div[2+${i}]/i
+    [Teardown]    sleep    2s
+
+获取Excel数据
+    [Arguments]    ${path}=C:\\Users\\ziqi\\Desktop\\data.xls    ${row}=
+    [Documentation]    获取Excel传来的数据，返回的结果是一个list集合。
+    Open Excel    ${path}    #打开Excel
+    ${arg0}    Read Cell Data By Coordinates    Sheet1    0    ${row}    #获取指定单元格的值
+    ${arg1}    Read Cell Data By Coordinates    Sheet1    1    ${row}
+    ${arg2}    Read Cell Data By Coordinates    Sheet1    2    ${row}
+    ${arg3}    Read Cell Data By Coordinates    Sheet1    3    ${row}
+    ${arg4}    Read Cell Data By Coordinates    Sheet1    4    ${row}
+    ${arg5}    Read Cell Data By Coordinates    Sheet1    5    ${row}
+    ${arg6}    Read Cell Data By Coordinates    Sheet1    6    ${row}
+    ${arg7}    Read Cell Data By Coordinates    Sheet1    7    ${row}
+    ${arg8}    Read Cell Data By Coordinates    Sheet1    8    ${row}
+    ${arg9}    Read Cell Data By Coordinates    Sheet1    9    ${row}
+    ${arg10}    Read Cell Data By Coordinates    Sheet1    10    ${row}
+    ${arg11}    Read Cell Data By Coordinates    Sheet1    11    ${row}
+    ${arg12}    Read Cell Data By Coordinates    Sheet1    12    ${row}
+    ${arg13}    Read Cell Data By Coordinates    Sheet1    13    ${row}
+    ${arg14}    Read Cell Data By Coordinates    Sheet1    14    ${row}
+    ${arg15}    Read Cell Data By Coordinates    Sheet1    15    ${row}
+    ${arg16}    Read Cell Data By Coordinates    Sheet1    16    ${row}
+    ${arg17}    Read Cell Data By Coordinates    Sheet1    17    ${row}
+    ${arg18}    Read Cell Data By Coordinates    Sheet1    18    ${row}
+    ${arg19}    Read Cell Data By Coordinates    Sheet1    19    ${row}
+    ${arg20}    Read Cell Data By Coordinates    Sheet1    20    ${row}
+    ${arg21}    Read Cell Data By Coordinates    Sheet1    21    ${row}
+    ${arg22}    Read Cell Data By Coordinates    Sheet1    22    ${row}
+    ${arg23}    Read Cell Data By Coordinates    Sheet1    23    ${row}
+    ${arg24}    Read Cell Data By Coordinates    Sheet1    24    ${row}
+    ${arg25}    Read Cell Data By Coordinates    Sheet1    25    ${row}
+    ${arg26}    Read Cell Data By Coordinates    Sheet1    26    ${row}
+    ${arg27}    Read Cell Data By Coordinates    Sheet1    27    ${row}
+    ${arg28}    Read Cell Data By Coordinates    Sheet1    28    ${row}
+    ${arg29}    Read Cell Data By Coordinates    Sheet1    29    ${row}
+    ${arg30}    Read Cell Data By Coordinates    Sheet1    30    ${row}
+    ${arg31}    Read Cell Data By Coordinates    Sheet1    31    ${row}
+    ${arg32}    Read Cell Data By Coordinates    Sheet1    32    ${row}
+    ${arg33}    Read Cell Data By Coordinates    Sheet1    33    ${row}
+    ${arg34}    Read Cell Data By Coordinates    Sheet1    34    ${row}
+    ${arg35}    Read Cell Data By Coordinates    Sheet1    35    ${row}
+    ${arg36}    Read Cell Data By Coordinates    Sheet1    36    ${row}
+    ${arg37}    Read Cell Data By Coordinates    Sheet1    37    ${row}
+    ${arg38}    Read Cell Data By Coordinates    Sheet1    38    ${row}
+    ${arg39}    Read Cell Data By Coordinates    Sheet1    39    ${row}
+    ${arg40}    Read Cell Data By Coordinates    Sheet1    40    ${row}
+    ${arg41}    Read Cell Data By Coordinates    Sheet1    41    ${row}
+    ${arg42}    Read Cell Data By Coordinates    Sheet1    42    ${row}
+    ${arg43}    Read Cell Data By Coordinates    Sheet1    43    ${row}
+    ${arg44}    Read Cell Data By Coordinates    Sheet1    44    ${row}
+    ${arg45}    Read Cell Data By Coordinates    Sheet1    45    ${row}
+    ${arg46}    Read Cell Data By Coordinates    Sheet1    46    ${row}
+    ${arg47}    Read Cell Data By Coordinates    Sheet1    47    ${row}
+    ${arg48}    Read Cell Data By Coordinates    Sheet1    48    ${row}
+    ${arg49}    Read Cell Data By Coordinates    Sheet1    49    ${row}
+    ${arg50}    Read Cell Data By Coordinates    Sheet1    50    ${row}
+    ${arg51}    Read Cell Data By Coordinates    Sheet1    51    ${row}
+    ${arg52}    Read Cell Data By Coordinates    Sheet1    52    ${row}
+    @{value}    Create List    ${arg0}    ${arg1}    ${arg2}    ${arg3}    ${arg4}
+    ...    ${arg5}    ${arg6}    ${arg7}    ${arg8}    ${arg9}    ${arg10}
+    ...    ${arg11}    ${arg12}    ${arg13}    ${arg14}    ${arg15}    ${arg16}
+    ...    ${arg17}    ${arg18}    ${arg19}    ${arg20}    ${arg21}    ${arg22}
+    ...    ${arg23}    ${arg24}    ${arg25}    ${arg26}    ${arg27}    ${arg28}
+    ...    ${arg29}    ${arg30}    ${arg31}    ${arg32}    ${arg33}    ${arg34}
+    ...    ${arg35}    ${arg36}    ${arg37}    ${arg38}    ${arg39}    ${arg40}
+    ...    ${arg41}    ${arg42}    ${arg43}    ${arg44}    ${arg45}    ${arg46}
+    ...    ${arg47}    ${arg48}    ${arg49}    ${arg50}    ${arg51}    ${arg52}
+    [Teardown]    sleep    1s
+    [Return]    @{value}
+
+指定日期分割
+    [Arguments]    ${date}
+    [Documentation]    分割YYYY-MM-DD格式的字符串，注意月份和日期如果只有各位就只写个位，不加0
+    ${year}    ${month}    ${day}    Evaluate    '${date}'.split('-')
+    [Teardown]    sleep    1s
+    [Return]    ${year}    ${month}    ${day}
+
+左侧菜单主菜单
+    [Arguments]    ${text}
+    [Documentation]    包括：办公管理、销售管理、商务管理、操作管理、客户管理、
+    ...
+    ...    财务管理、查询统计、审批中心、基础代码、系统设置
+    Click Element    xpath=//*[@id="main"]/div/div[1]/div/div[2]/ul//div/span[text()='${text}']
+    [Teardown]    sleep    1s
+
+左侧菜单子菜单
+    [Arguments]    ${text}
+    Click Element    xpath=//*[@id="main"]/div/div[1]/div/div[2]/ul/li[contains(@class,'ivu-menu-opened')]/ul//span[text()='${text}']
+    [Teardown]    sleep    3s

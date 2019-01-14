@@ -1,0 +1,140 @@
+*** Settings ***
+Library           Selenium2Library
+Library           Screenshot
+Resource          BaseResource.txt
+
+*** Keywords ***
+账单审批左侧菜单
+    [Arguments]    ${text}
+    [Documentation]    销售审核、业务复核、经理审核、财务审核
+    Run Keyword If    '${text}' == '销售审核'    Click Element    xpath=//*[@id="main"]/div/div[3]/div/div/div/div[2]/div[2]/ul/div[1]/li/div
+    Run Keyword If    '${text}' == '业务复核'    Click Element    xpath=//*[@id="main"]/div/div[3]/div/div/div/div[2]/div[2]/ul/div[2]/li/div
+    Run Keyword If    '${text}' == '经理审核'    Click Element    xpath=//*[@id="main"]/div/div[3]/div/div/div/div[2]/div[2]/ul/div[3]/li/div
+    Run Keyword If    '${text}' == '财务审核'    Click Element    xpath=//*[@id="main"]/div/div[3]/div/div/div/div[2]/div[2]/ul/div[4]/li/div
+    [Teardown]    sleep    1s
+
+账单审批左侧子菜单
+    [Arguments]    ${text}
+    [Documentation]    全部、待审批、已审核
+    Run Keyword If    '${text}' == '全部'    Click Element    xpath=//*[@id="main"]/div/div[3]/div/div/div/div[2]/div[2]/ul//li[contains(@class,'ivu-menu-opened')]/ul/li[1]
+    Run Keyword If    '${text}' == '待审批'    Click Element    xpath=//*[@id="main"]/div/div[3]/div/div/div/div[2]/div[2]/ul//li[contains(@class,'ivu-menu-opened')]/ul/li[2]
+    Run Keyword If    '${text}' == '待审核'    Click Element    xpath=//*[@id="main"]/div/div[3]/div/div/div/div[2]/div[2]/ul//li[contains(@class,'ivu-menu-opened')]/ul/li[2]
+    Run Keyword If    '${text}' == '已审核'    Click Element    xpath=//*[@id="main"]/div/div[3]/div/div/div/div[2]/div[2]/ul//li[contains(@class,'ivu-menu-opened')]/ul/li[3]
+    #Click Element    xpath=//*[@id="main"]/div/div[3]/div/div/div/div[2]/div[2]/ul//li[contains(@class,'ivu-menu-opened')]/ul/li[contains(text(),'${text}')]
+    [Teardown]    sleep    2s
+
+账单号搜索
+    [Arguments]    ${text}
+    [Documentation]    根据账单号进行搜索，并把搜索出来的结果进行验证。
+    Input Text    xpath=//*[@id="main"]/div/div[3]/div/div/div/div[3]/div/div[1]/div/div/div[1]/div/div[3]/input    ${text}
+    sleep    500ms
+    Click Element    xpath=//*[@id="main"]/div/div[3]/div/div/div/div[3]/div/div[1]/div/div/div[1]/div/div[3]/i
+    sleep    1s
+    ${this}    Get Text    xpath=//*[@id="main"]/div/div[3]/div/div/div/div[3]/div/div[1]/div/div/div[2]/div[4]/div[2]/table/tbody/tr/td[4]/div    #xpath=//*[@id="main"]/div/div[3]/div/div/div/div[3]/div/div[1]/div/div/div[2]/div[3]/table/tbody/tr/td[4]/div
+    Should Be Equal    ${text}    ${this.strip()}
+    [Teardown]    sleep    1s
+
+账单审批选中框
+    Click Element    xpath=//*[@id="main"]/div/div[3]/div/div/div/div[3]/div/div[1]/div/div/div[2]/div[4]/div[2]/table/tbody/tr/td[2]/div/label/span    #注意，选中框可能会有多处
+    [Teardown]    sleep    1s
+
+账单审批上部按钮
+    [Arguments]    ${text}
+    [Documentation]    同意、驳回
+    Run Keyword If    '${text}' == '同意'    Click Element    xpath=//*[@id="main"]/div/div[3]/div/div/div/div[3]/div/div[1]/div/div/div[1]/div/div[2]/button[1]/span
+    Run Keyword If    '${text}' == '驳回'    Click Element    xpath=//*[@id="main"]/div/div[3]/div/div/div/div[3]/div/div[1]/div/div/div[1]/div/div[2]/button[2]/span
+    [Teardown]    sleep    1s
+
+账单审批流程
+    [Arguments]    ${number}
+    [Documentation]    账单审批的四步流程，组合在一起的。
+    ...
+    ...    销售审核、业务复核、经理审核、财务审核。
+    左侧菜单主菜单    审批中心
+    左侧菜单子菜单    账单审批
+    账单审批左侧菜单    销售审核
+    账单审批左侧子菜单    待审批
+    账单号搜索    ${number}
+    账单审批选中框
+    账单审批上部按钮    同意
+    账单审批左侧菜单    业务复核
+    账单审批左侧子菜单    待审批
+    账单号搜索    ${number}
+    账单审批选中框
+    账单审批上部按钮    同意
+    账单审批左侧菜单    经理审核
+    账单审批左侧子菜单    待审批
+    账单号搜索    ${number}
+    账单审批选中框
+    账单审批上部按钮    同意
+    账单审批左侧菜单    财务审核
+    账单审批左侧子菜单    待审批
+    账单号搜索    ${number}
+    账单审批选中框
+    账单审批上部按钮    同意
+    [Teardown]    sleep    1s
+
+收付费审批搜索
+    [Arguments]    ${text}
+    [Documentation]    传入结算单号，进行搜索并进行验证。
+    Input Text    xpath=//*[@id="main"]/div/div[3]/div/div/div/div[3]/div/div[1]/div/div/div[1]/div/div[3]/input    ${text}
+    Click Element    xpath=//*[@id="main"]/div/div[3]/div/div/div/div[3]/div/div[1]/div/div/div[1]/div/div[3]/i
+    sleep    1s
+    ${this}    Get Text    xpath=//*[@id="main"]/div/div[3]/div/div/div/div[3]/div/div[1]/div/div/div[2]/div[3]/table/tbody/tr/td[4]/div
+    Should Be Equal    ${this.strip()}    ${text}
+
+点击收费单待审批
+    [Documentation]    进入收费单审批页面后，点击收费单审批菜单下的“待审批”菜单。
+    Click Element    xpath=(.//*[normalize-space(text()) and normalize-space(.)='收费单审批'])[4]/following::span[1]
+    [Teardown]    sleep    1s
+
+收费单审批选中收费单
+    [Documentation]    收费审批页面，点击一条收费联系单的选中框。
+    Click Element    xpath=(.//*[normalize-space(text()) and normalize-space(.)='备注'])[2]/following::span[2]
+    [Teardown]    sleep    1s
+
+收费单审批同意按钮
+    [Documentation]    收费审批页面下，选中一条联系单之后，点击“同意”按钮。
+    Click Element    xpath=(.//*[normalize-space(text()) and normalize-space(.)='收费审批'])[1]/following::button[1]
+    [Teardown]    sleep    1s
+
+点击付费单待审批
+    [Documentation]    进入付费单审批页面后，点击付费单审批菜单下的“待审批”菜单。
+    Click Element    xpath=(.//*[normalize-space(text()) and normalize-space(.)='付费单审批'])[4]/following::span[1]
+    [Teardown]    sleep    1s
+
+付费单审批选中付费单
+    [Documentation]    付费审批页面，点击一条付费联系单的选中框。
+    Click Element    xpath=(.//*[normalize-space(text()) and normalize-space(.)='备注'])[2]/following::span[2]
+    [Teardown]    sleep    1s
+
+付费单审批同意按钮
+    [Documentation]    付费审批页面下，选中一条联系单之后，点击“同意”按钮。
+    Click Element    xpath=(.//*[normalize-space(text()) and normalize-space(.)='付费审批'])[1]/following::span[1]
+    [Teardown]    sleep    1s
+
+付费单审批流程
+    [Arguments]    ${text}
+    [Documentation]    付费联系单审批的流程。
+    ...
+    ...    传入联系单号。
+    左侧菜单主菜单    审批中心
+    左侧菜单子菜单    付费单审批
+    点击付费单待审批
+    收付费审批搜索    ${text}
+    付费单审批选中付费单
+    付费单审批同意按钮
+    选择页面标签退出    付费单审批
+
+收费单审批流程
+    [Arguments]    ${text}
+    [Documentation]    收费联系单审批的流程。
+    ...
+    ...    传入联系单号。
+    左侧菜单主菜单    审批中心
+    左侧菜单子菜单    收费单审批
+    点击收费单待审批
+    收付费审批搜索    ${text}
+    收费单审批选中收费单
+    收费单审批同意按钮
+    选择页面标签退出    收费单审批

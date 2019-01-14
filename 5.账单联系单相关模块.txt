@@ -1,0 +1,54 @@
+*** Settings ***
+Library           Selenium2Library
+Library           Screenshot
+Resource          BaseResource.txt
+Resource          OperationResource.txt
+Resource          FinancialOrderResource.txt
+Resource          ApproveResource.txt
+
+*** Test Cases ***
+charge settlement
+    [Tags]    num
+    login    http://27.223.104.6:32880/#/login    shanfaxian    123456    实习测试公司
+    进入订舱操作页面
+    订舱操作下货纸选中框
+    订舱操作点击账单按钮
+    订舱操作选择账单子元素    账单
+    账单管理普通按钮    新增
+    账单明细新增一条明细    1    制冷费    USD    票    20    30
+    ...    应收    ziqi
+    账单明细新增一条明细    2    AMS费    CNY    托    20    30
+    ...    应付    大丰
+    新增账单上方初始按钮    保存
+    选择页面标签退出    新增账单
+    点击账单号选中
+    账单管理制作联系单
+    账单管理选择联系单子元素    收费联系单
+    制作联系单点击客户
+    制作联系单确定客户
+    收费联系单保存
+
+pay settlement
+    login    http://27.223.104.6:32880/#/login    shanfaxian    123456    实习测试公司
+    进入订舱操作页面
+    订舱操作下货纸选中框
+    订舱操作点击账单按钮
+    订舱操作选择账单子元素    账单
+    账单管理普通按钮    新增
+    账单明细新增一条明细    1    制冷费    USD    票    20    30
+    ...    应收    ziqi
+    账单明细新增一条明细    2    AMS费    EUR    托    50    30
+    ...    应付    大丰
+    新增账单上方初始按钮    保存
+    利润为负继续保存
+    选择页面标签退出    新增账单
+    ${number}    点击账单号选中
+    账单管理二次确认按钮    申请审批
+    账单审批流程    ${number}
+    选择页面标签退出    账单审批
+    点击账单号选中
+    账单管理制作联系单
+    账单管理选择联系单子元素    付费联系单
+    制作联系单点击客户
+    制作联系单确定客户
+    付费联系单保存

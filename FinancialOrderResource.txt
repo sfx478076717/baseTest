@@ -1,0 +1,216 @@
+*** Settings ***
+Library           Selenium2Library
+Library           Screenshot
+Resource          OperationResource.txt
+Resource          BaseResource.txt
+
+*** Keywords ***
+订舱操作点击账单按钮
+    [Documentation]    订舱操作-海运出口页面，点击外部按钮 账单
+    Click Button    xpath=//*[@id="main"]/div/div[3]/div/div/div/div[3]/div/div[2]/div/div/div[4]/div/div[1]/div[1]/div[5]/div[1]/button
+    [Teardown]    sleep    1s
+
+订舱操作选择账单子元素
+    [Arguments]    ${button}
+    [Documentation]    订舱操作-海运出口页面，点击账单之后的下拉框选择子元素。
+    ...
+    ...    包括：账单、收费联系单、付费联系单。
+    : FOR    ${i}    IN RANGE    5
+    \    ${text}    Get Text    xpath=//*[@id="main"]/div/div[3]/div/div/div/div[3]/div/div[2]/div/div/div[4]/div/div[1]/div[1]/div[5]/div[2]/ul/li[1+${i}]
+    \    Exit For Loop If    '${text}'=='${button}'    #如果当前循环是传入的按钮名 就退出循环 ${i}的值保留
+    Click Element    xpath=//*[@id="main"]/div/div[3]/div/div/div/div[3]/div/div[2]/div/div/div[4]/div/div[1]/div[1]/div[5]/div[2]/ul/li[1+${i}]
+    [Teardown]    sleep    1s
+
+账单管理普通按钮
+    [Arguments]    ${button}
+    [Documentation]    账单管理页面普通按钮。
+    ...
+    ...    包括：新增、打开
+    : FOR    ${i}    IN RANGE    5
+    \    ${text}    Get Text    xpath=//*[@id="main"]/div/div[3]/div/div/div[2]/div/div[1]/div/div[2]/button[${i}+1]
+    \    Exit For Loop If    '${text}'=='${button}'    #如果当前循环是传入的按钮名 就退出循环 ${i}的值保留
+    Click Button    xpath=//*[@id="main"]/div/div[3]/div/div/div[2]/div/div[1]/div/div[2]/button[${i}+1]
+    [Teardown]    sleep    2s
+
+账单管理二次确认按钮
+    [Arguments]    ${button}
+    [Documentation]    账单管理页面需要二次确认的按钮。
+    ...
+    ...    包括：删除、申请审批、取消审批。
+    : FOR    ${i}    IN RANGE    5
+    \    ${text}    Get Text    xpath=//*[@id="main"]/div/div[3]/div/div/div[2]/div/div[1]/div/div[2]/div[1+${i}]/div[1]/button
+    \    Exit For Loop If    '${text}'=='${button}'    #如果当前循环是传入的按钮名 就退出循环 ${i}的值保留
+    Click Button    xpath=//*[@id="main"]/div/div[3]/div/div/div[2]/div/div[1]/div/div[2]/div[1+${i}]/div[1]/button
+    sleep    1s
+    Click Button    xpath=//*[@id="main"]/div/div[3]/div/div/div[2]/div/div[1]/div/div[2]/div[1+${i}]/div[2]/div/div[2]/div[2]/button[2]
+    [Teardown]    sleep    1s
+
+新增账单上方初始按钮
+    [Arguments]    ${button}
+    [Documentation]    新增账单页面，上方标签下边的按钮，保存之前的按钮。
+    ...
+    ...    包括：保存、自动账单。
+    : FOR    ${i}    IN RANGE    5
+    \    ${text}    Get Text    xpath=//*[@id="main"]/div/div[3]/div/div/div/div[1]/div[1]/div/div[1+${i}]/button
+    \    Exit For Loop If    '${text}'=='${button}'    #如果当前循环是传入的按钮名 就退出循环 ${i}的值保留
+    Click Button    xpath=//*[@id="main"]/div/div[3]/div/div/div/div[1]/div[1]/div/div[1+${i}]/button
+    [Teardown]    sleep    1s
+
+新增账单保存账单按钮
+    [Documentation]    新增账单页面，上方的按钮，保存之后出现的按钮。保存账单
+    Click Button    xpath=//*[@id="main"]/div/div[3]/div/div/div/div[1]/div[1]/div/div/button
+    [Teardown]    sleep    1s
+
+新增账单删除账单按钮
+    [Documentation]    新增账单页面，上方的按钮，保存之后出现的按钮。删除账单
+    Click Button    xpath=//*[@id="main"]/div/div[3]/div/div/div/div[1]/div[1]/div/div/div/div[1]/button
+    [Teardown]    sleep    1s
+
+账单明细新增一条明细
+    [Arguments]    ${rowNum}    ${arg1}=    ${arg2}=    ${arg3}=    ${arg4}=    ${arg5}=
+    ...    ${arg6}=    ${arg7}=
+    [Documentation]    新增账单页面，新增一条账单明细。
+    ...
+    ...    费种、币种、计量单位、数量、单价、应收还是应付、客户
+    账单明细按钮    新增
+    账单明细选择费种    ${rowNum}    ${arg1}
+    账单明细选择币种    ${rowNum}    ${arg2}
+    账单明细选择计量单位    ${rowNum}    ${arg3}
+    账单明细输入数量    ${rowNum}    ${arg4}
+    账单明细输入单价    ${rowNum}    ${arg5}
+    Run Keyword If    '应收' == '${arg6}'    账单明细选择应收    ${rowNum}
+    Run Keyword If    '应付' == '${arg6}'    账单明细选择应付    ${rowNum}
+    账单明细选择客户    ${rowNum}    ${arg7}
+
+账单明细按钮
+    [Arguments]    ${button}
+    [Documentation]    新增账单页面，账单明细按钮。
+    ...
+    ...    包括：新增、删除、应收到应付、应付到应收。
+    : FOR    ${i}    IN RANGE    5
+    \    ${text}    Get Text    xpath=//*[@id="main"]/div/div[3]/div/div/div/div[2]/div/div/div[2]/button[1+${i}]
+    \    Exit For Loop If    '${text}'=='${button}'    #如果当前循环是传入的按钮名 就退出循环 ${i}的值保留
+    Click Element    xpath=//*[@id="main"]/div/div[3]/div/div/div/div[2]/div/div/div[2]/button[1+${i}]
+    [Teardown]    sleep    1s
+
+账单明细选择费种
+    [Arguments]    ${rowNum}    ${text}=海运费
+    [Documentation]    新增账单页面，账单明细第一条选择费种。
+    #Click Element    xpath=//*[@id="main"]/div/div[3]/div/div/div/div[2]/div/div/div[3]/div[3]/table/tbody/tr/td[3]/div/div/div/input[2]
+    #Input Text    xpath=//*[@id="main"]/div/div[3]/div/div/div/div[2]/div/div/div[3]/div[3]/table/tbody/tr/td[3]/div/div/div/input[2]    ${text}
+    #sleep    1s
+    #Click Element    xpath=(.//*[normalize-space(text()) and normalize-space(.)='无匹配数据'])[41]/following::li[1]
+    Click Element    xpath=/html/body/div[not(contains(@style,'display: none'))]//li[contains(@class,'ivu-select-item') and text()='${text}']
+    [Teardown]    sleep    1s
+
+账单明细选择币种
+    [Arguments]    ${rowNum}    ${text}=CNY
+    [Documentation]    新增账单页面，账单明细第一条选择币种。
+    Run Keyword If    '${rowNum}' == 1    Click Element    xpath=//*[@id="main"]/div/div[3]/div/div/div/div[2]/div/div/div[3]/div[3]/table/tbody/tr/td[4]/div/div/div/input[2]
+    Run Keyword If    '${rowNum}' != 1    Click Element    xpath=//*[@id="main"]/div/div[3]/div/div/div/div[2]/div/div/div[3]/div[3]/table/tbody/tr[${rowNum}]/td[4]/div/div/div/input[2]
+    #Input Text    xpath=//*[@id="main"]/div/div[3]/div/div/div/div[2]/div/div/div[3]/div[3]/table/tbody/tr/td[4]/div/div/div/input[2]    ${text}
+    sleep    1s
+    #Click Element    xpath=(.//*[normalize-space(text()) and normalize-space(.)='USD'])[2]/following::li[1]    #xpath=/html/body/div[101]/ul[2]/li[3]
+    Click Element    xpath=/html/body/div[not(contains(@style,'display: none'))]//li[contains(@class,'ivu-select-item') and contains(text(),'${text}')]
+    [Teardown]    sleep    1s
+
+账单明细选择计量单位
+    [Arguments]    ${rowNum}    ${text}=票
+    [Documentation]    新增账单页面，账单明细第一条选择计量单位。
+    Run Keyword If    '${rowNum}' == 1    Click Element    xpath=//*[@id="main"]/div/div[3]/div/div/div/div[2]/div/div/div[3]/div[3]/table/tbody/tr/td[6]/div/div/div/input[2]
+    Run Keyword If    '${rowNum}' != 1    Click Element    xpath=//*[@id="main"]/div/div[3]/div/div/div/div[2]/div/div/div[3]/div[3]/table/tbody/tr[${rowNum}]/td[6]/div/div/div/input[2]
+    #Input Text    xpath=//*[@id="main"]/div/div[3]/div/div/div/div[2]/div/div/div[3]/div[3]/table/tbody/tr/td[6]/div/div/div/input[2]    ${text}
+    sleep    1s
+    #Click Element    xpath=(.//*[normalize-space(text()) and normalize-space(.)='无匹配数据'])[43]/following::li[1]    #xpath=/html/body/div[102]/ul[2]/li
+    Click Element    xpath=/html/body/div[not(contains(@style,'display: none'))]/ul[2]/li[contains(@class,'ivu-select-item') and contains(text(),'${text}')]
+    [Teardown]    sleep    1s
+
+账单明细输入数量
+    [Arguments]    ${rowNum}    ${number}=1
+    [Documentation]    新增账单页面，账单明细第一条输入数量。
+    Run Keyword If    '${rowNum}' == 1    Input Text    xpath=//*[@id="main"]/div/div[3]/div/div/div/div[2]/div/div/div[3]/div[3]/table/tbody/tr/td[7]/div/div/div/input    ${number}
+    Run Keyword If    '${rowNum}' != 1    Input Text    xpath=//*[@id="main"]/div/div[3]/div/div/div/div[2]/div/div/div[3]/div[3]/table/tbody/tr[${rowNum}]/td[7]/div/div/div/input    ${number}
+    [Teardown]    sleep    1s
+
+账单明细输入单价
+    [Arguments]    ${rowNum}    ${singlePrice}=1
+    [Documentation]    新增账单页面，账单明细第一条输入单价。
+    #Click Element    xpath=//*[@id="main"]/div/div[3]/div/div/div/div[2]/div/div/div[3]/div[3]/table/tbody/tr/td[8]/div/div/div/input
+    Run Keyword If    '${rowNum}' == 1    Input Text    xpath=//*[@id="main"]/div/div[3]/div/div/div/div[2]/div/div/div[3]/div[3]/table/tbody/tr/td[8]/div/div/div/input    ${singlePrice}
+    Run Keyword If    '${rowNum}' != 1    Input Text    xpath=//*[@id="main"]/div/div[3]/div/div/div/div[2]/div/div/div[3]/div[3]/table/tbody/tr[${rowNum}]/td[8]/div/div/div/input    ${singlePrice}
+    [Teardown]    sleep    1s
+
+账单明细选择应收
+    [Arguments]    ${rowNum}
+    [Documentation]    新增账单页面，账单明细第一条选择应收。
+    Run Keyword If    '${rowNum}' == 1    Click Element    xpath=//*[@id="main"]/div/div[3]/div/div/div/div[2]/div/div/div[3]/div[3]/table/tbody/tr/td[9]/div/div/div/div/div/div/input
+    Run Keyword If    '${rowNum}' != 1    Click Element    xpath=//*[@id="main"]/div/div[3]/div/div/div/div[2]/div/div/div[3]/div[3]/table/tbody/tr[${rowNum}]/td[9]/div/div/div/div/div/div/input
+    [Teardown]    sleep    1s
+
+账单明细选择应付
+    [Arguments]    ${rowNum}
+    [Documentation]    新增账单页面，账单明细第一条选择应付。
+    Run Keyword If    '${rowNum}' == 1    Click Element    xpath=//*[@id="main"]/div/div[3]/div/div/div/div[2]/div/div/div[3]/div[3]/table/tbody/tr/td[10]/div/div/div/div/div/div/input
+    Run Keyword If    '${rowNum}' != 1    Click Element    xpath=//*[@id="main"]/div/div[3]/div/div/div/div[2]/div/div/div[3]/div[3]/table/tbody/tr[${rowNum}]/td[10]/div/div/div/div/div/div/input
+    [Teardown]    sleep    1s
+
+账单明细选择客户
+    [Arguments]    ${rowNum}    ${customer}=
+    [Documentation]    新增账单页面，账单明细第一条选择客户。
+    Run Keyword If    '${rowNum}' == 1    Click Element    xpath=//*[@id="main"]/div/div[3]/div/div/div/div[2]/div/div/div[3]/div[3]/table/tbody/tr/td[11]/div/div/div/div/input
+    Run Keyword If    '${rowNum}' == 1    Input Text    xpath=//*[@id="main"]/div/div[3]/div/div/div/div[2]/div/div/div[3]/div[3]/table/tbody/tr/td[11]/div/div/div/div/input    ${customer}
+    Run Keyword If    '${rowNum}' != 1    Click Element    xpath=//*[@id="main"]/div/div[3]/div/div/div/div[2]/div/div/div[3]/div[3]/table/tbody/tr[${rowNum}]/td[11]/div/div/div/div/input
+    Run Keyword If    '${rowNum}' != 1    Input Text    xpath=//*[@id="main"]/div/div[3]/div/div/div/div[2]/div/div/div[3]/div[3]/table/tbody/tr[${rowNum}]/td[11]/div/div/div/div/input    ${customer}
+    sleep    1s
+    Click Element    xpath=/html/body/div[not(contains(@style,'display: none'))]//div[@class='flex-auto label-box' and text()='${customer}']
+
+账单管理选中框
+    [Documentation]    账单管理页面，点击一条账单的选中框。
+    Wait Until Element Is Visible    xpath=//*[@id="main"]/div/div[3]/div/div/div[2]/div/div[2]/div[3]/table/tbody/tr[1]/td[1]/div/label/span
+    Click Element    xpath=//*[@id="main"]/div/div[3]/div/div/div[2]/div/div[2]/div[3]/table/tbody/tr[1]/td[1]/div/label/span
+    [Teardown]    sleep    1s
+
+点击账单号选中
+    [Documentation]    账单管理页面，点击某一条账单号拉取汇总资料详细信息。
+    ${value}    Get Text    xpath=//*[@id="main"]/div/div[3]/div/div/div[2]/div/div[2]/div[3]/table/tbody/tr[1]/td[4]/div
+    Click Element    xpath=//*[@id="main"]/div/div[3]/div/div/div[2]/div/div[2]/div[3]/table/tbody/tr[1]/td[4]/div
+    [Teardown]    sleep    1s
+    [Return]    ${value}
+
+账单管理制作联系单
+    [Documentation]    账单管理有下拉框的按钮：制作联系单。
+    Click Button    xpath=//*[@id="main"]/div/div[3]/div/div/div[2]/div/div[1]/div/div[3]/div[1]/button
+    [Teardown]    sleep    1s
+
+账单管理选择联系单子元素
+    [Arguments]    ${text}
+    [Documentation]    账单管理制作联系单按钮的下拉元素。
+    ...
+    ...    包括：收费联系单、付费联系单。
+    Run Keyword If    '${text}'=='收费联系单'    Click Element    xpath=//*[@id="main"]/div/div[3]/div/div/div[2]/div/div[1]/div/div[3]/div[2]/ul/li[1]
+    ...    ELSE    Click Element    xpath=//*[@id="main"]/div/div[3]/div/div/div[2]/div/div[1]/div/div[3]/div[2]/ul/li[2]
+    [Teardown]    sleep    1s
+
+制作联系单点击客户
+    [Documentation]    点击制作收费联系单之后，在弹出的选择客户modal中点击一位客户。
+    Click Element    xpath=(.//*[normalize-space(text()) and normalize-space(.)='冻结标志'])[3]/following::div[4]
+    [Teardown]    sleep    1s
+
+制作联系单确定客户
+    [Documentation]    点击制作联系单之后，选择客户modal的确定按钮。
+    Click Element    xpath=(.//*[normalize-space(text()) and normalize-space(.)='取消'])[21]/following::span[1]
+    [Teardown]    sleep    1s
+
+收费联系单保存
+    [Documentation]    制作收费联系单页面的联系单保存按钮。
+    Click Element    xpath=(.//*[normalize-space(text()) and normalize-space(.)='收费联系单'])[1]/following::span[1]
+    [Teardown]    sleep    1s
+
+付费联系单保存
+    [Documentation]    制作付费联系单的联系单保存按钮。
+    Click Element    xpath=(.//*[normalize-space(text()) and normalize-space(.)='付费联系单'])[1]/following::span[1]
+
+利润为负继续保存
+    [Documentation]    制作付费联系单会弹出的利润为负框，点击继续保存。
+    Click Element    xpath=/html/body/div[not(contains(@style,'display: none'))]/div[2]/div/div/div/div/div[3]/button[2]/span
+    [Teardown]    sleep    2s

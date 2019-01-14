@@ -1,0 +1,103 @@
+*** Settings ***
+Library           Selenium2Library
+Library           Screenshot
+Resource          BaseResource.txt
+Resource          ApproveResource.txt
+Resource          FinancialSettlementResource.txt
+
+*** Test Cases ***
+charge settlement
+    [Documentation]    对收费联系单的开票的申请。需要审批。
+    login    http://27.223.104.6:32880/#/login    shanfaxian    123456    实习测试公司
+    左侧菜单主菜单    财务管理
+    左侧菜单子菜单    收费管理
+    收付费管理客户菜单    ziqi
+    ${text}    收付费管理选中框
+    收费管理二次确认按钮    申请审批
+    收费审批方案选择
+    验证审批状态    等待审批
+    收费单审批流程    ${text}
+    收付费管理客户菜单    ziqi
+    验证审批状态    审批完成
+    收付费管理选中框
+    收费管理二次确认按钮    申请开票
+    发票继续申请
+    验证票申请状态    已申请
+
+charge settlement not approve
+    [Documentation]    收费联系单的开票的申请，不需要审批。
+    [Tags]    num
+    login    http://27.223.104.6:32880/#/login    shanfaxian    123456    实习测试公司
+    左侧菜单主菜单    财务管理
+    左侧菜单子菜单    收费管理
+    收付费管理客户菜单    ziqi
+    收付费管理选中框
+    收费管理二次确认按钮    申请开票
+    发票继续申请
+    验证票申请状态    已申请
+
+paid settlement
+    [Documentation]    对付费联系单的开票的申请，需要审批。
+    login    http://27.223.104.6:32880/#/login    shanfaxian    123456    实习测试公司
+    左侧菜单主菜单    财务管理
+    左侧菜单子菜单    付费管理
+    收付费管理客户菜单    robot
+    ${text}    收付费管理选中框
+    付费管理二次确认按钮    申请审批
+    付费审批方案选择
+    验证审批状态    等待审批
+    付费单审批流程    ${text}
+    收付费管理客户菜单    robot
+    验证审批状态    审批完成
+    收付费管理选中框
+    付费管理二次确认按钮    支票申请
+    支票继续申请
+    验证票申请状态    已申请
+
+test cheque
+    [Documentation]    收费联系单开发票流程。
+    [Tags]    num
+    login    http://27.223.104.6:32880/#/login    shanfaxian    123456    实习测试公司
+    左侧菜单主菜单    财务管理
+    左侧菜单子菜单    发票管理
+    普通发票开票申请
+    待开发票搜索并选中    10000918
+    普通发票点击开票
+    发票开具选择抬头    ziqi
+    发票开具选择货物名称    代理港杂费
+    发票开具确定流程
+
+test bill
+    [Documentation]    付费联系单CNY币种开普通支票流程。
+    login    http://27.223.104.6:32880/#/login    shanfaxian    123456    实习测试公司
+    左侧菜单主菜单    财务管理
+    左侧菜单子菜单    支票管理
+    进入支票申请
+    ${number}    Set Variable    10000928
+    待开支票搜索并选中    ${number}
+    待开支票普通按钮    开票
+    待开支票选择支票
+    普通支票选择支票确定
+    普通支票用途输入    ${number}
+    开具普通支票确认
+    打印取消
+
+test ZZPT
+    [Documentation]    付费联系单USD币种开转账凭条流程。
+    login    http://27.223.104.6:32880/#/login    shanfaxian    123456    实习测试公司
+    左侧菜单主菜单    财务管理
+    左侧菜单子菜单    支票管理
+    进入支票申请
+    ${number}    Set Variable    10000521
+    待开支票搜索并选中    ${number}
+    待开支票普通按钮    开票
+    待开支票选择支票
+    转账凭条选择支票确定
+    转账凭条密码输入    ${number}
+    转账凭条用途输入    ${number}
+    开具转账凭条确认
+    打印取消
+
+测试审批
+    login    http://27.223.104.6:32880/#/login    shanfaxian    123456    实习测试公司
+    账单审批流程    FOBN10000670

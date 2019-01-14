@@ -1,0 +1,172 @@
+*** Settings ***
+Library           Selenium2Library
+Library           Screenshot
+Resource          BaseResource.txt
+
+*** Keywords ***
+实收实付选择客户
+    [Arguments]    ${name}
+    [Documentation]    实收实付管理页面，左侧客户菜单栏选择。
+    ...
+    ...    包括：“全部”、robot， 都是客户简称。
+    : FOR    ${i}    IN RANGE    10
+    \    ${text}    Get Text    xpath=//*[@id="main"]/div/div[3]/div/div/div/div[2]/div[2]/div/ul/li[1+${i}]/span
+    \    Exit For Loop If    '${name}'=='${text}'
+    Click Element    xpath=//*[@id="main"]/div/div[3]/div/div/div/div[2]/div[2]/div/ul/li[1+${i}]/span
+    [Teardown]    sleep    3s
+
+实收实付确认按钮
+    [Arguments]    ${button}
+    [Documentation]    实收实付管理页面确认相关的按钮。
+    ...
+    ...    包括：收付款确认、按开票信息确认、撤销结算。
+    : FOR    ${i}    IN RANGE    10
+    \    ${text}    Get Text    xpath=//*[@id="main"]/div/div[3]/div/div/div/div[3]/div/div[1]/div/div[1]/div[2]/button[1+${i}]/span
+    \    Exit For Loop If    '${button}'=='${text}'
+    Click Element    xpath=//*[@id="main"]/div/div[3]/div/div/div/div[3]/div/div[1]/div/div[1]/div[2]/button[1+${i}]/span
+    [Teardown]    sleep    2s
+
+实收实付转账按钮
+    [Arguments]    ${button}
+    [Documentation]    实收实付管理转账相关的按钮。
+    ...
+    ...    包括：转账、合并转账。
+    : FOR    ${i}    IN RANGE    10
+    \    ${text}    Get Text    xpath=//*[@id="main"]/div/div[3]/div/div/div/div[3]/div/div[1]/div/div[1]/div[3]/button[1+${i}]/span
+    \    Exit For Loop If    '${button}'=='${text}'
+    Click Element    xpath=//*[@id="main"]/div/div[3]/div/div/div/div[3]/div/div[1]/div/div[1]/div[3]/button[1+${i}]/span
+    [Teardown]    sleep    2s
+
+实收实付关键字检索
+    [Arguments]    ${text}
+    [Documentation]    实收实付管理页面，输入关键字，按关键字检索
+    #输入关键字
+    Input Text    xpath=//*[@id="main"]/div/div[3]/div/div/div/div[3]/div/div[1]/div/div[1]/div[4]/input    ${text}
+    #点击检索
+    Click Element    xpath=//*[@id="main"]/div/div[3]/div/div/div/div[3]/div/div[1]/div/div[1]/button/span
+    [Teardown]    sleep    2s
+
+实收实付管理选中框
+    [Documentation]    实收实付管理页面，点击一条已经落帐的财务结算单选中框。
+    Click Element    xpath=//*[@id="main"]/div/div[3]/div/div/div/div[3]/div/div[1]/div/div[2]/div[4]/div[2]/table/tbody/tr[1]/td[1]/div/label
+    [Teardown]    sleep    1s
+
+收付款确认输入联系单号
+    [Arguments]    ${number}=
+    [Documentation]    收付款确认弹出的modal中，输入联系单号。
+    Input Text    xpath=(.//*[normalize-space(text()) and normalize-space(.)='请选择联系单信息'])[1]/following::input[1]    ${number}
+    [Teardown]    sleep    1s
+
+收付款确认点击收费
+    [Documentation]    收付款确认弹出的modal中，检索时点击收费按钮。
+    Click Element    xpath=(.//*[normalize-space(text()) and normalize-space(.)='请选择联系单信息'])[1]/following::label[1]
+    [Teardown]    sleep    1s
+
+收付款确认点击付费
+    [Documentation]    收付款确认弹出的modal中，检索时点击付费按钮。
+    Click Element    xpath=(.//*[normalize-space(text()) and normalize-space(.)='收费'])[1]/following::label[1]
+    [Teardown]    sleep    1s
+
+收付款确认点击检索
+    [Documentation]    收付款确认弹出的modal中，点击检索按钮。
+    Click Element    xpath=(.//*[normalize-space(text()) and normalize-space(.)='付费'])[1]/following::span[1]
+    [Teardown]    sleep    2s
+
+收付款确认选中联系单
+    [Arguments]    ${number}
+    [Documentation]    收付款确认弹出的modal中，检索后点击第一条联系单选中。
+    ...
+    ...    顺带验证结算单号是否正确
+    #验证结算单号是否正确
+    ${text}    get text    xpath=/html/body/div[not(contains(@style,'display: none'))]/div[2]/div/div/div[2]/div[2]/div/div/div[3]/table/tbody/tr/td[3]/div    #xpath=(.//*[normalize-space(text()) and normalize-space(.)='结算金额'])[3]/following::div[5]
+    Should Be Equal    ${number}    ${text}
+    # 点击选择框
+    Click Element    xpath=/html/body/div[not(contains(@style,'display: none'))]/div[2]/div/div/div[2]/div[2]/div/div/div[5]/div[2]/table/tbody/tr/td[1]/div/label/span
+    [Teardown]    sleep    1s
+
+收付款确认确认联系单按钮
+    [Documentation]    收付款确认弹出的modal中，选完联系单后点击确认按钮。
+    Click Element    xpath=/html/body/div[not(contains(@style,'display: none'))]/div[2]/div[not(contains(@style,'display: none'))]/div/div[3]/div/button[2]/span    #xpath=(.//*[normalize-space(text()) and normalize-space(.)='取消'])[19]/following::span[1]
+    [Teardown]    sleep    2s
+
+实收实付页面确认
+    [Documentation]    实收页面或者实付页面，点击上方的实收确认（实付确认）。
+    Click Element    xpath=//*[@id="main"]/div/div[3]/div/div/div[1]/div/div/div[1]/div[2]/button[1]/span
+    [Teardown]    sleep    3s
+
+按开票信息确认发票检索
+    [Arguments]    ${number}
+    [Documentation]    按发票信息确认弹出的modal中，输入完整的发票号进行检索。
+    #输入发票号
+    Click Element    xpath=/html/body/div[not(contains(@style,'display: none'))]/div[2]/div/div/div[2]/div[1]/div[1]/input
+    Input Text    xpath=/html/body/div[not(contains(@style,'display: none'))]/div[2]/div/div/div[2]/div[1]/div[1]/input    ${number}    #xpath=(.//*[normalize-space(text()) and normalize-space(.)='请选择联系单信息'])[2]/following::input[1]
+    #点击发票按钮
+    Click Element    xpath=/html/body/div[not(contains(@style,'display: none'))]/div[2]/div/div/div[2]/div[1]/div[2]/label[1]/span
+    #点击检索
+    sleep    1s
+    Click Element    xpath=/html/body/div[not(contains(@style,'display: none'))]/div[2]/div/div/div[2]/div[1]/button/span
+    [Teardown]    sleep    1s
+
+按开票信息确认支票检索
+    [Arguments]    ${number}
+    [Documentation]    按开票信息确认弹出的modal中，输入支票号进行检索。
+    #输入支票号
+    Input Text    xpath=/html/body/div[not(contains(@style,'display: none'))]/div[2]/div/div/div[2]/div[1]/div[1]/input    ${number}
+    #点击发票按钮
+    Click Element    xpath=/html/body/div[not(contains(@style,'display: none'))]/div[2]/div/div/div[2]/div[1]/div[2]/label[2]/span
+    #点击检索
+    sleep    1s
+    Click Element    xpath=/html/body/div[not(contains(@style,'display: none'))]/div[2]/div/div/div[2]/div[1]/button/span
+    [Teardown]    sleep    1s
+
+按开票信息确认点击选择框
+    [Arguments]    ${billNum}
+    [Documentation]    按开票信息确认弹出的modal中，检索后点击第一条联系单记录，点击其选择框选中。
+    #点击选择框
+    Click Element    xpath=/html/body/div[not(contains(@style,'display: none'))]/div[2]/div/div/div[2]/div[2]/div/div/div[5]/div[2]/table/tbody/tr/td[1]/div/label/span    #xpath=(.//*[normalize-space(text()) and normalize-space(.)='结算金额'])[6]/following::span[2]
+    #获取发票号
+    ${this}    get text    xpath=/html/body/div[not(contains(@style,'display: none'))]/div[2]/div/div/div[2]/div[2]/div/div/div[3]/table/tbody/tr/td[3]/div
+    Should Be Equal    ${this}    ${billNum}
+    #返回该发票的结算单号
+    ${number}    Get Text    xpath=/html/body/div[not(contains(@style,'display: none'))]/div[2]/div/div/div[2]/div[2]/div/div/div[3]/table/tbody/tr/td[5]/div
+    ${customer}    Get Text    xpath=/html/body/div[not(contains(@style,'display: none'))]/div[2]/div/div/div[2]/div[2]/div/div/div[3]/table/tbody/tr/td[6]/div
+    [Teardown]    sleep    1s
+    [Return]    ${number}    ${customer}
+
+按开票信息确认点击确定按钮
+    [Documentation]    按开票信息确认弹出的modal中，选中联系单后，点击确定按钮。
+    Click Element    xpath=/html/body/div[not(contains(@style,'display: none'))]/div[2]/div/div/div[3]/div/button[2]/span    #xpath=(.//*[normalize-space(text()) and normalize-space(.)='取消'])[4]/following::span[1]
+    [Teardown]    sleep    2s
+
+实收实付验证结算客户
+    [Arguments]    ${name}
+    [Documentation]    回到发票管理页面后，验证刚生成的已经开票的联系单的结算客户是否正确。
+    ${thisName}    Get Text    xpath=//*[@id="main"]/div/div[3]/div/div/div/div[3]/div/div[1]/div/div[2]/div[3]/table/tbody/tr[1]/td[4]/div
+    Should Be Equal    ${name}    ${thisName}
+    [Teardown]    sleep    1s
+
+实收实付点击结算客户
+    [Documentation]    验证完成之后，点击这个客户选中。弹出结算单明细页面。会去验证其结算单号是否正确。
+    Click Element    xpath=//*[@id="main"]/div/div[3]/div/div/div/div[3]/div/div[1]/div/div[2]/div[3]/table/tbody/tr[1]/td[4]/div
+    [Teardown]    sleep    1s
+
+实收实付验证结算单号
+    [Arguments]    ${number}
+    [Documentation]    点击收付款确认后的结算客户之后，在出现的明细页面验证结算单号是否正确。
+    ${thisNumber}    Get Text    xpath=//*[@id="main"]/div/div[3]/div/div/div/div[3]/div/div[2]/div/div/div[2]/div[3]/table/tbody/tr/td[2]/div
+    Should Be Equal    ${number}    ${thisNumber}
+    [Teardown]    sleep    1s
+
+验证收费结算单是否实收
+    [Arguments]    ${text}
+    [Documentation]    验证刚刚收费确认的结算单是否已经确认实收。
+    sleep    2s
+    ${thisText}    Get Text    xpath=//*[@id="main"]/div/div[3]/div/div/div[1]/div[3]/div/div[1]/div/div[2]/div[3]/table/tbody/tr[1]/td[8]/div
+    Should Be Equal    ${text}    ${thisText}
+
+验证付费结算单是否实付
+    [Arguments]    ${text}
+    [Documentation]    验证刚实付确认的结算单是否已经实付。
+    sleep    2s
+    ${thisText}    Get Text    xpath=//*[@id="main"]/div/div[3]/div/div/div[1]/div[3]/div/div[1]/div/div[2]/div[3]/table/tbody/tr[1]/td[7]/div
+    Should Be Equal    ${text}    ${thisText}

@@ -1,0 +1,320 @@
+*** Settings ***
+Library           Selenium2Library
+Library           Screenshot
+Library           AutoItLibrary
+Resource          BaseResource.txt
+
+*** Keywords ***
+收付费管理客户菜单
+    [Arguments]    ${name}
+    [Documentation]    收费管理、付费管理页面的左侧客户选择栏。
+    ...
+    ...    “全部”，以及客户简称如“robot”
+    sleep    2s
+    Click Element    xpath=//*[@id="main"]/div/div[3]/div/div/div[1]/div[2]/div[2]/div/ul//span[text()='${name}']
+    #: FOR    ${i}    IN RANGE    10
+    #    ${text}    get text    xpath=//*[@id="main"]/div/div[3]/div/div/div[1]/div[2]/div[2]/div/ul/li[1+${i}]/span
+    #    Exit For Loop If    '${name}'=='${text}'
+    #Click Element    xpath=//*[@id="main"]/div/div[3]/div/div/div[1]/div[2]/div[2]/div/ul/li[1+${i}]/span
+    [Teardown]    sleep    3s
+
+收付费管理选中框
+    [Documentation]    收付费管理页面，联系单选择框，顺带获取联系单号。
+    Click Element    xpath=//*[@id="main"]/div/div[3]/div/div/div[1]/div[3]/div/div[1]/div/div[2]/div[5]/div[2]/table/tbody/tr[1]/td[1]/div/label/span    #xpath=(.//*[normalize-space(text()) and normalize-space(.)='备注'])[2]/following::span[2]    #xpath=//*[@id="main"]/div/div[3]/div/div/div[1]/div[3]/div/div[1]/div/div[2]/div[3]/table/tbody/tr[1]/td[1]/div/label/span
+    ${text}    get text    xpath=//*[@id="main"]/div/div[3]/div/div/div[1]/div[3]/div/div[1]/div/div[2]/div[3]/table/tbody/tr[1]/td[5]/div
+    [Teardown]    sleep    1s
+    [Return]    ${text}
+
+收付费管理获取结算单号
+    [Documentation]    进入收付费管理页面后，第一件事就是获取刚生成的结算单号。
+    sleep    1s
+    ${settlementId}    get text    xpath=//*[@id="main"]/div/div[3]/div/div/div[1]/div[3]/div/div[1]/div/div[2]/div[3]/table/tbody/tr[1]/td[5]/div
+    [Teardown]    sleep    1s
+    [Return]    ${settlementId}
+
+收付费管理普通按钮
+    [Arguments]    ${button}
+    [Documentation]    收付费管理页面，普通的按钮。
+    ...
+    ...    包括：新增、新增(本客户)、追加明细、撤销记录
+    : FOR    ${i}    IN RANGE    5
+    \    ${text}    get text    xpath=//*[@id="main"]/div/div[3]/div/div/div[1]/div[3]/div/div[1]/div/div[1]/div/div[2]/button[1+${i}]/span
+    \    Exit For Loop If    '${button}'=='${text}'
+    Click Element    xpath=//*[@id="main"]/div/div[3]/div/div/div[1]/div[3]/div/div[1]/div/div[1]/div/div[2]/button[1+${i}]/span
+    [Teardown]    sleep    2s
+
+收付费管理EDOC对账按钮
+    [Arguments]    ${button}
+    [Documentation]    收付费管理页面，EDOC按钮和对账按钮。
+    ...
+    ...    包括：EDOC和对账
+    : FOR    ${i}    IN RANGE    5
+    \    ${text}    get text    xpath=//*[@id="main"]/div/div[3]/div/div/div[1]/div[3]/div/div[1]/div/div[1]/div/button[1+${i}]/span
+    \    Exit For Loop If    '${button}'=='${text}'
+    Click Element    xpath=//*[@id="main"]/div/div[3]/div/div/div[1]/div[3]/div/div[1]/div/div[1]/div/button[1+${i}]/span
+    [Teardown]    sleep    2s
+
+收费管理二次确认按钮
+    [Arguments]    ${button}
+    [Documentation]    收费管理需要二次确认的按钮。
+    ...
+    ...    包括：删除、申请审批、取消审批、申请开票
+    : FOR    ${i}    IN RANGE    5
+    \    ${text}    get text    xpath=//*[@id="main"]/div/div[3]/div/div/div[1]/div[3]/div/div[1]/div/div[1]/div/div[7+${i}]/div[1]/button/span
+    \    Exit For Loop If    '${button}'=='${text}'
+    Click Element    xpath=//*[@id="main"]/div/div[3]/div/div/div[1]/div[3]/div/div[1]/div/div[1]/div/div[7+${i}]/div[1]/button/span    #点击按钮
+    sleep    1s
+    Click Element    xpath=//*[@id="main"]/div/div[3]/div/div/div[1]/div[3]/div/div[1]/div/div[1]/div/div[7+${i}]/div[2]/div/div[2]/div[2]/button[2]/span    #二次确认
+    [Teardown]    sleep    1s
+
+付费管理二次确认按钮
+    [Arguments]    ${button}
+    [Documentation]    付费管理需要二次确认的按钮。
+    ...
+    ...    包括：删除、申请审批、取消审批、支票申请
+    : FOR    ${i}    IN RANGE    5
+    \    ${text}    get text    xpath=//*[@id="main"]/div/div[3]/div/div/div[1]/div[3]/div/div[1]/div/div[1]/div/div[6+${i}]/div[1]/button/span
+    \    Exit For Loop If    '${button}'=='${text}'
+    Click Element    xpath=//*[@id="main"]/div/div[3]/div/div/div[1]/div[3]/div/div[1]/div/div[1]/div/div[6+${i}]/div[1]/button/span
+    sleep    1s
+    Click Element    xpath=//*[@id="main"]/div/div[3]/div/div/div[1]/div[3]/div/div[1]/div/div[1]/div/div[6+${i}]/div[2]/div/div[2]/div[2]/button[2]/span
+    [Teardown]    sleep    1s
+
+发票继续申请
+    [Documentation]    申请发票时，如果发票抬头和客户名称不一致将会上传发票保函，此时点击“继续申请”按钮。
+    Click Element    xpath=(.//*[normalize-space(text()) and normalize-space(.)='联系单发票抬头与客户名称不一致，请在EDOC中上传发票保函！'])[1]/following::span[1]    #xpath=/html/body/div[34]/div[2]/div/div/div/div/div[3]/button[1]/span
+    [Teardown]    sleep    1s
+
+支票继续申请
+    [Documentation]    支票申请时，如果支票抬头和客户名称不一致将会上传发票保函，此时点击“继续申请”按钮。
+    Click Element    xpath=(.//*[normalize-space(text()) and normalize-space(.)='联系单支票抬头与客户名称不一致，请在EDOC中上传发票保函！'])[1]/following::span[1]
+    [Teardown]    sleep    1s
+
+验证票申请状态
+    [Arguments]    ${state}
+    [Documentation]    验证票（发票、支票）的申请状态。
+    ...
+    ...    包括：未申请、已申请、已开票。
+    ${text}    get text    xpath=//*[@id="main"]/div/div[3]/div/div/div[1]/div[3]/div/div[1]/div/div[2]/div[3]/table/tbody/tr[1]/td[4]/div/div/span
+    Should Be Equal    ${state}    ${text}
+    [Teardown]    sleep    1s
+
+验证审批状态
+    [Arguments]    ${state}=
+    [Documentation]    验证收付费管理的审批状态。
+    ...
+    ...    包括：空、未审批、等待审批、审批完成、已拒绝。
+    ${text}    Get Text    xpath=//*[@id="main"]/div/div[3]/div/div/div[1]/div[3]/div/div[1]/div/div[2]/div[3]/table/tbody/tr[1]/td[3]/div/div/span
+    Should Be Equal    ${text}    ${state}
+    [Teardown]    sleep    1s
+
+进入发票管理
+    [Arguments]    ${button}    ${option}
+    [Documentation]    一个关键字进入发票管理的内层菜单页面。
+    ...
+    ...    外层菜单：专用发票、普通发票
+    ...
+    ...    内层菜单：未使用发票、未核销发票、已核销发票、作废发票
+    #点击发票外层菜单
+    : FOR    ${i}    IN RANGE    5
+    \    ${text}    get text    xpath=//*[@id="main"]/div/div[3]/div/div/div[5]/div[2]/div[2]/ul/li[1+${i}]/div/span
+    \    Exit For Loop If    '${button}'=='${text}'
+    Click Element    xpath=//*[@id="main"]/div/div[3]/div/div/div[5]/div[2]/div[2]/ul/li[1+${i}]/div/span
+    #点击发票内层菜单
+    sleep    1s
+    : FOR    ${a}    IN RANGE    10
+    \    ${text}    get text    xpath=//*[@id="main"]/div/div[3]/div/div/div[5]/div[2]/div[2]/ul/li[1+${i}]/ul/li[2+${a}]
+    \    Exit For Loop If    '${option}'=='${text}'
+    Click Element    xpath=//*[@id="main"]/div/div[3]/div/div/div[5]/div[2]/div[2]/ul/li[1+${i}]/ul/li[2+${a}]
+    [Teardown]    sleep    1s
+
+普通发票开票申请
+    [Documentation]    一个关键字进入普通发票的开票申请页面。
+    ...
+    ...    因为有红点数字所以和其他格式不一样，专门写出来一个。
+    #点击普通发票
+    Click Element    xpath=//*[@id="main"]/div/div[3]/div/div/div[5]/div[2]/div[2]/ul/li[2]/div/span
+    sleep    1s
+    #点击开票申请
+    Click Element    xpath=//*[@id="main"]/div/div[3]/div/div/div[5]/div[2]/div[2]/ul/li[2]/ul/li[1]
+    Wait Until Page Contains    零税普票
+    [Teardown]    sleep    2s
+
+待开发票搜索并选中
+    [Arguments]    ${text}    # 联系单号
+    [Documentation]    财务管理-发票管理-普通发票-开票申请-待开发票页面。
+    ...
+    ...    输入联系单号进行搜索，进行验证，最后选中该联系单。
+    Input Text    xpath=//*[@id="main"]/div/div[3]/div/div/div[5]/div[3]/div[1]/div/div/div[2]/div[1]/div/div[3]/div/div[6]/input    ${text}
+    Click Element    xpath=//*[@id="main"]/div/div[3]/div/div/div[5]/div[3]/div[1]/div/div/div[2]/div[1]/div/div[3]/div/button[2]/span
+    sleep    1s
+    ${this}    Get Text    xpath=//*[@id="main"]/div/div[3]/div/div/div[5]/div[3]/div[1]/div/div/div[2]/div[1]/div/div[4]/div/div[3]/table/tbody/tr/td[3]/div
+    Should Be Equal    ${this.strip()}    ${text}
+    Click Element    xpath=//*[@id="main"]/div/div[3]/div/div/div[5]/div[3]/div[1]/div/div/div[2]/div[1]/div/div[4]/div/div[4]/div[2]/table/tbody/tr/td[1]/div/label/span    #xpath=(.//*[normalize-space(text()) and normalize-space(.)='备注'])[2]/following::span[2]
+    [Teardown]    sleep    1s
+
+普通发票点击开票
+    [Documentation]    在待开发票页面点击开票按钮。
+    Click Element    xpath=//*[@id="main"]/div/div[3]/div/div/div[5]/div[3]/div[1]/div/div/div[2]/div[1]/div/div[3]/div/div[2]/button[1]/span
+    [Teardown]    sleep    3s
+
+发票开具选择货物名称
+    [Arguments]    ${name}=
+    [Documentation]    普通发票发票开具modal页面。选择货物或应税劳务名称。
+    ...
+    ...    包括：代理海运费、代理港杂费
+    ${text}    Get Text    xpath=(.//*[normalize-space(text()) and normalize-space(.)='复制账号'])[1]/following::input[1]
+    Click Element    xpath=(.//*[normalize-space(text()) and normalize-space(.)='复制账号'])[1]/following::input[1]    #点击下拉框
+    sleep    500ms
+    Run Keyword If    '${name}'=='代理海运费'    Click Element    xpath=(.//*[normalize-space(text()) and normalize-space(.)='无匹配数据'])[16]/following::li[1]
+    Click Element    xpath=(.//*[normalize-space(text()) and normalize-space(.)='代理海运费'])[2]/following::li[1]
+    [Teardown]    sleep    1s
+
+发票开具选择抬头
+    [Arguments]    ${name}
+    [Documentation]    普通发票发票开具modal页面。选择抬头流程。传入客户名字。
+    Click Element    xpath=/html/body/div[not(contains(@style,'display: none'))]/div[2]/div[not(contains(@style,'display: none'))]/div/div[2]/div/div/div[9]/div/div/div[20]/button    #点击选择抬头
+    sleep    1s
+    Input Text    xpath=/html/body/div[not(contains(@style,'display: none'))]/div[2]/div[not(contains(@style,'display: none'))]/div/div[2]/div/div/div[5]/div/div[2]/div/div/div[2]/div[1]/div/input    ${name}
+    Click Element    xpath=/html/body/div[not(contains(@style,'display: none'))]/div[2]/div[not(contains(@style,'display: none'))]/div/div[2]/div/div/div[5]/div/div[2]/div/div/div[2]/div[1]/button
+    sleep    1s
+    Click Element    xpath=/html/body/div[not(contains(@style,'display: none'))]/div[2]/div[not(contains(@style,'display: none'))]/div/div[2]/div/div/div[5]/div/div[2]/div/div/div[2]/div[2]/div[3]/table/tbody/tr/td[3]/div/div    #选择抬头
+    Click Element    xpath=/html/body/div[not(contains(@style,'display: none'))]/div[2]/div[not(contains(@style,'display: none'))]/div/div[2]/div/div/div[5]/div/div[2]/div/div/div[3]/div/button[2]/span    #点击确定
+    [Teardown]    sleep    1s
+
+发票开具输入数量
+    [Arguments]    ${number}=
+    Input Text    xpath=(.//*[normalize-space(text()) and normalize-space(.)='代理港杂费'])[2]/following::input[2]    ${number}
+    [Teardown]    sleep    1s
+
+发票开具输入金额
+    [Arguments]    ${price}=
+    Click Element    xpath=(.//*[normalize-space(text()) and normalize-space(.)='代理港杂费'])[2]/following::input[3]
+    Input Text    xpath=(.//*[normalize-space(text()) and normalize-space(.)='代理港杂费'])[2]/following::input[3]    ${price}
+    [Teardown]    sleep    1s
+
+发票开具输入备注
+    [Arguments]    ${remark}=
+    Input Text    xpath=(.//*[normalize-space(text()) and normalize-space(.)='sdfggsd'])[1]/following::textarea[1]    ${remark}
+    [Teardown]    sleep    1s
+
+发票开具确定流程
+    [Documentation]    两种流程，一种是通过金税卡开票，另一种不通过金税卡开票。
+    ...
+    ...    这是第二种不通过金税卡开票。
+    #点击确定
+    Click Element    xpath=/html/body/div[not(contains(@style,'display: none'))]/div[2]/div[not(contains(@style,'display: none'))]/div/div[3]/div/button[3]/span    #xpath=(.//*[normalize-space(text()) and normalize-space(.)='普票换抬头'])[2]/following::span[1]
+    sleep    1s
+    #开票信息确认
+    Click Element    xpath=/html/body/div[not(contains(@style,'display: none'))]/div[2]/div[not(contains(@style,'display: none'))]/div/div/div/div[3]/button[2]/span    #xpath=(.//*[normalize-space(text()) and normalize-space(.)='取消'])[35]/following::span[1]
+    sleep    1s
+    #选择发票号
+    Click Element    xpath=/html/body/div[not(contains(@style,'display: none'))]/div[2]/div[not(contains(@style,'display: none'))]/div/div[2]/div/div/div[4]/div/div[2]/div/div/div[2]/div/div/div/i    #xpath=(.//*[normalize-space(text()) and normalize-space(.)='选择起始发票号码'])[3]/following::i[1]
+    sleep    1s
+    Click Element    xpath=/html/body/div[not(contains(@style,'display: none'))]/ul[2]/div/li[1]/div/div[1]    #xpath=(.//*[normalize-space(text()) and normalize-space(.)='无匹配数据'])[43]/following::div[3]
+    sleep    1s
+    #点击确定
+    Click Element    xpath=/html/body/div[not(contains(@style,'display: none'))]/div[2]/div[not(contains(@style,'display: none'))]/div/div[2]/div/div/div[4]/div/div[2]/div/div/div[3]/div/button[2]/span    #xpath=(.//*[normalize-space(text()) and normalize-space(.)='取消'])[32]/following::span[1]
+    [Teardown]    sleep    2s
+
+收费审批方案选择
+    [Documentation]    收费管理申请审批时，点击确定之后，在弹出的modal中选择审批方案。
+    ...
+    ...    TODO：审批逻辑改变：当只有一条审批方案时会不弹出该审批方案，并自动调用该审批方案。
+    Click Element    xpath=(.//*[normalize-space(text()) and normalize-space(.)='收费审核'])[1]/following::div[1]    #选择审批方案
+    Click Element    xpath=(.//*[normalize-space(text()) and normalize-space(.)='取消'])[9]/following::span[1]    #点击确定审批方案
+    [Teardown]    sleep    1s
+
+付费审批方案选择
+    [Documentation]    付费管理申请审批时，点击确定之后，在弹出的modal中选择审批方案。
+    ...
+    ...    TODO：审批逻辑改变：当只有一条审批方案时会不弹出该审批方案，并自动调用该审批方案。
+    Click Element    xpath=(.//*[normalize-space(text()) and normalize-space(.)='付费审核'])[1]/following::div[1]    #选择审批方案
+    Click Element    xpath=(.//*[normalize-space(text()) and normalize-space(.)='取消'])[9]/following::span[1]    #点击确定审批方案
+    [Teardown]    sleep    1s
+
+进入支票申请
+    [Documentation]    进入支票管理的支票申请页面。
+    #点击支票申请主菜单
+    Click Element    xpath=//*[@id="main"]/div/div[3]/div/div/div[2]/div[2]/div[2]/ul//div/span[contains(text(),'支票申请')]
+    sleep    1s
+    #点击支票申请子菜单
+    Click Element    xpath=//*[@id="main"]/div/div[3]/div/div/div[2]/div[2]/div[2]/ul//div/span[contains(text(),'支票申请')]/following::li[contains(@class,'ivu-menu-item')]
+    [Teardown]    sleep    2s
+
+待开支票搜索并选中
+    [Arguments]    ${text}
+    [Documentation]    支票管理-支票申请-待开支票页面。
+    ...
+    ...    输入联系单号进行关键字搜索，进行验证，最后选中该联系单。
+    Input Text    xpath=//*[@id="main"]/div/div[3]/div/div/div[1]/div/div/div[6]/div/input    ${text}
+    Click Element    xpath=//*[@id="main"]/div/div[3]/div/div/div[1]/div/div/div[6]/button/span
+    sleep    1s
+    ${thisNumber}    get text    xpath=//*[@id="main"]/div/div[3]/div/div/div[2]/div[3]/div/div/div/div/div/div[1]/div/div[6]/div/div[3]/table/tbody/tr[1]/td[3]/div
+    Should Be Equal    ${thisNumber.strip()}    ${text}
+    Click Element    xpath=//*[@id="main"]/div/div[3]/div/div/div[2]/div[3]/div/div/div/div/div/div[1]/div/div[6]/div/div[4]/div[2]/table/tbody/tr/td[1]/div/label/span
+    [Teardown]    sleep    2s
+
+待开支票普通按钮
+    [Arguments]    ${button}
+    [Documentation]    待开支票页面按钮。
+    ...
+    ...    包括：开票、驳回。
+    : FOR    ${i}    IN RANGE    3
+    \    ${text}    Get Text    xpath=//*[@id="main"]/div/div[3]/div/div/div[2]/div[3]/div/div/div/div/div/div[1]/div/div[5]/div/div[2]/button[1+${i}]/span
+    \    Exit For Loop If    '${button}'=='${text}'
+    Click Element    xpath=//*[@id="main"]/div/div[3]/div/div/div[2]/div[3]/div/div/div/div/div/div[1]/div/div[5]/div/div[2]/button[1+${i}]/span
+    [Teardown]    sleep    2s
+
+待开支票EDOC按钮
+    [Documentation]    待开支票按钮：EDOC。
+    Click Element    //*[@id="main"]/div/div[3]/div/div/div[2]/div[3]/div/div/div/div/div/div[1]/div/div[5]/div/button/span
+    [Teardown]    sleep    2s
+
+待开支票选择支票
+    [Documentation]    待开普通支票（转账凭条）点击开票之后，选择支票的modal点击支票号码选中。
+    Click Element    xpath=(.//*[normalize-space(text()) and normalize-space(.)='支票ID'])[1]/following::div[4]
+    [Teardown]    sleep    1s
+
+转账凭条选择支票确定
+    [Documentation]    待开转账凭条选择支票之后，点击确定按钮。
+    Click Element    xpath=(.//*[normalize-space(text()) and normalize-space(.)='取消'])[15]/following::span[1]
+    [Teardown]    sleep    2s
+
+普通支票选择支票确定
+    [Documentation]    待开正常支票选择支票之后，点击确定按钮。
+    Click Element    xpath=(.//*[normalize-space(text()) and normalize-space(.)='取消'])[15]/following::span[1]
+    [Teardown]    sleep    2s
+
+转账凭条密码输入
+    [Arguments]    ${password}
+    [Documentation]    开具外汇转账凭条页面，输入密码。
+    Input Text    xpath=(.//*[normalize-space(text()) and normalize-space(.)='密码'])[2]/following::input[1]    ${password}
+    [Teardown]    sleep    1s
+
+转账凭条用途输入
+    [Arguments]    ${text}
+    [Documentation]    开具外汇转账凭条页面，输入用途。
+    input text    xpath=(.//*[normalize-space(text()) and normalize-space(.)='用途'])[10]/following::input[1]    ${text}
+    [Teardown]    sleep    1s
+
+开具转账凭条确认
+    [Documentation]    开具外汇转账凭条页面，确定按钮。
+    Click Element    xpath=(.//*[normalize-space(text()) and normalize-space(.)='根据结算单开具'])[5]/following::span[1]
+    [Teardown]    sleep    2s
+
+打印取消
+    [Documentation]    虽然取消，但是也成功开票。不过没有打印。
+    send    {ESC}    #AutoItLibrary库模拟键盘操作
+    [Teardown]    sleep    2s
+
+普通支票用途输入
+    [Arguments]    ${text}
+    [Documentation]    开具普通支票页面，输入用途。
+    Input Text    xpath=(.//*[normalize-space(text()) and normalize-space(.)='用途'])[8]/following::input[1]    ${text}
+    [Teardown]    sleep    1s
+
+开具普通支票确认
+    [Documentation]    开具普通支票页面，确定按钮。
+    Click Element    xpath=(.//*[normalize-space(text()) and normalize-space(.)='根据结算单开具'])[4]/following::span[1]
+    [Teardown]    sleep    2s

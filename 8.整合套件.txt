@@ -1,0 +1,466 @@
+*** Settings ***
+Library           Selenium2Library
+Library           Screenshot
+Resource          BaseResource.txt
+Resource          SalesResource.txt
+Resource          BusinessResource.txt
+Resource          OperationResource.txt
+Resource          NecessaryShippingMessage.txt
+Resource          FinancialOrderResource.txt
+Resource          FinancialSettlementResource.txt
+Resource          ApproveResource.txt
+Resource          ReallyPayResource.txt
+Resource          CombineResource.txt
+Library           ExcelLibrary
+
+*** Test Cases ***
+整合收费联系单
+    [Documentation]    生成收费联系单并审批再开票的流程。
+    #用户登录
+    login    http://49.4.81.106    sys_admin    123456    青岛全运国际货运代理有限公司
+    #销售新增托单
+    进入销售订舱页面
+    销售订舱外部按钮    新增
+    必填信息
+    销售订舱内部保存托单
+    销售订舱内部按钮    提交
+    销售订舱点击列表
+    销售订舱委托单叉号退出
+    ${businessNum}    销售订舱获取业务流水号
+    选择页面标签退出    销售订舱
+    #商务流转
+    进入商务订舱页面
+    商务订舱选中托单
+    商务订舱外部按钮    打开
+    商务订舱内部按钮    接单
+    商务订舱约号输入    ${businessNum}    #约号默认为业务流水号
+    商务订舱内部保存
+    商务订舱内部按钮    提交
+    选择页面标签退出    海运出口-商务编辑
+    选择页面标签退出    商务订舱
+    #操作接单
+    进入订舱操作页面
+    订舱操作子菜单    托单接收
+    托单接收关键字检索    ${businessNum}
+    托单接收托单选中框
+    托单接收外部按钮    查看
+    托单接收内部按钮    接收
+    选择页面标签退出    订舱操作
+    页面刷新    首页
+    #下货纸船期编辑
+    进入订舱操作页面
+    订舱操作下货纸选中框
+    订舱操作海运出口按钮    打开
+    下货纸主单号输入
+    下货纸船名选择    didi    894554    2018-5-6    robot客户
+    下货纸内部保存
+    选择页面标签退出    订舱操作
+    页面刷新    首页
+    #收费联系单生成
+    进入订舱操作页面
+    订舱操作下货纸选中框
+    订舱操作点击账单按钮
+    订舱操作选择账单子元素    账单
+    账单管理普通按钮    新增
+    账单明细按钮    新增
+    账单明细新增一条明细    1    制冷费    USD    票    20    30
+    ...    应收    ziqi
+    新增账单上方初始按钮    保存
+    选择页面标签退出    新增账单
+    点击账单号选中
+    账单管理制作联系单
+    账单管理选择联系单子元素    收费联系单
+    制作联系单点击客户
+    制作联系单确定客户
+    收费联系单保存
+    选择页面标签退出    订舱操作
+    选择页面标签退出    账单管理
+    #收费联系单申请开票
+    左侧菜单子菜单    收费管理
+    ${settlementId}    收付费管理获取结算单号
+    收付费管理选中框
+    收费管理二次确认按钮    申请开票
+    发票继续申请
+    验证票申请状态    已申请
+    选择页面标签退出    收费管理
+    #收费联系单开票
+    左侧菜单子菜单    发票管理
+    普通发票开票申请
+    待开发票搜索并选中
+    普通发票点击开票
+    发票开具选择货物名称    代理港杂费
+    发票开具确定流程
+    选择页面标签退出    发票管理
+    #实收落帐
+    左侧菜单子菜单    实收实付管理
+    实收实付确认按钮    收付款确认
+    收付款确认输入联系单号    ${settlementId}
+    收付款确认点击收费
+    收付款确认点击检索
+    收付款确认选中联系单    ${settlementId}
+    收付款确认确认联系单按钮
+    实收实付页面确认
+    实收实付验证结算客户    ziqi
+    实收实付点击结算客户
+    实收实付验证结算单号    ${settlementId}
+    左侧菜单子菜单    收费管理
+    验证收费结算单是否实收    Y
+
+整合付费联系单
+    [Documentation]    生成收费联系单并开票的流程。
+    #用户登录
+    login    http://27.223.104.6:32880/#/login    shanfaxian    123456    实习测试公司
+    #销售新增托单
+    进入销售订舱页面
+    销售订舱外部按钮    新增
+    必填信息
+    销售订舱内部保存托单
+    销售订舱内部按钮    提交
+    销售订舱点击列表
+    销售订舱委托单叉号退出
+    ${businessNum}    销售订舱获取业务流水号
+    选择页面标签退出    销售订舱
+    #商务流转
+    进入商务订舱页面
+    商务订舱选中托单
+    商务订舱外部按钮    打开
+    商务订舱内部按钮    接单
+    商务订舱约号输入    ${businessNum}    #约号默认为业务流水号
+    商务订舱内部保存
+    商务订舱内部按钮    提交
+    选择页面标签退出    海运出口-商务编辑
+    选择页面标签退出    商务订舱
+    #操作接单
+    进入订舱操作页面
+    订舱操作子菜单    托单接收
+    托单接收关键字检索    ${businessNum}
+    托单接收托单选中框
+    托单接收外部按钮    查看
+    托单接收内部按钮    接收
+    选择页面标签退出    订舱操作
+    页面刷新    首页
+    #下货纸船期编辑
+    进入订舱操作页面
+    订舱操作下货纸选中框
+    订舱操作海运出口按钮    打开
+    下货纸主单号输入
+    下货纸船名选择
+    下货纸内部保存
+    选择页面标签退出    订舱操作
+    页面刷新    首页
+    #付费联系单生成
+    进入订舱操作页面
+    订舱操作下货纸选中框
+    订舱操作点击账单按钮
+    订舱操作选择账单子元素    账单
+    账单管理普通按钮    新增
+    账单明细按钮    新增
+    ${number}    Evaluate    random.randint(1,10)    random
+    账单明细输入单价    ${number}
+    账单明细选择费种
+    账单明细选择币种
+    账单明细选择计量单位
+    账单明细输入数量    ${number}
+    账单明细选择应付
+    ${abbreviation}    账单明细选择客户    #返回客户的简称，之后会用
+    新增账单上方初始按钮    保存
+    利润为负继续保存
+    增账单页面关闭
+    点击账单号选中
+    账单管理二次确认按钮    申请审批
+    账单审批流程
+    选择页面标签退出    账单审批
+    点击账单号选中
+    账单管理制作联系单
+    账单管理选择联系单子元素    付费联系单
+    制作联系单点击客户
+    制作联系单确定客户
+    付费联系单保存
+    选择页面标签退出    订舱操作
+    选择页面标签退出    账单管理
+    #付费单申请开票
+    点击财务管理
+    财务管理子菜单    付费管理
+    ${settlementId}    收付费管理获取结算单号
+    收付费管理客户菜单    ${abbreviation}
+    收付费管理选中框
+    付费管理二次确认按钮    申请审批
+    付费审批方案选择
+    验证审批状态    等待审批
+    付费单审批流程
+    页面刷新    结费协议描述
+    验证审批状态    审批完成
+    收付费管理选中框
+    付费管理二次确认按钮    支票申请
+    支票继续申请
+    验证票申请状态    已申请
+    选择页面标签退出    付费管理
+    #付费联系单开票
+    点击财务管理
+    财务管理子菜单    支票管理
+    进入支票申请
+    待开支票搜索并选中    ${settlementId}
+    验证支票结算单号    ${settlementId}
+    点击待开支票结算单号
+    待开支票普通按钮    开票
+    待开支票选择支票
+    普通支票选择支票确定
+    普通支票用途输入    ${settlementId}
+    开具普通支票确认
+    选择页面标签退出    发票管理
+    #实付落帐
+    财务管理子菜单    实收实付管理
+    实收实付确认按钮    收付款确认
+    收付款确认输入联系单号    ${settlementId}
+    收付款确认点击付费
+    收付款确认点击检索
+    收付款确认选中联系单    ${settlementId}
+    收付款确认确认联系单按钮
+    实收实付页面确认
+    实收实付验证结算客户    ${abbreviation}
+    实收实付点击结算客户
+    实收实付验证结算单号    ${settlementId}
+    财务管理子菜单    付费管理
+    验证付费结算单是否实付    Y
+
+收费联系单-sys_admin-实习测试公司
+    [Tags]    test1
+    #用户登录
+    login    http://27.223.104.6:32880/#/login    sys_admin    123456    实习测试公司
+    ${businessNum}    销售新增托单    robot客户    管理员    张小影    管理员    管理员
+    ...    CNC    robot客户
+    商务流转托单    ${businessNum}
+    操作接单    ${businessNum}
+    操作编辑船期    didi    robot客户
+    ${abbreviation}    Set Variable    ziqi    #确定收费对象
+    生成收费联系单    ${abbreviation}    ${businessNum}    robot客户    张小影
+    ${settlementId}    收费申请开发票
+    收费开发票    ${settlementId}
+    收费收款确认    ${settlementId}    ${abbreviation}
+    关闭浏览器
+
+付费联系单-sys_admin-实习测试公司
+    [Tags]    test1
+    #用户登录
+    login    http://27.223.104.6:32880/#/login    sys_admin    123456    实习测试公司
+    ${businessNum}    销售新增托单    robot客户    管理员    张小影    管理员    管理员
+    ...    CNC    robot客户
+    商务流转托单    ${businessNum}
+    操作接单    ${businessNum}
+    操作编辑船期    didi    robot客户
+    ${abbreviation}    Set Variable    ziqi    #确定付费对象
+    生成付费联系单    ${abbreviation}    ${businessNum}    robot客户    张小影
+    ${settlementId}    付费申请开支票    ${abbreviation}
+    付费开支票    ${settlementId}
+    付费付款确认    ${settlementId}    ${abbreviation}
+    关闭浏览器
+
+收费联系单-sys_admin-开瑞
+    [Tags]    kairui
+    #用户登录
+    login    http://27.223.104.6:32880/#/login    sys_admin    123456    开瑞国际物流（山东）股份有限公司    #商务需要特别注意
+    ${businessNum}    销售新增托单    青岛科技大学    管理员    刘凯    管理员    管理员
+    ...    CNC    青岛科技大学
+    商务流转托单    ${businessNum}
+    操作接单    ${businessNum}
+    操作编辑船期    didi    青岛科技大学
+    ${abbreviation}    Set Variable    青科大    #确定收费对象
+    生成收费联系单    ${abbreviation}    ${businessNum}    青岛科技大学    刘凯
+    ${settlementId}    收费申请开发票
+    收费开发票    ${settlementId}
+    收费收款确认    ${settlementId}    ${abbreviation}
+    关闭浏览器
+
+付费联系单-sys_admin-开瑞
+    [Tags]    kairui
+    #用户登录
+    login    http://27.223.104.6:32880/#/login    sys_admin    123456    开瑞国际物流（山东）股份有限公司    #商务需要特别注意
+    ${businessNum}    销售新增托单    青岛科技大学    管理员    刘凯    管理员    管理员
+    ...    CNC    青岛科技大学
+    商务流转托单    ${businessNum}
+    操作接单    ${businessNum}
+    操作编辑船期    didi    青岛科技大学
+    ${abbreviation}    Set Variable    青科大    #确定付费对象
+    生成付费联系单    ${abbreviation}    ${businessNum}    青岛科技大学    刘凯
+    ${settlementId}    付费申请开支票    ${abbreviation}
+    付费开支票    ${settlementId}
+    付费付款确认    ${settlementId}    ${abbreviation}
+    关闭浏览器
+
+收费联系单-Excel
+    [Tags]    sys_admin
+    @{value1}    获取Excel数据    C:\\Users\\ziqi\\Desktop\\data2.xls    1
+    @{value2}    获取Excel数据    C:\\Users\\ziqi\\Desktop\\data2.xls    3
+    @{value3}    获取Excel数据    C:\\Users\\ziqi\\Desktop\\data2.xls    5
+    #用户登录
+    login    @{value1}[0]    @{value1}[1]    @{value1}[2]    @{value1}[3]    #商务需要特别注意
+    ${businessNum}    销售新增托单    @{value2}[0]    @{value2}[1]    @{value2}[2]    @{value2}[3]    @{value2}[4]
+    ...    @{value2}[5]    @{value2}[6]
+    商务流转托单    ${businessNum}
+    操作接单    ${businessNum}
+    操作编辑船期    @{value3}[0]    @{value3}[1]
+    ${abbreviation}    Set Variable    @{value2}[0]    #确定收费对象
+    生成收费联系单    ${abbreviation}    ${businessNum}    @{value2}[0]    @{value2}[2]
+    ${settlementId}    收费申请开发票
+    收费开发票    ${settlementId}
+    收费收款确认    ${settlementId}    ${abbreviation}
+
+收费联系单-sys_admin-盈智
+    [Tags]    wisdom
+    #用户登录
+    login    http://27.223.104.6:32880/#/login    sys_admin    123456    青岛盈智科技    #商务需要特别注意
+    ${businessNum}    销售新增托单    青岛忠诚    管理员    刘凯    管理员    管理员
+    ...    CNC    青岛忠诚
+    商务流转托单    ${businessNum}
+    操作接单    ${businessNum}
+    操作编辑船期    didi    青岛忠诚
+    ${abbreviation}    Set Variable    青岛忠诚    #确定收费对象
+    生成收费联系单    ${abbreviation}    ${businessNum}    青岛忠诚    刘凯
+    ${settlementId}    收费申请开发票
+    收费开发票    ${settlementId}
+    收费收款确认    ${settlementId}    ${abbreviation}
+    关闭浏览器
+
+付费联系单-sys_admin-盈智
+    [Tags]    wisdom
+    #用户登录
+    login    http://27.223.104.6:32880/#/login    sys_admin    123456    青岛盈智科技    #商务需要特别注意
+    ${businessNum}    销售新增托单    青岛忠诚    管理员    刘凯    管理员    管理员
+    ...    CNC    青岛忠诚
+    商务流转托单    ${businessNum}
+    操作接单    ${businessNum}
+    操作编辑船期    didi    青岛忠诚
+    ${abbreviation}    Set Variable    青岛忠诚    #确定付费对象
+    生成付费联系单    ${abbreviation}    ${businessNum}    青岛忠诚    刘凯
+    ${settlementId}    付费申请开支票    ${abbreviation}
+    付费开支票    ${settlementId}
+    付费付款确认    ${settlementId}    ${abbreviation}
+    关闭浏览器
+
+收费联系单-sys_admin-开瑞-49
+    [Tags]    kairui49
+    #用户登录
+    login    http://49.4.86.37:38080/#/login    sys_admin    123456    开瑞国际物流（山东）股份有限公司    #商务需要特别注意
+    ${businessNum}    销售新增托单    青岛科技大学    管理员    刘凯    管理员    管理员
+    ...    CNC    青岛科技大学
+    商务流转托单    ${businessNum}
+    操作接单    ${businessNum}
+    操作编辑船期    didi    青岛科技大学
+    ${abbreviation}    Set Variable    青科大    #确定收费对象
+    生成收费联系单    ${abbreviation}    ${businessNum}    青岛科技大学    刘凯
+    ${settlementId}    收费申请开发票
+    收费开发票    ${settlementId}
+    收费收款确认    ${settlementId}    ${abbreviation}
+    关闭浏览器
+
+付费联系单-sys_admin-开瑞-49
+    [Tags]    kairui49
+    #用户登录
+    login    http://49.4.86.37:38080/#/login    sys_admin    123456    开瑞国际物流（山东）股份有限公司    #商务需要特别注意
+    ${businessNum}    销售新增托单    青岛科技大学    管理员    刘凯    管理员    管理员
+    ...    CNC    青岛科技大学
+    商务流转托单    ${businessNum}
+    操作接单    ${businessNum}
+    操作编辑船期    didi    青岛科技大学
+    ${abbreviation}    Set Variable    青科大    #确定付费对象
+    生成付费联系单    ${abbreviation}    ${businessNum}    青岛科技大学    刘凯
+    ${settlementId}    付费申请开支票    ${abbreviation}
+    付费开支票    ${settlementId}
+    付费付款确认    ${settlementId}    ${abbreviation}
+    关闭浏览器
+
+收费联系单-sys_admin-实测2
+    [Tags]    test2
+    #用户登录
+    login    http://27.223.104.6:32880/#/login    sys_admin    123456    实习测试公司2
+    ${businessNum}    销售新增托单    张三    管理员    刘凯    管理员    管理员
+    ...    CNC    张三
+    商务流转托单    ${businessNum}
+    操作接单    ${businessNum}
+    操作编辑船期    didi    张三
+    ${abbreviation}    Set Variable    张三    #确定收费对象
+    生成收费联系单    ${abbreviation}    ${businessNum}    张三    刘凯
+    ${settlementId}    收费申请开发票
+    收费开发票    ${settlementId}
+    收费收款确认    ${settlementId}    ${abbreviation}
+    关闭浏览器
+
+付费联系单-sys_admin-实测2
+    [Tags]    test2
+    #用户登录
+    login    http://27.223.104.6:32880/#/login    sys_admin    123456    实习测试公司2
+    ${businessNum}    销售新增托单    张三    管理员    刘凯    管理员    管理员
+    ...    CNC    张三
+    商务流转托单    ${businessNum}
+    操作接单    ${businessNum}
+    操作编辑船期    didi    张三
+    ${abbreviation}    Set Variable    张三    #确定付费对象
+    生成付费联系单    ${abbreviation}    ${businessNum}    张三    刘凯
+    ${settlementId}    付费申请开支票    ${abbreviation}
+    付费开支票    ${settlementId}
+    付费付款确认    ${settlementId}    ${abbreviation}
+    关闭浏览器
+
+收费联系单-sys_admin-32880澳源达
+    [Tags]    aoyuanda
+    #用户登录
+    login    http://27.223.104.6:32880/#/login    sys_admin    123456    澳源达
+    ${businessNum}    销售新增托单    船公司    管理员    李商务    管理员    管理员
+    ...    CNC    船公司
+    商务流转托单    ${businessNum}
+    操作接单    ${businessNum}
+    操作编辑船期    didi    船公司
+    ${abbreviation}    Set Variable    船公司    #确定收费对象
+    生成收费联系单    ${abbreviation}    ${businessNum}    船公司    李商务
+    ${settlementId}    收费申请开发票
+    收费开发票    ${settlementId}
+    收费收款确认    ${settlementId}    ${abbreviation}
+    关闭浏览器
+
+付费联系单-sys_admin-32880澳源达
+    [Tags]    aoyuanda
+    #用户登录
+    login    http://27.223.104.6:32880/#/login    sys_admin    123456    澳源达
+    ${businessNum}    销售新增托单    船公司    管理员    李商务    管理员    管理员
+    ...    CNC    船公司
+    商务流转托单    ${businessNum}
+    操作接单    ${businessNum}
+    操作编辑船期    didi    船公司
+    ${abbreviation}    Set Variable    船公司    #确定付费对象
+    生成付费联系单    ${abbreviation}    ${businessNum}    船公司    李商务
+    ${settlementId}    付费申请开支票    ${abbreviation}
+    付费开支票    ${settlementId}
+    付费付款确认    ${settlementId}    ${abbreviation}
+    关闭浏览器
+
+收费联系单-sys_admin-real澳源达
+    [Tags]    real
+    #用户登录
+    login    http://49.4.6.153/#/login    sys_admin    123456    山东澳源达物流有限公司
+    ${businessNum}    销售新增托单    王越    管理员    孙倩    管理员    管理员
+    ...    CNC    王越
+    商务流转托单    ${businessNum}
+    操作接单    ${businessNum}
+    操作编辑船期    KYPARSSIA    王越
+    ${abbreviation}    Set Variable    王越    #确定收费对象
+    生成收费联系单    ${abbreviation}    ${businessNum}    王越    孙倩
+    ${settlementId}    收费申请开发票
+    收费开发票    ${settlementId}
+    收费收款确认    ${settlementId}    ${abbreviation}
+    关闭浏览器
+
+付费联系单-sys_admin-real澳源达
+    [Tags]    real
+    #用户登录
+    login    http://49.4.6.153/#/login    sys_admin    123456    山东澳源达物流有限公司
+    ${businessNum}    销售新增托单    王越    管理员    孙倩    管理员    管理员
+    ...    CNC    王越
+    商务流转托单    ${businessNum}
+    操作接单    ${businessNum}
+    操作编辑船期    KYPARSSIA    王越
+    ${abbreviation}    Set Variable    王越    #确定付费对象
+    生成付费联系单    ${abbreviation}    ${businessNum}    王越    孙倩
+    ${settlementId}    付费申请开支票    ${abbreviation}
+    付费开支票    ${settlementId}
+    付费付款确认    ${settlementId}    ${abbreviation}
+    关闭浏览器

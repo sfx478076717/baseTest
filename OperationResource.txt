@@ -1,0 +1,253 @@
+*** Settings ***
+Library           Selenium2Library
+Library           Screenshot
+Resource          FinancialOrderResource.txt
+Library           AutoItLibrary
+Resource          BaseResource.txt
+
+*** Keywords ***
+进入订舱操作页面
+    [Documentation]    进入操作管理的操作订舱页面。
+    左侧菜单主菜单    操作管理    #点击操作管理
+    左侧菜单子菜单    订舱操作    #点击订舱操作
+    Wait Until Element Contains    xpath=//*[@id="main"]/div/div[3]/div/div/div/div[3]/div/div[2]/div/div/div[4]/div/div[2]/div[2]/table/thead/tr/th[4]/div    主单号    8s
+    [Teardown]    sleep    3s
+
+订舱操作子菜单
+    [Arguments]    ${button}
+    [Documentation]    点击订舱操作的子菜单。
+    ...
+    ...    包括：托单接收、海运出口、海运进口、空运出口、空运进口。
+    : FOR    ${i}    IN RANGE    6
+    \    ${text}    Get Text    xpath=//*[@id="main"]/div/div[3]/div/div/div/div[2]/div[2]/ul/li[1+${i}]/span
+    \    Exit For Loop If    '${button}'=='${text}'
+    Click Element    xpath=//*[@id="main"]/div/div[3]/div/div/div/div[2]/div[2]/ul/li[1+${i}]/span    #点击托单接收
+    [Teardown]    sleep    2s    # 没有什么可以定位的数据 只能休眠
+
+托单接收外部按钮
+    [Arguments]    ${button}
+    [Documentation]    订舱操作-托单接收页面的外部按钮
+    ...
+    ...    包括：接受并打开、接收、拒收、查看、检索
+    : FOR    ${i}    IN RANGE    6
+    \    ${text}    get text    xpath=//*[@id="main"]/div/div[3]/div/div/div/div[3]/div/div[2]/div/div/div[3]/div/div[1]/div[1]/button[1+${i}]
+    \    Exit For Loop If    '${button}'=='${text}'
+    Click Button    xpath=//*[@id="main"]/div/div[3]/div/div/div/div[3]/div/div[2]/div/div/div[3]/div/div[1]/div[1]/button[1+${i}]
+    [Teardown]    sleep    3s
+
+托单接收关键字检索
+    [Arguments]    ${search}
+    [Documentation]    托单接收传入关键字text，按关键字进行检索托单。
+    Input Text    xpath=//*[@id="main"]/div/div[3]/div/div/div/div[3]/div/div[2]/div/div/div[3]/div/div[1]/div[1]/div[2]/input    ${search}
+    sleep    1s
+    Click Button    xpath=//*[@id="main"]/div/div[3]/div/div/div/div[3]/div/div[2]/div/div/div[3]/div/div[1]/div[1]/button[5]
+    [Teardown]    sleep    2s
+
+托单接收托单选中框
+    [Documentation]    在托单接收页面，点击选中某一条托单的选中框。
+    Click Element    xpath=//*[@id="main"]/div/div[3]/div/div/div/div[3]/div/div[2]/div/div/div[3]/div/div[2]/div[3]/table/tbody/tr[1]/td[1]/div/label
+    [Teardown]    sleep    500ms
+
+订舱操作海运出口按钮
+    [Arguments]    ${button}
+    [Documentation]    订舱操作-海运出口页面，外部的按钮。
+    ...
+    ...    包括：新增、打开、驳回、删除、EDOC、另存。
+    : FOR    ${i}    IN RANGE    10    #最多10个按钮
+    \    ${text}    Get Text    xpath=//*[@id="main"]/div/div[3]/div/div/div/div[3]/div/div[2]/div/div/div[4]/div/div[1]/div[1]/div[2]/button[1+${i}]
+    \    Exit For Loop If    '${text}'=='${button}'    #如果当前循环是传入的按钮名 就退出循环 ${i}的值保留
+    Click Button    xpath=//*[@id="main"]/div/div[3]/div/div/div/div[3]/div/div[2]/div/div/div[4]/div/div[1]/div[1]/div[2]/button[1+${i}]
+    [Teardown]    sleep    2s
+
+订舱操作下货纸选中框
+    [Documentation]    在海运出口页面，点击一条下货纸的选中框。
+    sleep    2s
+    Click Element    xpath=//*[@id="main"]/div/div[3]/div/div/div/div[3]/div/div[2]/div/div/div[4]/div/div[2]/div[3]/table/tbody/tr[1]/td[2]/div/label
+    [Teardown]    sleep    500ms
+
+托单接收内部按钮
+    [Arguments]    ${button}
+    [Documentation]    托单接收页面，点击查看后，托单内部的按钮。
+    ...
+    ...    包括：接收并打开、接收、拒收。
+    : FOR    ${i}    IN RANGE    5
+    \    ${text}    get text    xpath=//*[@id="main"]/div/div[3]/div/div/div/div[3]/div/div[2]/div[2]/div/div[1]/button[1+${i}]
+    \    Exit For Loop If    '${button}'=='${text}'
+    #当点击的是 接受并打开    #需要多做一些等待的操作
+    Run Keyword If    '${button}'=='接收并打开'    Wait Until Element Is Visible    xpath=//*[@id="main"]/div/div[3]/div/div/div/div[3]/div/div[2]/div[2]/div/div[1]/button[1+${i}]
+    Click Element    xpath=//*[@id="main"]/div/div[3]/div/div/div/div[3]/div/div[2]/div[2]/div/div[1]/button[1+${i}]
+    Run Keyword If    '${button}'=='接收并打开'    Wait Until Page Contains    下货纸
+    [Teardown]    sleep    3s
+
+托单接收点击列表
+    [Documentation]    托单接收页面，当打开了一个托单的时候，点击列表上标签。
+    Click Element    xpath=//*[@id="main"]/div/div[3]/div/div/div/div[3]/div/div[1]/div/div/div/div/div[2]
+    [Teardown]    sleep    1s
+
+托单接收点击退出叉号
+    [Documentation]    托单接收页面，当打开了一个托单的时候，点击其上菜单的退出叉号。
+    Click Element    xpath=//*[@id="main"]/div/div[3]/div/div/div/div[3]/div/div[1]/div/div/div/div/div[3]/i
+    [Teardown]    sleep    1500ms
+
+订舱操作选择页面
+    [Arguments]    ${button}
+    [Documentation]    订舱操作-海运出口，选择一条下货纸，点击打开，内部选择页面。
+    ...
+    ...    包括：下货纸、箱信息、报价账单、VGM。
+    : FOR    ${i}    IN RANGE    5
+    \    ${text}    get text    xpath=//*[@id="main"]/div/div[3]/div/div/div/div[3]/div/div[2]/div[2]/div/div[1]/div[1]/label[1+${i}]
+    \    Exit For Loop If    '${button}'=='${text}'
+    Wait Until Element Is Visible    xpath=//*[@id="main"]/div/div[3]/div/div/div/div[3]/div/div[2]/div[2]/div/div[1]/div[1]/label[1+${i}]
+    Click Element    xpath=//*[@id="main"]/div/div[3]/div/div/div/div[3]/div/div[2]/div[2]/div/div[1]/div[1]/label[1+${i}]
+    [Teardown]    sleep    2s
+
+下货纸内部保存
+    [Documentation]    订舱操作-海运出口-打开一个下货纸，内部 保存 按钮。
+    Click Button    xpath=//*[@id="main"]/div/div[3]/div/div/div/div[3]/div/div[2]/div[2]/div/div[1]/span/button
+    [Teardown]    sleep    2s
+
+下货纸内部账单
+    [Documentation]    订舱操作-海运出口-打开一个下货纸，内部 账单 按钮。
+    Click Button    xpath=//*[@id="main"]/div/div[3]/div/div/div/div[3]/div/div[2]/div[2]/div/div[1]/button[1]
+    [Teardown]    sleep    2500ms
+
+下货纸主单号输入
+    [Arguments]    ${mainNum}=
+    [Documentation]    订舱操作-海运出口-打开一个下货纸，输入主单号。
+    ${number}    Evaluate    random.randint(10000,100000)    random
+    #当传入的主单号为空    #随机获取一个单号
+    ${mainNum}    Catenate    SEPARATOR=    ziqi    ${number}
+    Input Text    xpath=//*[@id="main"]/div/div[3]/div/div/div/div[3]/div/div[2]/div[2]/div/div[2]/div[2]/div/div[1]/div[2]/div[1]/div/div[2]/div[2]/div/div/div/div[4]/div/div/input    ${mainNum}
+    [Teardown]    sleep    500ms
+
+下货纸船名选择
+    [Arguments]    ${arg1}    ${arg2}    ${arg3}    ${arg4}
+    [Documentation]    下货纸选择船名增加船期的一个完整关键字。
+    ...
+    ...    依次要填的信息为：船名、航次、离港日、船代。
+    send    {HOME}
+    #点击下货纸页面的 “船名选择”的按钮
+    Click Button    xpath=//*[@id="main"]/div/div[3]/div/div/div/div[3]/div/div[2]/div[2]/div/div[2]/div[2]/div/div[1]/div[2]/div[1]/div/div[2]/div[2]/div/div/div/div[14]/div/div[1]/div/div/button
+    sleep    1s
+    #选择船东
+    选择船期页面按钮    添加
+    下货纸船期内容修改    ${arg1}    ${arg2}    ${arg3}    ${arg4}
+    [Teardown]    sleep    1s
+
+下货纸选择船东
+    [Documentation]    下货纸选择船期页面，选中一个船东。
+    Click Element    xpath=/html/body/div[not(contains(@style,'display: none'))]/div[2]/div/div/div[2]/div[2]/div[1]/div/div[3]/table/tbody/tr/td[2]
+    [Teardown]    sleep    500ms
+
+下货纸新增船名
+    [Arguments]    ${shipName}=ziqi
+    [Documentation]    下货纸选择船期页面，新增船名流程。
+    选择船期页面按钮    新增船期    #点击新增船名按钮
+    Input Text    xpath=/html/body/div[not(contains(@style,'display: none'))]/div[2]/div/div/div[2]/div/div/div[1]/div[2]/div/div/div[1]/input    ${shipName}    #输入英文名称
+    Click Button    xpath=/html/body/div[not(contains(@style,'display: none'))]/div[2]/div/div/div[3]/div/button[2]    #点击提交
+    [Teardown]    sleep    1500ms
+
+选择船期页面按钮
+    [Arguments]    ${text}
+    [Documentation]    下货纸选择船期页面，三个按钮。
+    ...    新增船名、添加、编辑。
+    Click Element    xpath=/html/body/div[not(contains(@style,'display: none'))]/div[2]/div[not(contains(@style,'display: none'))]/div/div[2]/div[1]/div[5]/button[2]/span[text()='${text}']    #xpath=(.//*[normalize-space(text()) and normalize-space(.)='新增船名'])[3]/following::span[1]
+    [Teardown]    sleep    1500ms
+
+下货纸船期内容修改
+    [Arguments]    ${arg1}    ${arg2}    ${arg3}    ${arg4}
+    [Documentation]    新增船期页面的内容填写及选择。
+    ...
+    ...    依次要填的信息为：船名、航次、离港日、船代。
+    新增船期船名选择    ${arg1}
+    新增船期船东航次输入    ${arg2}
+    新增船期预计离港日选择    ${arg3}
+    新增船期船代选择    ${arg4}
+    新增船期提交确认
+    [Teardown]    sleep    1500ms
+
+新增船期船名选择
+    [Arguments]    ${text}
+    Click Element    xpath=/html/body/div[not(contains(@style,'display: none'))]/div[2]/div[not(contains(@style,'display: none'))]/div/div[2]/div/div[1]/div[1]/div[2]/div/div/div/div/div/input    #点击船名输入框    #xpath=(.//*[normalize-space(text()) and normalize-space(.)='船名'])[14]/following::input[1]
+    Input Text    xpath=/html/body/div[not(contains(@style,'display: none'))]/div[2]/div[not(contains(@style,'display: none'))]/div/div[2]/div/div[1]/div[1]/div[2]/div/div/div/div/div/input    ${text}
+    sleep    1s
+    Click Element    xpath=/html/body/div[not(contains(@style,'display: none'))]//div[@class='flex-auto label-box' and text()='${text}']    #选择第一个船名    #xpath=(.//*[normalize-space(text()) and normalize-space(.)='无匹配数据'])[71]/following::div[3]
+    [Teardown]    sleep    1500ms
+
+新增船期船代选择
+    [Arguments]    ${text}
+    Click Element    xpath=/html/body/div[not(contains(@style,'display: none'))]/div[2]/div[not(contains(@style,'display: none'))]/div/div[2]/div/div[2]/div[1]/div[2]/div/div/div/div/div/input    #点击船代输入框    #xpath=(.//*[normalize-space(text()) and normalize-space(.)='船代'])[7]/following::input[1]
+    Input Text    xpath=/html/body/div[not(contains(@style,'display: none'))]/div[2]/div[not(contains(@style,'display: none'))]/div/div[2]/div/div[2]/div[1]/div[2]/div/div/div/div/div/input    ${text}
+    sleep    1s
+    Click Element    xpath=/html/body/div[not(contains(@style,'display: none'))]//div[contains(@class,'flex-auto label-box') and text()='${text}']    #选择第一个船代    #xpath=(.//*[normalize-space(text()) and normalize-space(.)='无匹配数据'])[73]/following::div[3]
+    [Teardown]    sleep    1500ms
+
+新增船期船东航次输入
+    [Arguments]    ${number}
+    #${number}    Evaluate    random.randint(10000,100000)    random    #随机海关航次
+    Input Text    xpath=/html/body/div[not(contains(@style,'display: none'))]/div[2]/div[not(contains(@style,'display: none'))]/div/div[2]/div/div[1]/div[2]/div[1]/div/div/div[1]/input    ${number}    #xpath=(.//*[normalize-space(text()) and normalize-space(.)='船东航次'])[3]/following::input[1]
+    [Teardown]    sleep    1500ms
+
+新增船期预计离港日选择
+    [Arguments]    ${date}
+    [Documentation]    预计离港日格式：2018-2-2 只有个数位注意不要带0
+    Click Element    xpath=/html/body/div[not(contains(@style,'display: none'))]/div[2]/div[not(contains(@style,'display: none'))]/div/div[2]/div/div[1]/div[3]/div[1]/div/div/div[1]/div[1]/div/input    #预计离港日输入框点击    #xpath=(.//*[normalize-space(text()) and normalize-space(.)='预计离港日'])[5]/following::input[1]
+    sleep    1s
+    ${year}    ${month}    ${day}    指定日期分割    ${date}
+    Click Element    xpath=/html/body/div[not(contains(@style,'display: none'))]/div[2]/div[not(contains(@style,'display: none'))]/div/div[2]/div/div[1]/div[3]/div[1]/div/div/div[1]/div[2]/div/div/div/div[1]/span[3]/span[1]    #点击年份选择
+    Click Element    xpath=/html/body/div[not(contains(@style,'display: none'))]/div[2]/div[not(contains(@style,'display: none'))]/div/div[2]/div/div[1]/div[3]/div[1]/div/div/div[1]/div[2]/div/div/div/div[2]/div//em[text()='${year}']    #选择年份
+    Click Element    xpath=/html/body/div[not(contains(@style,'display: none'))]/div[2]/div[not(contains(@style,'display: none'))]/div/div[2]/div/div[1]/div[3]/div[1]/div/div/div[1]/div[2]/div/div/div/div[2]/div//em[text()='${month}月']    #选择月份
+    Click Element    xpath=/html/body/div[not(contains(@style,'display: none'))]/div[2]/div[not(contains(@style,'display: none'))]/div/div[2]/div/div[1]/div[3]/div[1]/div/div/div[1]/div[2]/div/div/div/div[2]/div/span[@class='ivu-date-picker-cells-cell']/em[text()='${day}']    #选择日
+    sleep    1s
+    Click Element    xpath=/html/body/div[not(contains(@style,'display: none'))]/div[2]/div[not(contains(@style,'display: none'))]/div/div[2]/div/div[1]/div[3]/div[1]/div/div/div/div[2]/div/div/div/div[4]/button[3]/span    #点击确定按钮    xpath=(.//*[normalize-space(text()) and normalize-space(.)='清空'])[24]/following::span[1]
+    sleep    1s
+    Click Element    xpath=/html/body/div[not(contains(@style,'display: none'))]/div[2]/div[not(contains(@style,'display: none'))]/div/div[3]/button[2]/span    #自动日期确定    #xpath=(.//*[normalize-space(text()) and normalize-space(.)='取消'])[48]/following::span[1]
+    [Teardown]    sleep    1500ms
+
+新增船期提交确认
+    Click Element    xpath=/html/body/div[not(contains(@style,'display: none'))]/div[2]/div[not(contains(@style,'display: none'))]/div/div[3]/div/button[2]/span[text()='提交']    #船期提交    xpath=(.//*[normalize-space(text()) and normalize-space(.)='取消'])[47]/following::span[1]
+    Click Element    xpath=/html/body/div[not(contains(@style,'display: none'))]/div[2]/div[not(contains(@style,'display: none'))]/div/div/div/div[3]/button[2]/span[text()='确定']    #更新船期确定    xpath=(.//*[normalize-space(text()) and normalize-space(.)='取消'])[51]/following::span[1]
+    [Teardown]    sleep    1500ms
+
+用箱信息页面按钮
+    [Arguments]    ${button}
+    [Documentation]    用箱信息页面的多个按钮合一。
+    ...
+    ...    包括：新增、删除、重置、快速录入、生成用箱信息
+    #Run Keyword If    '${button}'=='新增'    Click Element    xpath=//*[@id="main"]/div/div[3]/div/div/div/div[3]/div/div[2]/div[2]/div/div[2]/div[2]/div/div[1]/div[2]/div[2]/div/div[1]/div/button[1]
+    #Run Keyword If    '${button}'=='删除'    Click Element    xpath=//*[@id="main"]/div/div[3]/div/div/div/div[3]/div/div[2]/div[2]/div/div[2]/div[2]/div/div[1]/div[2]/div[2]/div/div[1]/div/button[2]
+    #Run Keyword If    '${button}'=='重置'    Click Element    xpath=//*[@id="main"]/div/div[3]/div/div/div/div[3]/div/div[2]/div[2]/div/div[2]/div[2]/div/div[1]/div[2]/div[2]/div/div[1]/div/button[3]
+    #Run Keyword If    '${button}'=='快速录入'    Click Element    xpath=//*[@id="main"]/div/div[3]/div/div/div/div[3]/div/div[2]/div[2]/div/div[2]/div[2]/div/div[1]/div[2]/div[2]/div/div[1]/div/button[4]
+    #Run Keyword If    '${button}'=='生成用箱信息'    Click Element    xpath=//*[@id="main"]/div/div[3]/div/div/div/div[3]/div/div[2]/div[2]/div/div[2]/div[2]/div/div[1]/div[2]/div[2]/div/div[1]/div/button[5]
+    Click Element    xpath=//*[@id="main"]/div/div[3]/div/div/div/div[3]/div/div[2]/div[2]/div/div[2]/div[2]/div/div[1]/div[2]/div[2]/div/div[1]/div/button[contains(text(),'${button}')]
+    [Teardown]    sleep    1s
+
+快速录入箱信息一条
+    [Arguments]    ${text}
+    [Documentation]    快速录入用箱信息一条：在输入框内输入一条用箱信息。
+    Input Text    xpath=(.//*[normalize-space(text()) and normalize-space(.)='录入箱信息'])[1]/following::textarea[1]    ${text}
+    [Teardown]    sleep    500ms
+
+快速录入箱信息提交按钮
+    [Documentation]    快速录入箱信息的页面，提交按钮。
+    Click Element    xpath=(.//*[normalize-space(text()) and normalize-space(.)='取消'])[35]/following::span[1]
+    [Teardown]    sleep    500ms
+
+快速录入一条用箱信息流程
+    [Arguments]    ${text}
+    [Documentation]    因重复行太多，所以单写一个流程。
+    用箱信息页面按钮    快速录入
+    快速录入箱信息一条    ${text}
+    快速录入箱信息提交按钮
+    快速录入箱信息提交按钮
+    [Teardown]    sleep    1s
+
+用箱信息不一致继续保存
+    [Documentation]    修改用箱信息之后，会出现用箱信息不一致的情况，点击继续保存。
+    Click Element    xpath=(.//*[normalize-space(text()) and normalize-space(.)='取消'])[51]/following::span[1]
+    [Teardown]    sleep    2s
+
+用箱信息不一致同步信息
+    [Documentation]    当修改的用箱信息之后，返回下货纸页面，会出现提示同步用箱信息的modal，此时点击同步。
+    Click Element    xpath=(.//*[normalize-space(text()) and normalize-space(.)='取消'])[51]/following::span[1]
+    [Teardown]    sleep    1s

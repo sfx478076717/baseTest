@@ -1,0 +1,107 @@
+*** Settings ***
+Library           Selenium2Library
+Library           Screenshot
+Resource          BaseResource.txt
+
+*** Keywords ***
+进入销售订舱页面
+    [Documentation]    进入销售管理的销售订舱页面。
+    左侧菜单主菜单    销售管理    #点击销售管理
+    左侧菜单子菜单    销售订舱    #点击销售订舱
+    Wait Until Page Contains    海运出口(全部)    10s
+    [Teardown]    sleep    2s
+
+销售订舱外部按钮
+    [Arguments]    ${button}
+    [Documentation]    销售订舱外部按钮，传入的name必须正确。
+    ...
+    ...    包括：新增、打开、删除、提交、撤回提交、EDOC、设置
+    : FOR    ${i}    IN RANGE    10    #最多10个按钮
+    \    ${text}    Get Text    xpath=//*[@id="main"]/div/div[3]/div/div/div/div[3]/div/div[2]/div/div/div[2]/div/div[1]/div[1]/button[${i}+1]
+    \    Exit For Loop If    '${text}'=='${button}'    #如果当前循环是传入的按钮名 就退出循环 ${i}的值保留
+    Click Button    xpath=//*[@id="main"]/div/div[3]/div/div/div/div[3]/div/div[2]/div/div/div[2]/div/div[1]/div[1]/button[${i}+1]
+    [Teardown]    sleep    2s
+
+销售订舱内部按钮
+    [Arguments]    ${button}
+    [Documentation]    销售订舱托单内部按钮，传入的name必须正确。
+    ...
+    ...    包括：提交、EDOC、撤回提交、布局设置。
+    : FOR    ${i}    IN RANGE    5    #最多5个按钮
+    \    ${text}    Get Text    xpath=//*[@id="main"]/div/div[3]/div/div/div/div[3]/div/div[2]/div[2]/div/div[1]/button[${i}+1]
+    \    Exit For Loop If    '${text}'=='${button}'    #如果当前循环是传入的按钮名 就退出循环 ${i}的值保留
+    Click Button    xpath=//*[@id="main"]/div/div[3]/div/div/div/div[3]/div/div[2]/div[2]/div/div[1]/button[${i}+1]
+    [Teardown]    sleep    2s
+
+销售订舱内部保存托单
+    [Documentation]    销售订舱打开托单或者新增托单页面的内部 保存 托单按钮。
+    Click Button    xpath=//*[@id="main"]/div/div[3]/div/div/div/div[3]/div/div[2]/div[2]/div/div[1]/span/button    #保存托单
+    [Teardown]    sleep    3s
+
+销售订舱内部另存为
+    [Documentation]    销售订舱打开托单或者新增托单页面的内部 另存为 按钮。
+    Click Button    xpath=//*[@id="main"]/div/div[3]/div/div/div/div[3]/div/div[2]/div[2]/div/div[1]/div[1]/div[1]/button
+    [Teardown]    sleep    500ms
+
+销售订舱内部打印
+    [Documentation]    销售订舱打开托单或者新增托单页面的内部 打印 按钮。
+    Click Button    xpath=//*[@id="main"]/div/div[3]/div/div/div/div[3]/div/div[2]/div[2]/div/div[1]/div[2]
+    Wait Until Element Is Visible    xpath=//*[@id="main"]/div/div[3]/div/div/div/div[3]/div/div[2]/div[2]/div/div[1]/div[2]/div[2]/ul/li
+    Click Element    xpath=//*[@id="main"]/div/div[3]/div/div/div/div[3]/div/div[2]/div[2]/div/div[1]/div[2]/div[2]/ul/li
+    [Teardown]    sleep    500ms
+
+销售订舱外部打印
+    [Documentation]    销售订舱页面外部 打印 按钮。
+    Click Button    xpath=//*[@id="main"]/div/div[3]/div/div/div/div[3]/div/div[2]/div/div/div[2]/div/div[1]/div[1]/div[2]/div[1]/button
+    Wait Until Element Is Visible    Xpath=//*[@id="main"]/div/div[3]/div/div/div/div[3]/div/div[2]/div/div/div[2]/div/div[1]/div[1]/div[2]/div[2]/ul/li
+    Click Element    Xpath=//*[@id="main"]/div/div[3]/div/div/div/div[3]/div/div[2]/div/div/div[2]/div/div[1]/div[1]/div[2]/div[2]/ul/li
+    [Teardown]    sleep    500ms
+
+销售订舱验证业务流水号
+    [Arguments]    ${businessCode}
+    [Documentation]    既然决定要验证，就必须传要验证的业务流水号。
+    ${thisCode}    Get Text    xpath=//*[@id="main"]/div/div[3]/div/div/div/div[3]/div/div[2]/div[1]/div/div[2]/div/div[2]/div[3]/table/tbody/tr[1]/td[5]/div    #获取此处的业务流水号
+    Should Be Equal    ${businessCode}    ${thisCode}    #判断第一个托单是否是需要的托单
+    [Teardown]    sleep    1s
+
+销售订舱托单选中框
+    [Arguments]    ${businessCode}=
+    [Documentation]    销售订舱页面，选中第一条托单的选中框。
+    Click Element    xpath=//*[@id="main"]/div/div[3]/div/div/div/div[3]/div/div[2]/div/div/div[2]/div/div[2]/div[3]/table/tbody/tr[1]/td[1]/div/label
+    [Teardown]    sleep    500ms
+
+销售订舱关键字检索
+    [Arguments]    ${message}
+    [Documentation]    销售订舱页面，输入关键字，按关键字检索托单。
+    #输入关键字
+    Input Text    xpath=//*[@id="main"]/div/div[3]/div/div/div/div[3]/div/div[2]/div/div/div[2]/div/div[1]/div[1]/div[3]/input    ${message}
+    sleep    1s
+    #点击检索
+    Click Button    xpath=//*[@id="main"]/div/div[3]/div/div/div/div[3]/div/div[2]/div/div/div[2]/div/div[1]/div[1]/button[8]
+    [Teardown]    sleep    3s
+
+销售订舱委托单叉号退出
+    [Documentation]    在销售托单页面，点击“列表”后边的标签，有可能是当前打开的页面，点击其叉号（即退出）。
+    Click Element    xpath=//*[@id="main"]/div/div[3]/div/div/div/div[3]/div/div[1]/div/div/div/div/div[3]/i
+    [Teardown]    sleep    1s
+
+销售订舱点击列表
+    [Documentation]    在销售订舱托单页面的时候，点击子标签“列表”，返回托单列表页面。
+    Click Element    xpath=//*[@id="main"]/div/div[3]/div/div/div/div[3]/div/div[1]/div/div/div/div/div[2]
+    [Teardown]    sleep    1s
+
+销售订舱获取业务流水号
+    [Documentation]    获取新生成的托单的业务流水号。
+    ${number}    Get Text    xpath=//*[@id="main"]/div/div[3]/div/div/div/div[3]/div/div[2]/div[1]/div/div[2]/div/div[2]/div[3]/table/tbody/tr[1]/td[5]/div
+    [Teardown]
+    [Return]    ${number}    # 新生成的托单的业务流水号。
+
+循环新增托单
+    [Arguments]    ${number}=1
+    [Documentation]    用于循环新增托单，默认新增1条托单。
+    : FOR    ${i}    IN RANGE    ${number}
+    \    销售订舱外部按钮    新增
+    \    必填信息
+    \    销售订舱内部按钮    提交
+    \    销售订舱委托单叉号退出
+    [Teardown]    sleep    2s

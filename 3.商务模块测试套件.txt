@@ -1,0 +1,41 @@
+*** Settings ***
+Library           Selenium2Library
+Library           Screenshot
+Resource          BaseResource.txt
+Resource          BusinessResource.txt
+
+*** Test Cases ***
+businessShipping
+    login    http://27.223.104.6:32880/#/login    shanfaxian    123456    实习测试公司
+    进入商务订舱页面
+    商务订舱选中托单    100210001488
+    商务订舱外部按钮    打开
+    商务订舱内部按钮    接单
+    商务订舱约号输入
+    商务订舱内部保存
+    商务订舱内部按钮    提交
+    商务订舱内部按钮    撤回提交
+    商务订舱内部按钮    返回
+    页面刷新    海运出口(
+    商务订舱选中托单    100210001488
+    商务订舱外部按钮    提交
+    商务订舱选中托单    100210001488
+    商务订舱外部按钮    撤回提交    #一定要准确无误
+    商务订舱外部按钮    驳回
+
+foreachBusiness
+    [Documentation]    循环流转商务托单
+    login    http://27.223.104.6:32880/#/login    shanfaxian    123456    实习测试公司
+    进入商务订舱页面
+    循环流转商务托单    5
+
+商务流转
+    [Tags]    num
+    login    http://27.223.104.6:32880/#/login    shanfaxian    123456    实习测试公司
+    进入商务订舱页面
+    商务订舱选中托单
+    商务订舱外部按钮    打开
+    商务订舱内部按钮    接单
+    商务订舱约号输入
+    商务订舱内部保存
+    商务订舱内部按钮    提交

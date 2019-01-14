@@ -1,0 +1,83 @@
+*** Settings ***
+Library           Selenium2Library
+Library           Screenshot
+Library           AutoItLibrary
+Resource          BaseResource.txt
+Resource          FinancialSettlementResource.txt
+Resource          FinancialOrderResource.txt
+Resource          ReallyPayResource.txt
+
+*** Test Cases ***
+收款确认
+    [Documentation]    实收实付管理收付款确认 ： 收费联系单确认。
+    login    http://27.223.104.6:32880/#/login    shanfaxian    123456    实习测试公司
+    左侧菜单主菜单    财务管理
+    左侧菜单子菜单    实收实付管理
+    #实收实付选择客户    robot
+    实收实付确认按钮    收付款确认
+    ${number}    Set Variable    10000918
+    收付款确认输入联系单号    ${number}
+    收付款确认点击收费
+    收付款确认点击检索
+    收付款确认选中联系单    ${number}
+    收付款确认确认联系单按钮
+    实收实付页面确认
+    实收实付验证结算客户    ziqi
+    实收实付点击结算客户
+    实收实付验证结算单号    ${number}
+    左侧菜单子菜单    收费管理
+    验证收费结算单是否实收    Y
+
+付款确认
+    [Documentation]    实收实付管理收付款确认 ： 付费联系单确认。
+    login    http://27.223.104.6:32880/#/login    shanfaxian    123456    实习测试公司
+    左侧菜单主菜单    财务管理
+    左侧菜单子菜单    实收实付管理
+    #实收实付选择客户    robot
+    实收实付确认按钮    收付款确认
+    ${number}    Set Variable    10000674
+    收付款确认输入联系单号    ${number}
+    收付款确认点击付费
+    收付款确认点击检索
+    收付款确认选中联系单    ${number}
+    收付款确认确认联系单按钮
+    实收实付页面确认
+    实收实付验证结算客户    robot
+    实收实付点击结算客户
+    实收实付验证结算单号    ${number}
+    左侧菜单子菜单    付费管理
+    验证付费结算单是否实付    Y
+
+按发票信息确认
+    [Documentation]    实收实付管理按开票信息确认 ： 按发票信息确认。
+    login    http://27.223.104.6:32880/#/login    shanfaxian    123456    实习测试公司
+    左侧菜单主菜单    财务管理
+    左侧菜单子菜单    实收实付管理
+    实收实付确认按钮    按开票信息确认
+    ${billNum}    Set Variable    25    # 27 28 29
+    按开票信息确认发票检索    ${billNum}
+    ${settlementId}    ${customer}    按开票信息确认点击选择框    ${billNum}
+    按开票信息确认点击确定按钮
+    实收实付页面确认
+    实收实付验证结算客户    ${customer}
+    实收实付点击结算客户
+    实收实付验证结算单号    ${settlementId}
+    左侧菜单子菜单    收费管理
+    验证收费结算单是否实收    Y
+
+按支票信息确认
+    [Documentation]    实收实付管理按开票信息确认 ： 按支票信息确认。
+    login    http://27.223.104.6:32880/#/login    shanfaxian    123456    实习测试公司
+    左侧菜单主菜单    财务管理
+    左侧菜单子菜单    实收实付管理
+    实收实付确认按钮    按开票信息确认
+    ${billNum}    Set Variable    1100001
+    按开票信息确认支票检索    ${billNum}
+    ${settlementId}    ${customer}    按开票信息确认点击选择框    ${billNum}
+    按开票信息确认点击确定按钮
+    实收实付页面确认
+    实收实付验证结算客户    ${customer}
+    实收实付点击结算客户
+    实收实付验证结算单号    ${settlementId}
+    左侧菜单子菜单    收费管理
+    验证付费结算单是否实付    Y

@@ -1,0 +1,34 @@
+*** Settings ***
+Library           Selenium2Library
+Library           Screenshot
+Resource          BaseResource.txt
+Resource          SalesResource.txt
+Resource          OperationResource.txt
+Resource          BusinessResource.txt
+
+*** Test Cases ***
+Login Test Case
+    打开浏览器    http://27.223.104.6:32880/#/login
+    选择分公司    实习测试公司
+    输入用户名和密码    shanfaxian    123456
+    点击按钮
+    校验标题    货代管理平台
+    校验用户名    单发显
+    sleep    3s
+    用户登出
+    关闭浏览器
+
+test top tags
+    [Documentation]    测试顶部标签选择点击和选择退出的用例。
+    [Tags]    top
+    login    http://27.223.104.6:32880/#/login    shanfaxian    123456    实习测试公司
+    进入销售订舱页面
+    进入商务订舱页面
+    进入订舱操作页面
+    选择页面标签    销售订舱
+    选择页面标签    商务订舱
+    选择页面标签    订舱操作
+    选择页面标签退出    销售订舱
+    选择页面标签退出    商务订舱
+    选择页面标签退出    订舱操作
+    关闭浏览器

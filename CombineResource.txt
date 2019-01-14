@@ -1,0 +1,278 @@
+*** Settings ***
+Library           Selenium2Library
+Library           Screenshot
+Resource          BaseResource.txt
+Resource          SalesResource.txt
+Resource          BusinessResource.txt
+Resource          OperationResource.txt
+Resource          NecessaryShippingMessage.txt
+Resource          FinancialOrderResource.txt
+Resource          FinancialSettlementResource.txt
+Resource          ApproveResource.txt
+Resource          ReallyPayResource.txt
+
+*** Keywords ***
+销售新增托单
+    [Arguments]    ${arg1}    ${arg2}    ${arg3}    ${arg4}    ${arg5}    ${arg6}
+    ...    ${arg7}
+    [Documentation]    委托客户、销售、商务、操作、客服、船公司、订舱代理
+    #销售新增托单
+    进入销售订舱页面
+    销售订舱外部按钮    新增
+    录入数据1    ADENC    ADENC    ADENC    加勒比    ${arg1}
+    录入数据2    ${arg2}    ${arg3}    ${arg4}    ${arg5}    业务员
+    录入数据3    自揽货    PP    冻柜    ${arg6}    ${arg7}
+    销售订舱内部保存托单
+    销售订舱内部按钮    提交
+    销售订舱点击列表
+    销售订舱委托单叉号退出
+    ${businessNum}    销售订舱获取业务流水号
+    选择页面标签退出    销售订舱
+    [Return]    ${businessNum}
+
+下货纸数据验证
+    [Arguments]    ${businessNum}    ${customer}    ${businessMan}
+    sleep    2s
+    #点击业务流水号 使左右移动可用
+    Click Element    xpath=//*[@id="main"]/div/div[3]/div/div/div/div[3]/div/div[2]/div/div/div[4]/div/div[2]/div[3]/table/tbody/tr[1]/td[4]
+    ${end}    列表数据验证    4    客户    ${customer}
+    ${end}    列表数据验证    ${end}    装货港    ENCAMP
+    ${end}    列表数据验证    ${end}    卸货港    ENCAMP
+    ${end}    列表数据验证    ${end}    船名    KYPARSSIA
+    ${end}    列表数据验证    ${end}    航次    987564
+    ${end}    列表数据验证    ${end}    商务    ${businessMan}
+    ${end}    列表数据验证    ${end}    业务流水号    ${businessNum}
+
+商务流转托单
+    [Arguments]    ${businessNum}
+    #商务流转
+    进入商务订舱页面
+    商务订舱选中托单
+    商务订舱外部按钮    打开
+    商务订舱内部按钮    接单
+    商务订舱约号输入    ${businessNum}    #约号默认为业务流水号
+    商务订舱内部保存
+    商务订舱内部按钮    提交
+    选择页面标签退出    海运出口-商务编辑
+    选择页面标签退出    商务订舱
+
+操作接单
+    [Arguments]    ${businessNum}
+    #操作接单
+    进入订舱操作页面
+    订舱操作子菜单    托单接收
+    托单接收关键字检索    ${businessNum}
+    托单接收托单选中框
+    托单接收外部按钮    查看
+    托单接收内部按钮    接收
+    选择页面标签退出    订舱操作
+
+操作编辑船期
+    [Arguments]    ${arg1}    ${arg2}
+    [Documentation]    船名、船代
+    #操作编辑船期
+    左侧菜单子菜单    订舱操作
+    sleep    10s
+    订舱操作下货纸选中框
+    订舱操作海运出口按钮    打开
+    下货纸主单号输入
+    下货纸船名选择    ${arg1}    987564    2018-12-12    ${arg2}
+    下货纸内部保存
+    选择页面标签退出    订舱操作
+
+生成收费联系单
+    [Arguments]    ${abbreviation}    ${businessNum}    ${customer}    ${businessMan}
+    [Documentation]    客户简称、业务流水号、客户、商务。
+    #生成收费联系单
+    左侧菜单子菜单    订舱操作
+    sleep    10s
+    下货纸数据验证    ${businessNum}    ${customer}    ${businessMan}
+    订舱操作下货纸选中框
+    订舱操作点击账单按钮
+    订舱操作选择账单子元素    账单
+    账单管理普通按钮    新增
+    账单明细新增一条明细    1    制冷费    USD    票    1    5
+    ...    应收    ${abbreviation}
+    新增账单上方初始按钮    保存
+    选择页面标签退出    新增账单
+    点击账单号选中
+    账单管理制作联系单
+    账单管理选择联系单子元素    收费联系单
+    制作联系单点击客户
+    制作联系单确定客户
+    收费联系单保存
+    选择页面标签退出    订舱操作
+    选择页面标签退出    账单管理
+
+生成付费联系单
+    [Arguments]    ${abbreviation}    ${businessNum}    ${customer}    ${businessMan}
+    [Documentation]    客户简称、业务流水号、客户、商务。
+    #生成付费联系单
+    左侧菜单子菜单    订舱操作
+    sleep    10s
+    下货纸数据验证    ${businessNum}    ${customer}    ${businessMan}
+    订舱操作下货纸选中框
+    订舱操作点击账单按钮
+    订舱操作选择账单子元素    账单
+    账单管理普通按钮    新增
+    账单明细新增一条明细    1    制冷费    CNY    票    1    5
+    ...    应付    ${abbreviation}
+    新增账单上方初始按钮    保存
+    利润为负继续保存
+    选择页面标签退出    新增账单
+    点击账单号选中
+    账单管理二次确认按钮    申请审批
+    ${FOBN}    点击账单号选中
+    账单审批流程    ${FOBN}
+    选择页面标签退出    账单审批
+    点击账单号选中
+    账单管理制作联系单
+    账单管理选择联系单子元素    付费联系单
+    制作联系单点击客户
+    制作联系单确定客户
+    付费联系单保存
+    选择页面标签退出    订舱操作
+    选择页面标签退出    账单管理
+
+收费申请开发票
+    #收费联系单申请开票
+    左侧菜单子菜单    收费管理
+    ${settlementId}    收付费管理获取结算单号
+    收付费管理选中框
+    收费管理二次确认按钮    申请开票
+    #发票继续申请
+    验证票申请状态    已申请
+    选择页面标签退出    收费管理
+    [Return]    ${settlementId}
+
+付费申请开支票
+    [Arguments]    ${abbreviation}
+    #付费单申请开票
+    左侧菜单子菜单    付费管理
+    ${settlementId}    收付费管理获取结算单号
+    收付费管理客户菜单    ${abbreviation}
+    收付费管理选中框
+    付费管理二次确认按钮    申请审批
+    付费审批方案选择
+    验证审批状态    等待审批
+    付费单审批流程    ${settlementId}
+    收付费管理客户菜单    ${abbreviation}
+    验证审批状态    审批完成
+    收付费管理选中框
+    付费管理二次确认按钮    支票申请
+    #支票继续申请
+    验证票申请状态    已申请
+    选择页面标签退出    付费管理
+    [Return]    ${settlementId}
+
+收费开发票
+    [Arguments]    ${settlementId}    # 联系单号
+    #收费联系单开票
+    左侧菜单子菜单    发票管理
+    普通发票开票申请
+    待开发票搜索并选中    ${settlementId}
+    普通发票点击开票
+    发票开具选择货物名称    代理港杂费
+    发票开具确定流程
+    选择页面标签退出    发票管理
+
+付费开支票
+    [Arguments]    ${settlementId}    # 联系单号
+    #付费联系单开票
+    左侧菜单子菜单    支票管理
+    进入支票申请
+    待开支票搜索并选中    ${settlementId}
+    待开支票普通按钮    开票
+    待开支票选择支票
+    普通支票选择支票确定
+    普通支票用途输入    ${settlementId}
+    开具普通支票确认
+    sleep    2s
+    send    {ESC}
+    sleep    1s
+    选择页面标签退出    支票管理
+
+收费收款确认
+    [Arguments]    ${settlementId}    ${abbreviation}
+    #实收落帐
+    左侧菜单子菜单    实收实付管理
+    实收实付确认按钮    收付款确认
+    收付款确认输入联系单号    ${settlementId}
+    收付款确认点击收费
+    收付款确认点击检索
+    收付款确认选中联系单    ${settlementId}
+    收付款确认确认联系单按钮
+    实收实付页面确认
+    实收实付验证结算客户    ${abbreviation}
+    实收实付点击结算客户
+    实收实付验证结算单号    ${settlementId}
+    左侧菜单子菜单    收费管理
+    验证收费结算单是否实收    Y
+
+付费付款确认
+    [Arguments]    ${settlementId}    ${abbreviation}
+    #实付落帐
+    左侧菜单子菜单    实收实付管理
+    实收实付确认按钮    收付款确认
+    收付款确认输入联系单号    ${settlementId}
+    收付款确认点击付费
+    收付款确认点击检索
+    收付款确认选中联系单    ${settlementId}
+    收付款确认确认联系单按钮
+    实收实付页面确认
+    实收实付验证结算客户    ${abbreviation}
+    实收实付点击结算客户
+    实收实付验证结算单号    ${settlementId}
+    左侧菜单子菜单    付费管理
+    验证付费结算单是否实付    Y
+
+销售-商务-操作整合
+    销售订舱内部保存托单
+    销售订舱内部按钮    提交
+    销售订舱点击列表
+    销售订舱委托单叉号退出
+    ${businessNum}    销售订舱获取业务流水号
+    选择页面标签退出    销售订舱
+    #商务流转
+    进入商务订舱页面
+    商务订舱选中托单
+    商务订舱外部按钮    打开
+    商务订舱内部按钮    接单
+    商务订舱约号输入    ${businessNum}    #约号默认为业务流水号
+    商务订舱内部保存
+    商务订舱内部按钮    提交
+    选择页面标签退出    海运出口-商务编辑
+    选择页面标签退出    商务订舱
+    #操作接单
+    进入订舱操作页面
+    订舱操作子菜单    托单接收
+    托单接收关键字检索    ${businessNum}
+    托单接收托单选中框
+    托单接收外部按钮    查看
+    托单接收内部按钮    接收
+
+列表数据验证
+    [Arguments]    ${start}=    ${text}=    ${arg}=
+    : FOR    ${i}    IN RANGE    ${start}    66
+    \    #过滤掉箱量20和40的 因为单引号不能比较
+    \    ${i}    Set Variable If    '${i}'=='26'    28    ${i}
+    \    ${i}    Set Variable If    '${i}'=='27'    28    ${i}
+    \    #固定${i}的值 因为要两次获取text文本
+    \    ${row}    Set Variable    ${i}
+    \    #第一次获取 判断它是否为空
+    \    ${th}    Get Text    xpath=//*[@id="main"]/div/div[3]/div/div/div/div[3]/div/div[2]/div/div/div[4]/div/div[2]/div[2]//tr/th[${row}]/div
+    \    #5次往右滑动
+    \    Run Keyword If    '${th}'==''    send    {RIGHT}
+    \    Run Keyword If    '${th}'==''    send    {RIGHT}
+    \    Run Keyword If    '${th}'==''    send    {RIGHT}
+    \    Run Keyword If    '${th}'==''    send    {RIGHT}
+    \    Run Keyword If    '${th}'==''    send    {RIGHT}
+    \    #再次获取该文本
+    \    ${th}    Get Text    xpath=//*[@id="main"]/div/div[3]/div/div/div/div[3]/div/div[2]/div/div/div[4]/div/div[2]/div[2]//tr/th[${row}]/div
+    \    Exit For Loop If    '${text}' == '${th.strip()}'    # .strip()去除空格
+    ${td}    Get Text    xpath=//*[@id="main"]/div/div[3]/div/div/div/div[3]/div/div[2]/div/div/div[4]/div/div[2]/div[3]/table/tbody/tr[1]/td[${i}]/div
+    #验证数据
+    Should Be Equal    ${td}    ${arg}
+    #最终行数赋值
+    ${end}    Set Variable    ${row}
+    [Return]    ${end}

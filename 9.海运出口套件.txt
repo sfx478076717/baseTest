@@ -1,0 +1,103 @@
+*** Settings ***
+Library           Selenium2Library
+Library           Screenshot
+Library           AutoItLibrary
+Resource          HYCKResource.txt
+Resource          BaseResource.txt
+Resource          OperationResource.txt
+Library           DatabaseLibrary
+
+*** Test Cases ***
+case1 新增下货纸
+    login    http://27.223.104.6:32880/#/login    shanfaxian    123456    实习测试公司
+    进入订舱操作页面
+    订舱操作海运出口按钮    新增
+    数据1    青岛大丰有限公司    单发显    管理员    单发显    海外代理    青岛阳光有限公司
+    数据2    海运网络合作项目    整柜    05304764399    rno4399    rno4398    2018-10-01
+    ...    2019-1-1    青岛阳光有限公司
+    数据3    ADFMO    ADFMO    ADFMO    ADFMO    ADFMO    ADFMO
+    ...    ADFMO    ADFMO
+    服务项目选择    保险    robot客户
+    服务项目选择    报关    robot客户
+    服务项目选择    陆运    robot客户
+    服务项目选择    海外服务    robot客户
+    服务项目选择    熏蒸    robot客户
+    服务项目选择    提单
+    船公司和订舱代理    CNC    ziqi
+    数据4    10    BAG    10    20    冻柜    火腿肠
+    数据5    自揽货    PC    ADENC    ADORD    进料加工    455215652
+    数据6    CFS-CFS    2018-11-11    ADSJL    海运单    FOUR    EIGHT
+    下货纸船名选择    didi    6666966    2018-12-12    ziqi
+
+case2 test 服务项目
+    login    http://27.223.104.6:32880/#/login    shanfaxian    123456    实习测试公司
+    进入订舱操作页面
+    订舱操作海运出口按钮    新增
+    服务项目选择    保险    robot客户
+    服务项目选择    报关    robot客户
+    服务项目选择    陆运    robot客户
+    服务项目选择    海外服务    robot客户
+    服务项目选择    熏蒸    robot客户
+    服务项目选择    提单
+    船公司和订舱代理    CNC    ziqi
+
+case3 验证测试
+    login    http://49.4.86.37:38080/#/login    shanfaxian    123456    实习测试公司
+    进入订舱操作页面
+    #点击主单号 让左右键可以使用
+    Click Element    xpath=//*[@id="main"]/div/div[3]/div/div/div/div[3]/div/div[2]/div/div/div[4]/div/div[2]/div[3]/table/tbody/tr[1]/td[4]
+    ${end}    列表数据验证    4    主单号    ZIQI84816
+    ${end}    列表数据验证    ${end}    客户    robot客户
+    ${end}    列表数据验证    ${end}    装货港    QINGDAO
+    ${end}    列表数据验证    ${end}    运输条款    CY-CY
+    ${end}    列表数据验证    ${end}    航次    987564
+    ${end}    列表数据验证    ${end}    约号    100210001564
+    ${end}    列表数据验证    ${end}    其他    3.00
+    ${end}    列表数据验证    ${end}    输入    0
+    ${end}    列表数据验证    ${end}    制单人    单发显
+
+case4 修改下货纸
+    login    http://27.223.104.6:32880/#/login    shanfaxian    123456    实习测试公司
+    进入订舱操作页面
+    订舱操作下货纸选中框
+    订舱操作海运出口按钮    打开    #数据1    青岛大丰有限公司    张小影    张小影    徐悦钧
+    ...    # 公司    青岛阳光有限公司    #数据2    海运网络合作项目    整柜    05304764399
+    ...    # rno4399    rno4398    2018-10-01    # 2019-1-1    青岛阳光有限公司    #数据3
+    ...    # ADFMO    ADFMO    ADFMO    ADFMO    ADFMO    ADFMO
+    ...    # ADFMO    ADFMO
+    已存在服务项目修改    船公司    CCNI
+    已存在服务项目修改    订舱代理    代理客户001
+    已存在服务项目修改    报关行    ziqi
+    已存在服务项目修改    地面服务    robot客户
+    已存在服务项目修改    海外代理    robot客户
+    已存在服务项目修改    保险公司    ziqi
+    数据4    10    BAG    10    20    冻柜    火腿肠
+    数据5    自揽货    PC    ADENC    ADORD    进料加工    455215652
+    数据6    CFS-CFS    2018-11-11    ADSJL    海运单    FOUR    EIGHT
+
+case5 test mysql数据库
+    Connect To Database Using Custom Params    pymysql    host='192.168.102.136',port=32768,user='root',password='root',db='kairui_master_1025'
+    Connect To Database    pymysql    kairui_master_1025    root    root    192.168.102.136
+
+case6 使用Excel传数据
+    @{value}    获取Excel数据    1
+    login    http://27.223.104.6:32880/#/login    shanfaxian    123456    实习测试公司
+    进入订舱操作页面
+    订舱操作海运出口按钮    新增
+    数据1    @{value}[0]    @{value}[1]    @{value}[2]    @{value}[3]    @{value}[4]    @{value}[5]
+    数据2    @{value}[6]    @{value}[7]    @{value}[8]    @{value}[9]    @{value}[10]    @{value}[11]
+    ...    @{value}[12]    @{value}[13]
+    数据3    @{value}[14]    @{value}[15]    @{value}[16]    @{value}[17]    @{value}[18]    @{value}[19]
+    ...    @{value}[20]    @{value}[21]
+    服务项目选择    保险    @{value}[22]
+    服务项目选择    报检    @{value}[23]
+    服务项目选择    报关    @{value}[24]
+    服务项目选择    陆运    @{value}[25]
+    服务项目选择    海外服务    @{value}[26]
+    服务项目选择    熏蒸    @{value}[27]
+    服务项目选择    提单    @{value}[28]
+    船公司和订舱代理    @{value}[29]    @{value}[30]
+    数据4    @{value}[31]    @{value}[32]    @{value}[33]    @{value}[34]    @{value}[35]    @{value}[36]
+    数据5    @{value}[37]    @{value}[38]    @{value}[39]    @{value}[40]    @{value}[41]    @{value}[42]
+    数据6    @{value}[43]    @{value}[44]    @{value}[45]    @{value}[46]    @{value}[47]    @{value}[48]
+    下货纸船名选择    @{value}[49]    @{value}[50]    @{value}[51]    @{value}[52]

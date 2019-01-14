@@ -1,0 +1,425 @@
+*** Settings ***
+Library           Selenium2Library
+Library           Screenshot
+Library           AutoItLibrary
+Resource          BaseResource.txt
+
+*** Keywords ***
+必填信息
+    [Documentation]    销售新增托单的必填信息
+    装货港1    ADESC
+    卸货港1    ADESC
+    委托客户    robot客户
+    要求装运日期    2018-12-12
+    销售1    单发显
+    商务1    单发显
+    操作1    单发显
+    客服1    管理员
+    揽货类型    指定货
+    付费方式    PC
+    预付地点1    ENCAMP
+    到付地点1    ORDINO
+    运输条款    DOOR-DOOR
+    重量KGS    80
+    货物种类    化工品
+    用箱信息    1    10GP    10
+    用箱信息    2    20GP    8
+    用箱信息    3    40OD    89
+    船公司和订舱代理    CNC    su
+    [Teardown]    sleep    500ms
+
+新必填信息
+    [Arguments]    ${arg1}    ${arg2}    ${arg3}    ${arg4}    ${arg5}    ${arg6}
+    ...    ${arg7}    ${arg8}    ${arg9}    ${arg10}    ${arg11}    ${arg12}
+    ...    ${arg13}    ${arg14}    ${arg15}=    ${arg16}=    ${arg17}=    ${arg18}=
+    ...    ${arg19}=    ${arg20}=
+    [Documentation]    依次为：收货地、装货港、卸货港、航线、委托客户。
+    ...
+    ...    销售、商务、操作、客服、业务来源、来源客户。
+    ...
+    ...    揽货类型、付费方式、货物种类。
+    ...
+    ...    船公司、订舱代理、报关、车队、海外代理、地面服务
+    收货地    ${arg1}
+    装货港1    ${arg2}
+    卸货港1    ${arg3}
+    验证航线    ${arg4}
+    委托客户    ${arg5}
+    要求装运日期    2018-12-12
+    销售1    ${arg6}
+    商务1    ${arg7}
+    操作1    ${arg8}
+    客服1    ${arg9}
+    业务来源    ${arg10}    ${arg11}
+    揽货类型    ${arg12}
+    付费方式    ${arg13}
+    预付地点1    ${arg2}
+    到付地点1    ${arg3}
+    运输条款    CY-CY
+    重量KGS    2
+    货物种类    ${arg14}
+    用箱信息    1    20GP    1
+    船公司和订舱代理    ${arg15}    ${arg16}
+    报关    ${arg17}
+    车队    ${arg18}
+    海外代理1    ${arg19}
+    地面服务    ${arg20}
+
+收货地
+    [Arguments]    ${text}=
+    Run Keyword If    '${text}'!=''    Input Text    xpath=//*[@id="main"]/div/div[3]/div/div/div/div[3]/div/div[2]/div[2]/div/div[2]/div/div/div[1]/div[1]/div[2]/div[1]/div/div[2]/div[2]/div/div/div/div/div/div/div[1]/div/div/div[1]/div/div/input    ${text}
+    Run Keyword If    '${text}'==''    Click Element    xpath=//*[@id="main"]/div/div[3]/div/div/div/div[3]/div/div[2]/div[2]/div/div[2]/div/div/div[1]/div[1]/div[2]/div[1]/div/div[2]/div[2]/div/div/div/div/div/div/div[1]/div/div/div[1]/div/div/input    #点击收货地输入框
+    #Wait Until Page Contains Element    xpath=/html/body/div[37]/ul[2]/div/li
+    sleep    2s
+    #Click Element    xpath=/html/body/div[37]/ul[2]/div/li    #点击第一个收货地    #44
+    Click Element    xpath=/html/body/div[not(contains(@style,'display: none'))]//div[@class='options-item-label' and text()='${text}']    #//div[@data-transfer='true' and not(contains(@style,'display: none'))]
+    [Teardown]    sleep    500ms
+
+装货港1
+    [Arguments]    ${text}=
+    Run Keyword If    '${text}'!=''    Input Text    xpath=//*[@id="main"]/div/div[3]/div/div/div/div[3]/div/div[2]/div[2]/div/div[2]/div/div/div[1]/div[1]/div[2]/div[1]/div/div[2]/div[2]/div/div/div/div/div/div/div[2]/div/div/div[1]/div/div/input    ${text}
+    Run Keyword If    '${text}'==''    Click Element    xpath=//*[@id="main"]/div/div[3]/div/div/div/div[3]/div/div[2]/div[2]/div/div[2]/div/div/div[1]/div[1]/div[2]/div[1]/div/div[2]/div[2]/div/div/div/div/div/div/div[2]/div/div/div[1]/div/div/input    #点击装货港输入框
+    #Wait Until Page Contains Element    xpath=/html/body/div[38]/ul[2]/div/li
+    sleep    2s
+    #Click Element    xpath=/html/body/div[38]/ul[2]/div/li    #点击第一个装货港
+    Click Element    xpath=/html/body/div[not(contains(@style,'display: none'))]//div[@class='options-item-label' and text()='${text}']
+    [Teardown]    sleep    500ms
+
+卸货港1
+    [Arguments]    ${text}=
+    Run Keyword If    '${text}'!=''    Input Text    xpath=//*[@id="main"]/div/div[3]/div/div/div/div[3]/div/div[2]/div[2]/div/div[2]/div/div/div[1]/div[1]/div[2]/div[1]/div/div[2]/div[2]/div/div/div/div/div/div/div[4]/div/div/div[1]/div/div/input    ${text}
+    Run Keyword If    '${text}'==''    Click Element    xpath=//*[@id="main"]/div/div[3]/div/div/div/div[3]/div/div[2]/div[2]/div/div[2]/div/div/div[1]/div[1]/div[2]/div[1]/div/div[2]/div[2]/div/div/div/div/div/div/div[4]/div/div/div[1]/div/div/input    #点击卸货港输入框
+    #Wait Until Page Contains Element    xpath=/html/body/div[40]/ul[2]/div/li[1]
+    sleep    2s
+    #Click Element    xpath=/html/body/div[40]/ul[2]/div/li[1]    #点击第一个卸货港
+    Click Element    xpath=/html/body/div[not(contains(@style,'display: none'))]//div[@class='options-item-label' and text()='${text}']
+    [Teardown]    sleep    500ms
+
+验证航线
+    [Arguments]    ${text}=
+    [Documentation]    验证航线是否准确
+    ${thisText}    Get Element Attribute    xpath=//*[@id="main"]/div/div[3]/div/div/div/div[3]/div/div[2]/div[2]/div/div[2]/div/div/div[1]/div[1]/div[2]/div[1]/div/div[2]/div[2]/div/div/div/div/div/div/div[5]/div/div/div/input    value
+    Run Keyword If    '${text}'!=''    Should Be Equal    ${text}    ${thisText}
+
+委托客户
+    [Arguments]    ${text}=
+    Run Keyword If    '${text}'!=''    Input Text    xpath=//*[@id="main"]/div/div[3]/div/div/div/div[3]/div/div[2]/div[2]/div/div[2]/div/div/div[1]/div[1]/div[2]/div[1]/div/div[2]/div[1]/div/div/div/div[1]/div/div/div[1]/div/div/div/div/div/input    ${text}
+    Run Keyword If    '${text}'==''    Click Element    xpath=//*[@id="main"]/div/div[3]/div/div/div/div[3]/div/div[2]/div[2]/div/div[2]/div/div/div[1]/div[1]/div[2]/div[1]/div/div[2]/div[1]/div/div/div/div[1]/div/div/div[1]/div/div/div    #点击委托客户输入框
+    #Wait Until Page Contains Element    xpath=/html/body/div[30]/ul[2]/div/li/div/div[1]
+    sleep    1s
+    #Click Element    xpath=/html/body/div[30]/ul[2]/div/li[1]    #点击第一个委托客户
+    Click Element    xpath=//div[@class='flex-auto label-box' and text()='${text}']
+    [Teardown]    sleep    500ms
+
+要求装运日期
+    [Arguments]    ${text}=
+    Run Keyword If    '${text}'!=''    Input Text    xpath=//*[@id="main"]/div/div[3]/div/div/div/div[3]/div/div[2]/div[2]/div/div[2]/div/div/div[1]/div[1]/div[2]/div[1]/div/div[2]/div[1]/div/div/div/div[1]/div/div/div[4]/div/div/div/div/div[1]/div/input    ${text}
+    Run Keyword If    '${text}'==''    Click Element    xpath=//*[@id="main"]/div/div[3]/div/div/div/div[3]/div/div[2]/div[2]/div/div[2]/div/div/div[1]/div[1]/div[2]/div[1]/div/div[2]/div[1]/div/div/div/div[1]/div/div/div[4]/div/div/div/div/div[1]    #点击要求装运日期输入框
+    Run Keyword If    '${text}'==''    Wait Until Page Contains Element    xpath=//*[@id="main"]/div/div[3]/div/div/div/div[3]/div/div[2]/div[2]/div/div[2]/div/div/div[1]/div[1]/div[2]/div[1]/div/div[2]/div[1]/div/div/div/div[1]/div/div/div[4]/div/div/div/div/div[2]/div/div/div/div[2]/div/span[1]
+    Run Keyword If    '${text}'==''    sleep    1s
+    Run Keyword If    '${text}'==''    Click Element    xpath=//*[@id="main"]/div/div[3]/div/div/div/div[3]/div/div[2]/div[2]/div/div[2]/div/div/div[1]/div[1]/div[2]/div[1]/div/div[2]/div[1]/div/div/div/div[1]/div/div/div[4]/div/div/div/div/div[2]/div/div/div/div[2]/div/span[1]    #点击第一个日期
+    [Teardown]    sleep    500ms
+
+销售1
+    [Arguments]    ${text}=
+    Click Element    xpath=//*[@id="main"]/div/div[3]/div/div/div/div[3]/div/div[2]/div[2]/div/div[2]/div/div/div[1]/div[1]/div[2]/div[1]/div/div[2]/div[1]/div/div/div/div[3]/div/div/div[1]/div/div/div[1]/div/input[2]    #点击销售选择框
+    Run Keyword If    '${text}'!=''    Input Text    xpath=//*[@id="main"]/div/div[3]/div/div/div/div[3]/div/div[2]/div[2]/div/div[2]/div/div/div[1]/div[1]/div[2]/div[1]/div/div[2]/div[1]/div/div/div/div[3]/div/div/div[1]/div/div/div[1]/div/input[2]    ${text}
+    #Wait Until Page Contains Element    xpath=/html/body/div[31]/ul[2]/li
+    sleep    500ms
+    #Click Element    xpath=/html/body/div[31]/ul[2]/li    #点击第一个销售
+    Click Element    xpath=/html/body/div[not(contains(@style,'display: none'))]//li[contains(@class,'ivu-select-item') and text()='${text}']
+    [Teardown]    sleep    500ms
+
+商务1
+    [Arguments]    ${text}=
+    Click Element    xpath=//*[@id="main"]/div/div[3]/div/div/div/div[3]/div/div[2]/div[2]/div/div[2]/div/div/div[1]/div[1]/div[2]/div[1]/div/div[2]/div[1]/div/div/div/div[3]/div/div/div[3]/div/div/div/div/input[2]    #点击商务选择框
+    Run Keyword If    '${text}'!=''    Input Text    xpath=//*[@id="main"]/div/div[3]/div/div/div/div[3]/div/div[2]/div[2]/div/div[2]/div/div/div[1]/div[1]/div[2]/div[1]/div/div[2]/div[1]/div/div/div/div[3]/div/div/div[3]/div/div/div/div/input[2]    ${text}
+    sleep    1s
+    #: FOR    ${i}    IN RANGE    10
+    #    ${thisText}    get text    xpath=/html/body/div[32]/ul[2]/li[1+${i}]
+    #    Exit For Loop If    '${text}'=='${thisText}'
+    #Click Element    xpath=/html/body/div[32]/ul[2]/li[1+${i}]    #点击该商务人
+    Click Element    xpath=/html/body/div[not(contains(@style,'display: none'))]//li[contains(@class,'ivu-select-item') and text()='${text}']
+    [Teardown]    sleep    500ms
+
+操作1
+    [Arguments]    ${text}=
+    Click Element    xpath=//*[@id="main"]/div/div[3]/div/div/div/div[3]/div/div[2]/div[2]/div/div[2]/div/div/div[1]/div[1]/div[2]/div[1]/div/div[2]/div[1]/div/div/div/div[3]/div/div/div[5]/div/div/div/div/input[2]    #点击操作选择框
+    Run Keyword If    '${text}'!=''    Input Text    xpath=//*[@id="main"]/div/div[3]/div/div/div/div[3]/div/div[2]/div[2]/div/div[2]/div/div/div[1]/div[1]/div[2]/div[1]/div/div[2]/div[1]/div/div/div/div[3]/div/div/div[5]/div/div/div/div/input[2]    ${text}
+    sleep    500ms
+    #: FOR    ${i}    IN RANGE    10
+    #    ${thisText}    get text    xpath=/html/body/div[33]/ul[2]/li[1+${i}]
+    #    Exit For Loop If    '${text}'=='${thisText}'
+    #Click Element    xpath=/html/body/div[33]/ul[2]/li[1+${i}]    #点击该操作人
+    Click Element    xpath=/html/body/div[not(contains(@style,'display: none'))]//li[contains(@class,'ivu-select-item') and text()='${text}']
+    [Teardown]    sleep    500ms
+
+客服1
+    [Arguments]    ${text}=
+    Click Element    xpath=//*[@id="main"]/div/div[3]/div/div/div/div[3]/div/div[2]/div[2]/div/div[2]/div/div/div[1]/div[1]/div[2]/div[1]/div/div[2]/div[1]/div/div/div/div[5]/div[1]/div/div/div/div/input[2]    #点击客服选择框
+    Run Keyword If    '${text}'!=''    Input Text    xpath=//*[@id="main"]/div/div[3]/div/div/div/div[3]/div/div[2]/div[2]/div/div[2]/div/div/div[1]/div[1]/div[2]/div[1]/div/div[2]/div[1]/div/div/div/div[5]/div[1]/div/div/div/div/input[2]    ${text}
+    sleep    500ms
+    #: FOR    ${i}    IN RANGE    10
+    #    ${thisText}    get text    xpath=/html/body/div[34]/ul[2]/li[1+${i}]
+    #    Exit For Loop If    '${text}'=='${thisText}'
+    #Click Element    xpath=/html/body/div[34]/ul[2]/li[1+${i}]    #点击该客服人
+    Click Element    xpath=/html/body/div[not(contains(@style,'display: none'))]//li[contains(@class,'ivu-select-item') and text()='${text}']
+    [Teardown]    sleep    500ms
+
+业务来源
+    [Arguments]    ${text}=    ${customer}=
+    [Documentation]    业务来源包括：业务员、海外代理、公司
+    ...
+    ...    来源客户需要自己输入。
+    #选择业务来源
+    Click Element    xpath=//*[@id="main"]/div/div[3]/div/div/div/div[3]/div/div[2]/div[2]/div/div[2]/div/div/div[1]/div[1]/div[2]/div[1]/div/div[2]/div[1]/div/div/div/div[5]/div[3]/div/div/div/div/span[2]    #点击业务来源选择框
+    sleep    500ms
+    #: FOR    ${i}    IN RANGE    5
+    #    ${thisText}    get text    xpath=/html/body/div[35]/ul[2]/li[1+${i}]
+    #    Exit For Loop If    '${text}'=='${thisText}'
+    #Click Element    xpath=/html/body/div[35]/ul[2]/li[1+${i}]    #点击该揽货类型
+    Click Element    xpath=/html/body/div[not(contains(@style,'display: none'))]//li[contains(@class,'ivu-select-item') and text()='${text}']
+    #选择来源客户
+    sleep    1s
+    Run Keyword If    '${customer}'!=''    Input Text    xpath=//*[@id="main"]/div/div[3]/div/div/div/div[3]/div/div[2]/div[2]/div/div[2]/div/div/div[1]/div[1]/div[2]/div[1]/div/div[2]/div[1]/div/div/div/div[5]/div[4]/div/div/div/div/div/input    ${customer}
+    sleep    1s
+    Run Keyword If    '${customer}'!=''    Click Element    xpath=/html/body/div[not(contains(@style,'display: none'))]//div[contains(@class,'flex-auto label-box') and text()='${customer}']
+    [Teardown]    sleep    500ms
+
+揽货类型
+    [Arguments]    ${text}=
+    Click Element    xpath=//*[@id="main"]/div/div[3]/div/div/div/div[3]/div/div[2]/div[2]/div/div[2]/div/div/div[1]/div[1]/div[2]/div[1]/div/div[2]/div[3]/div/div/div/div/div[1]/div/div/div/div/input[2]    #点击揽货类型选择框
+    sleep    500ms
+    #: FOR    ${i}    IN RANGE    10
+    #    ${thisText}    get text    xpath=/html/body/div[44]/ul[2]/li[1+${i}]
+    #    Exit For Loop If    '${text}'=='${thisText}'
+    #Click Element    xpath=/html/body/div[44]/ul[2]/li[1+${i}]    #点击该揽货类型
+    Click Element    xpath=/html/body/div[not(contains(@style,'display: none'))]//li[contains(@class,'ivu-select-item') and text()='${text}']
+    [Teardown]    sleep    500ms
+
+付费方式
+    [Arguments]    ${text}=
+    Click Element    xpath=//*[@id="main"]/div/div[3]/div/div/div/div[3]/div/div[2]/div[2]/div/div[2]/div/div/div[1]/div[1]/div[2]/div[1]/div/div[2]/div[3]/div/div/div/div/div[2]/div/div/div/div/input[2]    #点击付费方式选择框
+    sleep    500ms
+    #: FOR    ${i}    IN RANGE    10
+    #    ${thisText}    get text    xpath=/html/body/div[45]/ul[2]/li[1+${i}]
+    #    Exit For Loop If    '${text}'=='${thisText}'
+    #Click Element    xpath=/html/body/div[45]/ul[2]/li[1+${i}]    #点击该付费方式
+    Click Element    xpath=/html/body/div[not(contains(@style,'display: none'))]//li[contains(@class,'ivu-select-item') and text()='${text}']
+    [Teardown]    sleep    500ms
+
+预付地点1
+    [Arguments]    ${text}=
+    Run Keyword If    '${text}'!=''    Input Text    xpath=//*[@id="main"]/div/div[3]/div/div/div/div[3]/div/div[2]/div[2]/div/div[2]/div/div/div[1]/div[1]/div[2]/div[1]/div/div[2]/div[3]/div/div/div/div/div[3]/div/div/div/div/div/input    ${text}
+    Run Keyword If    '${text}'==''    Click Element    xpath=//*[@id="main"]/div/div[3]/div/div/div/div[3]/div/div[2]/div[2]/div/div[2]/div/div/div[1]/div[1]/div[2]/div[1]/div/div[2]/div[3]/div/div/div/div/div[3]/div/div/div/div/div/input    #点击预付地点选择框
+    #Wait Until Page Contains Element    xpath=/html/body/div[46]/ul[2]/div/li[1]
+    sleep    2s
+    #Click Element    xpath=/html/body/div[53]/ul[2]/div/li[1]    #点击第一个预付地点    #当只搜出来一个地点xpath为    /html/body/div[54]/ul[2]/div/li
+    Click Element    xpath=/html/body/div[not(contains(@style,'display: none'))]//div[contains(@class,'flex-auto label-box') and text()='${text}']
+    [Teardown]    sleep    500ms
+
+到付地点1
+    [Arguments]    ${text}=
+    Run Keyword If    '${text}'!=''    Input Text    xpath=//*[@id="main"]/div/div[3]/div/div/div/div[3]/div/div[2]/div[2]/div/div[2]/div/div/div[1]/div[1]/div[2]/div[1]/div/div[2]/div[3]/div/div/div/div/div[4]/div/div/div/div/div/input    ${text}
+    Run Keyword If    '${text}'==''    Click Element    xpath=//*[@id="main"]/div/div[3]/div/div/div/div[3]/div/div[2]/div[2]/div/div[2]/div/div/div[1]/div[1]/div[2]/div[1]/div/div[2]/div[3]/div/div/div/div/div[4]/div/div/div/div/div/input    #点击到付地点选择框
+    #Wait Until Page Contains Element    xpath=/html/body/div[47]/ul[2]/div/li[1]
+    sleep    2s
+    #Click Element    xpath=/html/body/div[54]/ul[2]/div/li[1]    #点击第一个到付地点
+    Click Element    xpath=/html/body/div[not(contains(@style,'display: none'))]//div[contains(@class,'flex-auto label-box') and text()='${text}']
+    [Teardown]    sleep    500ms
+
+运输条款
+    [Arguments]    ${text}=CY-CY
+    [Documentation]    运输条款不能手动输入查询，只能循环定位。
+    ...
+    ...    CY-CY、CY-CFS、CY-DOOR、CY-RAMP
+    ...    CFS-CY、CFS-CFS、CFS-DOOR、CFS-RAMP
+    ...
+    ...    DOOR-CY、DOOR-CFS、DOOR-DOOR、DOOR-RAMP
+    ...    RAMP-CY、RAMP-CFS、RAMP-DOOR、RAMP-RAMP
+    Click Element    xpath=//*[@id="main"]/div/div[3]/div/div/div/div[3]/div/div[2]/div[2]/div/div[2]/div/div/div[1]/div[1]/div[2]/div[1]/div/div[2]/div[3]/div/div/div/div/div[5]/div/div/div/div    #点击运输条款选择框
+    #Wait Until Page Contains Element    xpath=/html/body/div[48]/ul[2]/li[1]
+    sleep    500ms
+    #: FOR    ${i}    IN RANGE    20
+    #    ${thisText}    Get Text    xpath=/html/body/div[48]/ul[2]/li[1+${i}]
+    #    Exit For Loop If    '${text}'=='${thisText}'
+    #Click Element    xpath=/html/body/div[48]/ul[2]/li[1+${i}]    #点击第一个运输条款
+    Click Element    xpath=/html/body/div[not(contains(@style,'display: none'))]//li[contains(@class,'ivu-select-item') and text()='${text}']
+    [Teardown]    sleep    500ms
+
+重量KGS
+    [Arguments]    ${text}=2
+    Input Text    xpath=//*[@id="main"]/div/div[3]/div/div/div/div[3]/div/div[2]/div[2]/div/div[2]/div/div/div[1]/div[1]/div[2]/div[1]/div/div[2]/div[4]/div/div/div/div/div/div/div[3]/div/div/div/div[2]/input    ${text}    #默认输入重量为2
+    [Teardown]    sleep    500ms
+
+货物种类
+    [Arguments]    ${text}=普通货
+    [Documentation]    货物种类不能手动输入查询，只能循环定位。
+    ...
+    ...    包括：普通货、危险货物、冻柜、化工品、拼箱、散货
+    Click Element    xpath=//*[@id="main"]/div/div[3]/div/div/div/div[3]/div/div[2]/div[2]/div/div[2]/div/div/div[1]/div[1]/div[2]/div[1]/div/div[2]/div[4]/div/div/div/div/div/div/div[5]/div/div/div/div    #点击货物种类选择框
+    #Wait Until Page Contains Element    xpath=/html/body/div[50]/ul[2]/li[1]
+    #sleep    500ms
+    #: FOR    ${i}    IN RANGE    10
+    #    ${thisText}    Get Text    xpath=/html/body/div[50]/ul[2]/li[1+${i}]
+    #    Exit For Loop If    '${text}'=='${thisText}'
+    #Click Element    xpath=/html/body/div[50]/ul[2]/li[1+${i}]    #点击第一个货物种类
+    Click Element    xpath=/html/body/div[not(contains(@style,'display: none'))]//li[contains(@class,'ivu-select-item') and text()='${text}']
+    [Teardown]    sleep    500ms
+
+用箱信息
+    [Arguments]    ${code}    ${text}=    ${num}=
+    [Documentation]    编号|箱型号|数量|备注
+    Click Button    xpath=//*[@id="main"]/div/div[3]/div/div/div/div[3]/div/div[2]/div[2]/div/div[2]/div/div/div[1]/div[1]/div[2]/div[1]/div/div[2]/div[7]/div/div/div[1]/div/p/button[4]    #新增一条用箱信息
+    sleep    1s
+    Run Keyword If    '${code}'=='1'    单个用箱信息    ${code}    ${text}    ${num}
+    Run Keyword If    '${code}'!='1'    多个用箱信息    ${code}    ${text}    ${num}
+    [Teardown]    sleep    500ms
+
+单个用箱信息
+    [Arguments]    ${code}    ${text}    ${num}
+    #判断编号是否正确
+    ${thisCode}    Get Text    xpath=//*[@id="main"]/div/div[3]/div/div/div/div[3]/div/div[2]/div[2]/div/div[2]/div/div/div[1]/div[1]/div[2]/div[1]/div/div[2]/div[7]/div/div/div[2]/div/div/div[3]/table/tbody/tr/td[2]
+    Should Be Equal    ${thisCode}    ${code}
+    #选择箱型号
+    Click Element    xpath=//*[@id="main"]/div/div[3]/div/div/div/div[3]/div/div[2]/div[2]/div/div[2]/div/div/div[1]/div[1]/div[2]/div[1]/div/div[2]/div[7]/div/div/div[2]/div/div/div[3]/table/tbody/tr/td[3]    #需要点击两次才会出现输入框
+    Click Element    xpath=//*[@id="main"]/div/div[3]/div/div/div/div[3]/div/div[2]/div[2]/div/div[2]/div/div/div[1]/div[1]/div[2]/div[1]/div/div[2]/div[7]/div/div/div[2]/div/div/div[3]/table/tbody/tr/td[3]/div/div/div/input[2]
+    Input Text    xpath=//*[@id="main"]/div/div[3]/div/div/div/div[3]/div/div[2]/div[2]/div/div[2]/div/div/div[1]/div[1]/div[2]/div[1]/div/div[2]/div[7]/div/div/div[2]/div/div/div[3]/table/tbody/tr/td[3]/div/div/div/input[2]    ${text}
+    #按键模拟选取第一个
+    send    {DOWN}
+    sleep    1s
+    send    {ENTER}
+    #输入数量，需要先点击
+    Click Element    xpath=//*[@id="main"]/div/div[3]/div/div/div/div[3]/div/div[2]/div[2]/div/div[2]/div/div/div[1]/div[1]/div[2]/div[1]/div/div[2]/div[7]/div/div/div[2]/div/div/div[3]/table/tbody/tr/td[4]/div
+    Input Text    xpath=//*[@id="main"]/div/div[3]/div/div/div/div[3]/div/div[2]/div[2]/div/div[2]/div/div/div[1]/div[1]/div[2]/div[1]/div/div[2]/div[7]/div/div/div[2]/div/div/div[3]/table/tbody/tr/td[4]/div/div/div[2]/input    ${num}
+
+多个用箱信息
+    [Arguments]    ${code}    ${text}    ${num}
+    #判断编号是否正确
+    ${thisCode}    Get Text    xpath=//*[@id="main"]/div/div[3]/div/div/div/div[3]/div/div[2]/div[2]/div/div[2]/div/div/div[1]/div[1]/div[2]/div[1]/div/div[2]/div[7]/div/div/div[2]/div/div/div[3]/table/tbody/tr[${code}]/td[2]
+    Should Be Equal    ${thisCode}    ${code}
+    #选择箱型号
+    Click Element    xpath=//*[@id="main"]/div/div[3]/div/div/div/div[3]/div/div[2]/div[2]/div/div[2]/div/div/div[1]/div[1]/div[2]/div[1]/div/div[2]/div[7]/div/div/div[2]/div/div/div[3]/table/tbody/tr[${code}]/td[3]    #需要点击两次才会出现输入框
+    Click Element    xpath=//*[@id="main"]/div/div[3]/div/div/div/div[3]/div/div[2]/div[2]/div/div[2]/div/div/div[1]/div[1]/div[2]/div[1]/div/div[2]/div[7]/div/div/div[2]/div/div/div[3]/table/tbody/tr[${code}]/td[3]/div/div/div/input[2]
+    Input Text    xpath=//*[@id="main"]/div/div[3]/div/div/div/div[3]/div/div[2]/div[2]/div/div[2]/div/div/div[1]/div[1]/div[2]/div[1]/div/div[2]/div[7]/div/div/div[2]/div/div/div[3]/table/tbody/tr[${code}]/td[3]/div/div/div/input[2]    ${text}
+    #按键模拟选取第一个
+    send    {DOWN}
+    sleep    1s
+    send    {ENTER}
+    #输入数量，需要先点击
+    Click Element    xpath=//*[@id="main"]/div/div[3]/div/div/div/div[3]/div/div[2]/div[2]/div/div[2]/div/div/div[1]/div[1]/div[2]/div[1]/div/div[2]/div[7]/div/div/div[2]/div/div/div[3]/table/tbody/tr[${code}]/td[4]/div
+    Input Text    xpath=//*[@id="main"]/div/div[3]/div/div/div/div[3]/div/div[2]/div[2]/div/div[2]/div/div/div[1]/div[1]/div[2]/div[1]/div/div[2]/div[7]/div/div/div[2]/div/div/div[3]/table/tbody/tr[${code}]/td[4]/div/div/div[2]/input    ${num}
+
+船公司和订舱代理
+    [Arguments]    ${ship}=    ${proxy}=
+    [Documentation]    选择服务项目，选择订舱，然后传入的值为船公司和订舱代理。
+    #选择船公司
+    Click Element    xpath=//*[@id="main"]/div/div[3]/div/div/div/div[3]/div/div[2]/div[2]/div/div[2]/div/div/div[1]/div[1]/div[2]/div[1]/div/div[2]/div[5]/div/div/div[1]/div/div/div/label[contains(text(),'订舱')]    #选择服务项目为订舱
+    sleep    1s
+    Run Keyword If    '${ship}'!=''    Click Element    xpath=//*[@id="main"]/div/div[3]/div/div/div/div[3]/div/div[2]/div[2]/div/div[2]/div/div/div[1]/div[1]/div[2]/div[1]/div/div[2]/div[5]/div/div/div[3]/div/div[1]/div/div/div/div/div/input    #点击船公司输入框
+    Run Keyword If    '${ship}'!=''    Input Text    xpath=//*[@id="main"]/div/div[3]/div/div/div/div[3]/div/div[2]/div[2]/div/div[2]/div/div/div[1]/div[1]/div[2]/div[1]/div/div[2]/div[5]/div/div/div[3]/div/div[1]/div/div/div/div/div/input    ${ship}
+    sleep    2s
+    Run Keyword If    '${ship}'!=''    Click Element    xpath=/html/body/div[not(contains(@style,'display: none'))]//div[contains(@class,'flex-auto label-box') and text()='${ship}']
+    #选择订舱代理
+    sleep    1s
+    Run Keyword If    '${proxy}'!=''    Click Element    xpath=//*[@id="main"]/div/div[3]/div/div/div/div[3]/div/div[2]/div[2]/div/div[2]/div/div/div[1]/div[1]/div[2]/div[1]/div/div[2]/div[5]/div/div/div[4]/div/div[1]/div/div/div/div/div/input    #点击订舱代理输入框
+    Run Keyword If    '${proxy}'!=''    Input Text    xpath=//*[@id="main"]/div/div[3]/div/div/div/div[3]/div/div[2]/div[2]/div/div[2]/div/div/div[1]/div[1]/div[2]/div[1]/div/div[2]/div[5]/div/div/div[4]/div/div[1]/div/div/div/div/div/input    ${proxy}
+    sleep    2s
+    Run Keyword If    '${proxy}'!=''    Click Element    xpath=/html/body/div[not(contains(@style,'display: none'))]//div[contains(@class,'flex-auto label-box') and text()='${proxy}']
+    [Teardown]    sleep    1s
+
+报关
+    [Arguments]    ${text}=
+    [Documentation]    点击服务项目的报关和报检都会出现报关填写栏。
+    #点击报关和报检
+    Click Element    xpath=//*[@id="main"]/div/div[3]/div/div/div/div[3]/div/div[2]/div[2]/div/div[2]/div/div/div[1]/div[1]/div[2]/div[1]/div/div[2]/div[5]/div/div/div[1]/div/div/div/label[2]
+    sleep    500ms
+    Click Element    xpath=//*[@id="main"]/div/div[3]/div/div/div/div[3]/div/div[2]/div[2]/div/div[2]/div/div/div[1]/div[1]/div[2]/div[1]/div/div[2]/div[5]/div/div/div[1]/div/div/div/label[3]
+    sleep    1s
+    #选择报关
+    Run Keyword If    '${text}'!=''    Click Element    xpath=//*[@id="main"]/div/div[3]/div/div/div/div[3]/div/div[2]/div[2]/div/div[2]/div/div/div[1]/div[1]/div[2]/div[1]/div/div[2]/div[5]/div/div/div[5]/div/div[1]/div/div/div/div/div/input
+    Run Keyword If    '${text}'!=''    Input Text    xpath=//*[@id="main"]/div/div[3]/div/div/div/div[3]/div/div[2]/div[2]/div/div[2]/div/div/div[1]/div[1]/div[2]/div[1]/div/div[2]/div[5]/div/div/div[5]/div/div[1]/div/div/div/div/div/input    ${text}
+    sleep    1s
+    #Run Keyword If    '${text}'!=''    Click Element    xpath=/html/body/div[54]/ul[2]/div/li
+    Run Keyword If    '${text}'!=''    Click Element    xpath=/html/body/div[not(contains(@style,'display: none'))]//div[contains(@class,'flex-auto label-box') and text()='${text}']
+    [Teardown]    sleep    1s
+
+车队
+    [Arguments]    ${text}=
+    #点击服务项目：陆运
+    Click Element    xpath=//*[@id="main"]/div/div[3]/div/div/div/div[3]/div/div[2]/div[2]/div/div[2]/div/div/div[1]/div[1]/div[2]/div[1]/div/div[2]/div[5]/div/div/div[1]/div/div/div/label[4]
+    sleep    1s
+    #选择车队
+    Run Keyword If    '${text}'!=''    Click Element    xpath=//*[@id="main"]/div/div[3]/div/div/div/div[3]/div/div[2]/div[2]/div/div[2]/div/div/div[1]/div[1]/div[2]/div[1]/div/div[2]/div[5]/div/div/div[6]/div/div[1]/div/div/div/div/div/input
+    Run Keyword If    '${text}'!=''    Input Text    xpath=//*[@id="main"]/div/div[3]/div/div/div/div[3]/div/div[2]/div[2]/div/div[2]/div/div/div[1]/div[1]/div[2]/div[1]/div/div[2]/div[5]/div/div/div[6]/div/div[1]/div/div/div/div/div/input    ${text}
+    sleep    1s
+    #Run Keyword If    '${text}'!=''    Click Element    xpath=/html/body/div[55]/ul[2]/div/li
+    Run Keyword If    '${text}'!=''    Click Element    xpath=/html/body/div[not(contains(@style,'display: none'))]//div[contains(@class,'flex-auto label-box') and text()='${text}']
+    [Teardown]    sleep    1s
+
+海外代理1
+    [Arguments]    ${text}=
+    #击海外代理和提单
+    Click Element    xpath=//*[@id="main"]/div/div[3]/div/div/div/div[3]/div/div[2]/div[2]/div/div[2]/div/div/div[1]/div[1]/div[2]/div[1]/div/div[2]/div[5]/div/div/div[1]/div/div/div/label[5]
+    #sleep    500ms
+    Click Element    xpath=//*[@id="main"]/div/div[3]/div/div/div/div[3]/div/div[2]/div[2]/div/div[2]/div/div/div[1]/div[1]/div[2]/div[1]/div/div[2]/div[5]/div/div/div[1]/div/div/div/label[7]
+    sleep    1s
+    #选择海外代理
+    Run Keyword If    '${text}'!=''    Click Element    xpath=//*[@id="main"]/div/div[3]/div/div/div/div[3]/div/div[2]/div[2]/div/div[2]/div/div/div[1]/div[1]/div[2]/div[1]/div/div[2]/div[5]/div/div/div[7]/div/div[1]/div/div/div/div/div/input
+    Run Keyword If    '${text}'!=''    Input Text    xpath=//*[@id="main"]/div/div[3]/div/div/div/div[3]/div/div[2]/div[2]/div/div[2]/div/div/div[1]/div[1]/div[2]/div[1]/div/div[2]/div[5]/div/div/div[7]/div/div[1]/div/div/div/div/div/input    ${text}
+    sleep    1s
+    #Run Keyword If    '${text}'!=''    Click Element    xpath=/html/body/div[56]/ul[2]/div/li
+    Run Keyword If    '${text}'!=''    Click Element    xpath=/html/body/div[not(contains(@style,'display: none'))]//div[contains(@class,'flex-auto label-box') and text()='${text}']
+    [Teardown]    sleep    1s
+
+地面服务
+    [Arguments]    ${text}=
+    #点击服务项目：熏蒸
+    Click Element    xpath=//*[@id="main"]/div/div[3]/div/div/div/div[3]/div/div[2]/div[2]/div/div[2]/div/div/div[1]/div[1]/div[2]/div[1]/div/div[2]/div[5]/div/div/div[1]/div/div/div/label[6]
+    sleep    1s
+    #选择地面服务
+    Run Keyword If    '${text}'!=''    Click Element    xpath=//*[@id="main"]/div/div[3]/div/div/div/div[3]/div/div[2]/div[2]/div/div[2]/div/div/div[1]/div[1]/div[2]/div[1]/div/div[2]/div[5]/div/div/div[8]/div/div[1]/div/div/div/div/div/input
+    Run Keyword If    '${text}'!=''    Input Text    xpath=//*[@id="main"]/div/div[3]/div/div/div/div[3]/div/div[2]/div[2]/div/div[2]/div/div/div[1]/div[1]/div[2]/div[1]/div/div[2]/div[5]/div/div/div[8]/div/div[1]/div/div/div/div/div/input    ${text}
+    sleep    1s
+    #Run Keyword If    '${text}'!=''    Click Element    xpath=/html/body/div[57]/ul[2]/div/li
+    Run Keyword If    '${text}'!=''    Click Element    xpath=/html/body/div[not(contains(@style,'display: none'))]//div[contains(@class,'flex-auto label-box') and text()='${text}']
+    [Teardown]    sleep    1s
+
+录入数据1
+    [Arguments]    ${arg1}    ${arg2}    ${arg3}    ${arg4}    ${arg5}
+    [Documentation]    依次为：收货地、装货港、卸货港、航线、委托客户。
+    收货地    ${arg1}
+    装货港1    ${arg2}
+    卸货港1    ${arg3}
+    #验证航线    ${arg4}
+    委托客户    ${arg5}
+    要求装运日期    2018-12-12
+
+录入数据2
+    [Arguments]    ${arg6}    ${arg7}    ${arg8}    ${arg9}    ${arg10}    ${arg11}=
+    [Documentation]    依次为：销售、商务、操作、客服、业务来源、来源客户。
+    销售1    ${arg6}
+    商务1    ${arg7}
+    操作1    ${arg8}
+    客服1    ${arg9}
+    业务来源    ${arg10}    ${arg11}
+    #预付地点    ${arg3}
+    #到付地点    ${arg3}
+
+录入数据3
+    [Arguments]    ${arg12}    ${arg13}    ${arg14}    ${arg15}    ${arg16}    ${arg17}=
+    ...    ${arg18}=    ${arg19}=    ${arg20}=
+    [Documentation]    揽货类型、付费方式、货物种类。
+    ...
+    ...    船公司、订舱代理、报关、车队、海外代理、地面服务
+    揽货类型    ${arg12}
+    付费方式    ${arg13}
+    运输条款    CY-CY
+    重量KGS    2
+    货物种类    ${arg14}
+    用箱信息    1    40GP    1
+    船公司和订舱代理    ${arg15}    ${arg16}
+    Run Keyword If    '${arg17}'!=''    报关    ${arg17}
+    Run Keyword If    '${arg18}'!=''    车队    ${arg18}
+    Run Keyword If    '${arg19}'!=''    海外代理1    ${arg19}
+    Run Keyword If    '${arg20}'!=''    地面服务    ${arg20}

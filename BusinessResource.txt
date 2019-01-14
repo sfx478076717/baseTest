@@ -1,0 +1,77 @@
+*** Settings ***
+Library           Selenium2Library
+Library           Screenshot
+Resource          BaseResource.txt
+
+*** Keywords ***
+进入商务订舱页面
+    [Documentation]    进入商务管理的商务订舱页面。
+    左侧菜单主菜单    商务管理    #点击商务管理
+    左侧菜单子菜单    商务订舱    #点击商务订舱
+    Wait Until Page Contains    海运出口(全部)
+    [Teardown]    sleep    2s
+
+商务订舱海运出口待接收
+    [Documentation]    点击商务订舱子菜单-海运出口的子菜单-待接收 按钮。
+    Click Element    xpath=//*[@id="main"]/div/div[3]/div/div/div/div[2]/div[2]/ul/li[1]/ul/li[2]/span
+    Wait Until Page Contains    海运出口(待接收)
+    [Teardown]    sleep    2s
+
+商务订舱选中托单
+    [Arguments]    ${businessCode}=
+    [Documentation]    选中第一行的托单
+    ${thisCode}    Get Text    xpath=//*[@id="main"]/div/div[3]/div/div/div/div[3]/div/div[2]/div/div[2]/div[3]/table/tbody/tr[1]/td[5]/div    #获取此处的业务流水号
+    Run Keyword If    '${businessCode}'!=''    Should Be Equal    ${businessCode}    ${thisCode}    #判断第一个托单是否是需要的托单
+    Click Element    xpath=//*[@id="main"]/div/div[3]/div/div/div/div[3]/div/div[2]/div/div[2]/div[3]/table/tbody/tr[1]/td[1]/div/label    #点击选中框
+    [Teardown]    sleep    500ms
+
+商务订舱外部按钮
+    [Arguments]    ${button}
+    [Documentation]    外部按钮，传入的name必须正确。
+    ...
+    ...    包括：打开、接单、驳回、提交、撤回提交。
+    : FOR    ${i}    IN RANGE    6    #最多6个按钮
+    \    ${text}    Get Text    xpath=//*[@id="main"]/div/div[3]/div/div/div/div[3]/div/div[2]/div/div[1]/div[1]/button[${i}+1]
+    \    Exit For Loop If    '${text}'=='${button}'    #如果当前循环是传入的按钮名 就退出循环 ${i}的值保留
+    Click Button    xpath=//*[@id="main"]/div/div[3]/div/div/div/div[3]/div/div[2]/div/div[1]/div[1]/button[${i}+1]
+    [Teardown]    sleep    3s
+
+商务订舱内部按钮
+    [Arguments]    ${button}
+    [Documentation]    内部按钮，传入的name必须正确。
+    ...
+    ...    包括：接单、驳回、返回、EDOC、提交、撤回提交。
+    sleep    1s
+    : FOR    ${i}    IN RANGE    6    #最多6个按钮
+    \    ${text}    Get Text    xpath=//*[@id="main"]/div/div[3]/div/div/div[1]/button[${i}+1]
+    \    Exit For Loop If    '${text}'=='${button}'    #如果当前循环是传入的按钮名 就退出循环 ${i}的值保留
+    Click Button    xpath=//*[@id="main"]/div/div[3]/div/div/div[1]/button[${i}+1]
+    [Teardown]    sleep    2s
+
+商务订舱内部保存
+    [Documentation]    商务订舱内部按钮，保存按钮。
+    ...
+    ...    因为会有红点，所以和其他按钮样式不一样，单拉出来。
+    ${text}    Get Text    xpath=//*[@id="main"]/div/div[3]/div/div/div[1]/span/button
+    Click Button    xpath=//*[@id="main"]/div/div[3]/div/div/div[1]/span/button
+    [Teardown]    sleep    2s
+
+商务订舱约号输入
+    [Arguments]    ${number}=123
+    [Documentation]    商务流转托单的必填信息：约号。
+    Input Text    xpath=//*[@id="main"]/div/div[3]/div/div/div[2]/div/div/div[1]/div/div[2]/div[1]/div[1]/div/div/div[1]/div/div/div[6]/div/div/div/div/div/input    ${number}    #默认约号为123
+    [Teardown]    sleep    500ms
+
+循环流转商务托单
+    [Arguments]    ${number}=1
+    [Documentation]    商务人循环流转多条托单，默认流转一条。
+    : FOR    ${i}    IN RANGE    ${number}
+    \    商务订舱海运出口待接收
+    \    商务订舱选中托单
+    \    商务订舱外部按钮    打开
+    \    商务订舱内部按钮    接单
+    \    商务订舱约号输入
+    \    商务订舱内部按钮    提交
+    \    商务订舱内部按钮    返回
+    \    页面刷新
+    [Teardown]    sleep    2s
