@@ -228,10 +228,10 @@ Library           ExcelLibrary
     #用户登录
     login    http://27.223.104.6:32880/#/login    sys_admin    123456    实习测试公司
     ${businessNum}    销售新增托单    robot客户    管理员    张小影    管理员    管理员
-    ...    CNC    robot客户
+    ...    ONE    robot客户
     商务流转托单    ${businessNum}
     操作接单    ${businessNum}
-    操作编辑船期    didi    robot客户
+    操作编辑船期    TBN    robot客户
     ${abbreviation}    Set Variable    ziqi    #确定收费对象
     生成收费联系单    ${abbreviation}    ${businessNum}    robot客户    张小影
     ${settlementId}    收费申请开发票
@@ -244,10 +244,10 @@ Library           ExcelLibrary
     #用户登录
     login    http://27.223.104.6:32880/#/login    sys_admin    123456    实习测试公司
     ${businessNum}    销售新增托单    robot客户    管理员    张小影    管理员    管理员
-    ...    CNC    robot客户
+    ...    ONE    robot客户
     商务流转托单    ${businessNum}
     操作接单    ${businessNum}
-    操作编辑船期    didi    robot客户
+    操作编辑船期    TBN    robot客户
     ${abbreviation}    Set Variable    ziqi    #确定付费对象
     生成付费联系单    ${abbreviation}    ${businessNum}    robot客户    张小影
     ${settlementId}    付费申请开支票    ${abbreviation}
@@ -260,10 +260,10 @@ Library           ExcelLibrary
     #用户登录
     login    http://27.223.104.6:32880/#/login    sys_admin    123456    开瑞国际物流（山东）股份有限公司    #商务需要特别注意
     ${businessNum}    销售新增托单    青岛科技大学    管理员    刘凯    管理员    管理员
-    ...    CNC    青岛科技大学
+    ...    ONE    青岛科技大学
     商务流转托单    ${businessNum}
     操作接单    ${businessNum}
-    操作编辑船期    didi    青岛科技大学
+    操作编辑船期    TBN    青岛科技大学
     ${abbreviation}    Set Variable    青科大    #确定收费对象
     生成收费联系单    ${abbreviation}    ${businessNum}    青岛科技大学    刘凯
     ${settlementId}    收费申请开发票
@@ -276,10 +276,10 @@ Library           ExcelLibrary
     #用户登录
     login    http://27.223.104.6:32880/#/login    sys_admin    123456    开瑞国际物流（山东）股份有限公司    #商务需要特别注意
     ${businessNum}    销售新增托单    青岛科技大学    管理员    刘凯    管理员    管理员
-    ...    CNC    青岛科技大学
+    ...    ONE    青岛科技大学
     商务流转托单    ${businessNum}
     操作接单    ${businessNum}
-    操作编辑船期    didi    青岛科技大学
+    操作编辑船期    TBN    青岛科技大学
     ${abbreviation}    Set Variable    青科大    #确定付费对象
     生成付费联系单    ${abbreviation}    ${businessNum}    青岛科技大学    刘凯
     ${settlementId}    付费申请开支票    ${abbreviation}
@@ -310,10 +310,10 @@ Library           ExcelLibrary
     #用户登录
     login    http://27.223.104.6:32880/#/login    sys_admin    123456    青岛盈智科技    #商务需要特别注意
     ${businessNum}    销售新增托单    青岛忠诚    管理员    刘凯    管理员    管理员
-    ...    CNC    青岛忠诚
+    ...    ONE    青岛忠诚
     商务流转托单    ${businessNum}
     操作接单    ${businessNum}
-    操作编辑船期    didi    青岛忠诚
+    操作编辑船期    TBN    青岛忠诚
     ${abbreviation}    Set Variable    青岛忠诚    #确定收费对象
     生成收费联系单    ${abbreviation}    ${businessNum}    青岛忠诚    刘凯
     ${settlementId}    收费申请开发票
@@ -326,10 +326,10 @@ Library           ExcelLibrary
     #用户登录
     login    http://27.223.104.6:32880/#/login    sys_admin    123456    青岛盈智科技    #商务需要特别注意
     ${businessNum}    销售新增托单    青岛忠诚    管理员    刘凯    管理员    管理员
-    ...    CNC    青岛忠诚
+    ...    ONE    青岛忠诚
     商务流转托单    ${businessNum}
     操作接单    ${businessNum}
-    操作编辑船期    didi    青岛忠诚
+    操作编辑船期    TBN    青岛忠诚
     ${abbreviation}    Set Variable    青岛忠诚    #确定付费对象
     生成付费联系单    ${abbreviation}    ${businessNum}    青岛忠诚    刘凯
     ${settlementId}    付费申请开支票    ${abbreviation}
@@ -342,10 +342,10 @@ Library           ExcelLibrary
     #用户登录
     login    http://49.4.86.37:38080/#/login    sys_admin    123456    开瑞国际物流（山东）股份有限公司    #商务需要特别注意
     ${businessNum}    销售新增托单    青岛科技大学    管理员    刘凯    管理员    管理员
-    ...    CNC    青岛科技大学
+    ...    ONE    青岛科技大学
     商务流转托单    ${businessNum}
     操作接单    ${businessNum}
-    操作编辑船期    didi    青岛科技大学
+    操作编辑船期    TBN    青岛科技大学
     ${abbreviation}    Set Variable    青科大    #确定收费对象
     生成收费联系单    ${abbreviation}    ${businessNum}    青岛科技大学    刘凯
     ${settlementId}    收费申请开发票
@@ -358,10 +358,10 @@ Library           ExcelLibrary
     #用户登录
     login    http://49.4.86.37:38080/#/login    sys_admin    123456    开瑞国际物流（山东）股份有限公司    #商务需要特别注意
     ${businessNum}    销售新增托单    青岛科技大学    管理员    刘凯    管理员    管理员
-    ...    CNC    青岛科技大学
+    ...    ONE    青岛科技大学
     商务流转托单    ${businessNum}
     操作接单    ${businessNum}
-    操作编辑船期    didi    青岛科技大学
+    操作编辑船期    TBN    青岛科技大学
     ${abbreviation}    Set Variable    青科大    #确定付费对象
     生成付费联系单    ${abbreviation}    ${businessNum}    青岛科技大学    刘凯
     ${settlementId}    付费申请开支票    ${abbreviation}
@@ -374,10 +374,10 @@ Library           ExcelLibrary
     #用户登录
     login    http://27.223.104.6:32880/#/login    sys_admin    123456    实习测试公司2
     ${businessNum}    销售新增托单    张三    管理员    刘凯    管理员    管理员
-    ...    CNC    张三
+    ...    ONE    张三
     商务流转托单    ${businessNum}
     操作接单    ${businessNum}
-    操作编辑船期    didi    张三
+    操作编辑船期    TBN    张三
     ${abbreviation}    Set Variable    张三    #确定收费对象
     生成收费联系单    ${abbreviation}    ${businessNum}    张三    刘凯
     ${settlementId}    收费申请开发票
@@ -390,10 +390,10 @@ Library           ExcelLibrary
     #用户登录
     login    http://27.223.104.6:32880/#/login    sys_admin    123456    实习测试公司2
     ${businessNum}    销售新增托单    张三    管理员    刘凯    管理员    管理员
-    ...    CNC    张三
+    ...    ONE    张三
     商务流转托单    ${businessNum}
     操作接单    ${businessNum}
-    操作编辑船期    didi    张三
+    操作编辑船期    TBN    张三
     ${abbreviation}    Set Variable    张三    #确定付费对象
     生成付费联系单    ${abbreviation}    ${businessNum}    张三    刘凯
     ${settlementId}    付费申请开支票    ${abbreviation}
@@ -406,10 +406,10 @@ Library           ExcelLibrary
     #用户登录
     login    http://27.223.104.6:32880/#/login    sys_admin    123456    澳源达
     ${businessNum}    销售新增托单    船公司    管理员    李商务    管理员    管理员
-    ...    CNC    船公司
+    ...    ONE    船公司
     商务流转托单    ${businessNum}
     操作接单    ${businessNum}
-    操作编辑船期    didi    船公司
+    操作编辑船期    TBN    船公司
     ${abbreviation}    Set Variable    船公司    #确定收费对象
     生成收费联系单    ${abbreviation}    ${businessNum}    船公司    李商务
     ${settlementId}    收费申请开发票
@@ -422,10 +422,10 @@ Library           ExcelLibrary
     #用户登录
     login    http://27.223.104.6:32880/#/login    sys_admin    123456    澳源达
     ${businessNum}    销售新增托单    船公司    管理员    李商务    管理员    管理员
-    ...    CNC    船公司
+    ...    ONE    船公司
     商务流转托单    ${businessNum}
     操作接单    ${businessNum}
-    操作编辑船期    didi    船公司
+    操作编辑船期    TBN    船公司
     ${abbreviation}    Set Variable    船公司    #确定付费对象
     生成付费联系单    ${abbreviation}    ${businessNum}    船公司    李商务
     ${settlementId}    付费申请开支票    ${abbreviation}
@@ -438,10 +438,10 @@ Library           ExcelLibrary
     #用户登录
     login    http://49.4.6.153/#/login    sys_admin    123456    山东澳源达物流有限公司
     ${businessNum}    销售新增托单    王越    管理员    孙倩    管理员    管理员
-    ...    CNC    王越
+    ...    ONE    王越    #船公司用系统自带的
     商务流转托单    ${businessNum}
     操作接单    ${businessNum}
-    操作编辑船期    KYPARSSIA    王越
+    操作编辑船期    TBN    王越    #船名用系统自带的
     ${abbreviation}    Set Variable    王越    #确定收费对象
     生成收费联系单    ${abbreviation}    ${businessNum}    王越    孙倩
     ${settlementId}    收费申请开发票
@@ -454,12 +454,44 @@ Library           ExcelLibrary
     #用户登录
     login    http://49.4.6.153/#/login    sys_admin    123456    山东澳源达物流有限公司
     ${businessNum}    销售新增托单    王越    管理员    孙倩    管理员    管理员
-    ...    CNC    王越
+    ...    ONE    王越
     商务流转托单    ${businessNum}
     操作接单    ${businessNum}
-    操作编辑船期    KYPARSSIA    王越
+    操作编辑船期    TBN    王越
     ${abbreviation}    Set Variable    王越    #确定付费对象
     生成付费联系单    ${abbreviation}    ${businessNum}    王越    孙倩
+    ${settlementId}    付费申请开支票    ${abbreviation}
+    付费开支票    ${settlementId}
+    付费付款确认    ${settlementId}    ${abbreviation}
+    关闭浏览器
+
+收费联系单-sys_admin-全运
+    [Tags]    quanyun
+    #用户登录
+    login    http://49.4.81.106    sys_admin    123456    青岛全运国际货运代理有限公司
+    ${businessNum}    销售新增托单    青岛晨星国际物流有限公司    管理员    郭金    管理员    管理员
+    ...    ONE    青岛晨星国际物流有限公司    #船公司用系统自带的
+    商务流转托单    ${businessNum}
+    操作接单    ${businessNum}
+    操作编辑船期    TBN    青岛晨星国际物流有限公司    #船名用系统自带的
+    ${abbreviation}    Set Variable    青岛晨星国际物流有限公司    #确定收费对象
+    生成收费联系单    ${abbreviation}    ${businessNum}    青岛晨星国际物流有限公司    郭金
+    ${settlementId}    收费申请开发票
+    收费开发票    ${settlementId}
+    收费收款确认    ${settlementId}    ${abbreviation}
+    关闭浏览器
+
+付费联系单-sys_admin-全运
+    [Tags]    quanyun
+    #用户登录
+    login    http://49.4.81.106    sys_admin    123456    青岛全运国际货运代理有限公司
+    ${businessNum}    销售新增托单    青岛晨星国际物流有限公司    管理员    郭金    管理员    管理员
+    ...    ONE    青岛晨星国际物流有限公司
+    商务流转托单    ${businessNum}
+    操作接单    ${businessNum}
+    操作编辑船期    TBN    青岛晨星国际物流有限公司
+    ${abbreviation}    Set Variable    青岛晨星国际物流有限公司    #确定付费对象
+    生成付费联系单    ${abbreviation}    ${businessNum}    青岛晨星国际物流有限公司    郭金
     ${settlementId}    付费申请开支票    ${abbreviation}
     付费开支票    ${settlementId}
     付费付款确认    ${settlementId}    ${abbreviation}

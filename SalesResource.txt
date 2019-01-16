@@ -8,8 +8,8 @@ Resource          BaseResource.txt
     [Documentation]    进入销售管理的销售订舱页面。
     左侧菜单主菜单    销售管理    #点击销售管理
     左侧菜单子菜单    销售订舱    #点击销售订舱
-    Wait Until Page Contains    海运出口(全部)    10s
-    [Teardown]    sleep    2s
+    Wait Until Element Contains    xpath=//*[@id="main"]/div/div[3]/div/div/div/div[3]/div/div[2]/div/div/div[2]/div/div[2]/div[2]/table/thead/tr/th[2]/div    编号    10s
+    [Teardown]    sleep    1s
 
 销售订舱外部按钮
     [Arguments]    ${button}
@@ -31,11 +31,14 @@ Resource          BaseResource.txt
     \    ${text}    Get Text    xpath=//*[@id="main"]/div/div[3]/div/div/div/div[3]/div/div[2]/div[2]/div/div[1]/button[${i}+1]
     \    Exit For Loop If    '${text}'=='${button}'    #如果当前循环是传入的按钮名 就退出循环 ${i}的值保留
     Click Button    xpath=//*[@id="main"]/div/div[3]/div/div/div/div[3]/div/div[2]/div[2]/div/div[1]/button[${i}+1]
+    Run Keyword If    '${button}'=='提交'    Wait Until Element Contains    xpath=/html/body/div[not(contains(@style,'display: none'))]/div/div[1]/p    提交成功！
+    Run Keyword If    '${button}'=='撤回提交'    Wait Until Element Contains    xpath=/html/body/div[not(contains(@style,'display: none'))]/div/div[1]/p    撤回成功！
     [Teardown]    sleep    2s
 
 销售订舱内部保存托单
     [Documentation]    销售订舱打开托单或者新增托单页面的内部 保存 托单按钮。
     Click Button    xpath=//*[@id="main"]/div/div[3]/div/div/div/div[3]/div/div[2]/div[2]/div/div[1]/span/button    #保存托单
+    Wait Until Element Contains    xpath=/html/body/div[not(contains(@style,'display: none'))]/div/div[1]/p    保存成功
     [Teardown]    sleep    3s
 
 销售订舱内部另存为

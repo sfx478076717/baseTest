@@ -1,8 +1,8 @@
 *** Settings ***
 Library           Selenium2Library
 Library           Screenshot
-Library           AutoItLibrary
 Resource          BaseResource.txt
+Library           AutoItLibrary
 
 *** Keywords ***
 必填信息
@@ -174,15 +174,11 @@ Resource          BaseResource.txt
     #选择业务来源
     Click Element    xpath=//*[@id="main"]/div/div[3]/div/div/div/div[3]/div/div[2]/div[2]/div/div[2]/div/div/div[1]/div[1]/div[2]/div[1]/div/div[2]/div[1]/div/div/div/div[5]/div[3]/div/div/div/div/span[2]    #点击业务来源选择框
     sleep    500ms
-    #: FOR    ${i}    IN RANGE    5
-    #    ${thisText}    get text    xpath=/html/body/div[35]/ul[2]/li[1+${i}]
-    #    Exit For Loop If    '${text}'=='${thisText}'
-    #Click Element    xpath=/html/body/div[35]/ul[2]/li[1+${i}]    #点击该揽货类型
     Click Element    xpath=/html/body/div[not(contains(@style,'display: none'))]//li[contains(@class,'ivu-select-item') and text()='${text}']
     #选择来源客户
-    sleep    1s
+    Run Keyword If    '${customer}'!=''    sleep    1s
     Run Keyword If    '${customer}'!=''    Input Text    xpath=//*[@id="main"]/div/div[3]/div/div/div/div[3]/div/div[2]/div[2]/div/div[2]/div/div/div[1]/div[1]/div[2]/div[1]/div/div[2]/div[1]/div/div/div/div[5]/div[4]/div/div/div/div/div/input    ${customer}
-    sleep    1s
+    Run Keyword If    '${customer}'!=''    sleep    1s
     Run Keyword If    '${customer}'!=''    Click Element    xpath=/html/body/div[not(contains(@style,'display: none'))]//div[contains(@class,'flex-auto label-box') and text()='${customer}']
     [Teardown]    sleep    500ms
 
@@ -403,8 +399,6 @@ Resource          BaseResource.txt
     操作1    ${arg8}
     客服1    ${arg9}
     业务来源    ${arg10}    ${arg11}
-    #预付地点    ${arg3}
-    #到付地点    ${arg3}
 
 录入数据3
     [Arguments]    ${arg12}    ${arg13}    ${arg14}    ${arg15}    ${arg16}    ${arg17}=
@@ -414,6 +408,8 @@ Resource          BaseResource.txt
     ...    船公司、订舱代理、报关、车队、海外代理、地面服务
     揽货类型    ${arg12}
     付费方式    ${arg13}
+    #预付地点1    MALGRAT
+    #到付地点1    MALGRAT
     运输条款    CY-CY
     重量KGS    2
     货物种类    ${arg14}

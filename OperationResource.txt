@@ -10,8 +10,8 @@ Resource          BaseResource.txt
     [Documentation]    进入操作管理的操作订舱页面。
     左侧菜单主菜单    操作管理    #点击操作管理
     左侧菜单子菜单    订舱操作    #点击订舱操作
-    Wait Until Element Contains    xpath=//*[@id="main"]/div/div[3]/div/div/div/div[3]/div/div[2]/div/div/div[4]/div/div[2]/div[2]/table/thead/tr/th[4]/div    主单号    8s
-    [Teardown]    sleep    3s
+    等待下货纸数据加载
+    [Teardown]    sleep    1s
 
 订舱操作子菜单
     [Arguments]    ${button}
@@ -24,6 +24,9 @@ Resource          BaseResource.txt
     Click Element    xpath=//*[@id="main"]/div/div[3]/div/div/div/div[2]/div[2]/ul/li[1+${i}]/span    #点击托单接收
     [Teardown]    sleep    2s    # 没有什么可以定位的数据 只能休眠
 
+等待下货纸数据加载
+    Wait Until Element Contains    xpath=//*[@id="main"]/div/div[3]/div/div/div/div[3]/div/div[2]/div/div/div[4]/div/div[2]/div[2]/table/thead/tr/th[4]/div    主单号    10s
+
 托单接收外部按钮
     [Arguments]    ${button}
     [Documentation]    订舱操作-托单接收页面的外部按钮
@@ -33,6 +36,7 @@ Resource          BaseResource.txt
     \    ${text}    get text    xpath=//*[@id="main"]/div/div[3]/div/div/div/div[3]/div/div[2]/div/div/div[3]/div/div[1]/div[1]/button[1+${i}]
     \    Exit For Loop If    '${button}'=='${text}'
     Click Button    xpath=//*[@id="main"]/div/div[3]/div/div/div/div[3]/div/div[2]/div/div/div[3]/div/div[1]/div[1]/button[1+${i}]
+    Run Keyword If    '${button}'=='接收'    Wait Until Element Contains    xpath=/html/body/div[not(contains(@style,'display: none'))]/div/div/div[1]/div/span    接单成功
     [Teardown]    sleep    3s
 
 托单接收关键字检索
@@ -61,7 +65,7 @@ Resource          BaseResource.txt
 
 订舱操作下货纸选中框
     [Documentation]    在海运出口页面，点击一条下货纸的选中框。
-    sleep    2s
+    sleep    1s
     Click Element    xpath=//*[@id="main"]/div/div[3]/div/div/div/div[3]/div/div[2]/div/div/div[4]/div/div[2]/div[3]/table/tbody/tr[1]/td[2]/div/label
     [Teardown]    sleep    500ms
 
@@ -77,6 +81,7 @@ Resource          BaseResource.txt
     Run Keyword If    '${button}'=='接收并打开'    Wait Until Element Is Visible    xpath=//*[@id="main"]/div/div[3]/div/div/div/div[3]/div/div[2]/div[2]/div/div[1]/button[1+${i}]
     Click Element    xpath=//*[@id="main"]/div/div[3]/div/div/div/div[3]/div/div[2]/div[2]/div/div[1]/button[1+${i}]
     Run Keyword If    '${button}'=='接收并打开'    Wait Until Page Contains    下货纸
+    Run Keyword If    '${button}'=='接收'    Wait Until Element Contains    xpath=/html/body/div[not(contains(@style,'display: none'))]/div/div/div[1]/div/span    接单成功
     [Teardown]    sleep    3s
 
 托单接收点击列表
@@ -104,6 +109,7 @@ Resource          BaseResource.txt
 下货纸内部保存
     [Documentation]    订舱操作-海运出口-打开一个下货纸，内部 保存 按钮。
     Click Button    xpath=//*[@id="main"]/div/div[3]/div/div/div/div[3]/div/div[2]/div[2]/div/div[1]/span/button
+    Wait Until Element Contains    xpath=/html/body/div[not(contains(@style,'display: none'))]/div/div[1]/p    保存成功
     [Teardown]    sleep    2s
 
 下货纸内部账单
@@ -164,6 +170,7 @@ Resource          BaseResource.txt
     新增船期预计离港日选择    ${arg3}
     新增船期船代选择    ${arg4}
     新增船期提交确认
+    Wait Until Element Contains    xpath=/html/body/div[not(contains(@style,'display: none'))]/div/div/div[1]/div/span    操作成功
     [Teardown]    sleep    1500ms
 
 新增船期船名选择

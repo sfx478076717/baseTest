@@ -19,6 +19,7 @@ Resource          BaseResource.txt
     \    ${text}    Get Text    xpath=//*[@id="main"]/div/div[3]/div/div/div/div[3]/div/div[2]/div/div/div[4]/div/div[1]/div[1]/div[5]/div[2]/ul/li[1+${i}]
     \    Exit For Loop If    '${text}'=='${button}'    #如果当前循环是传入的按钮名 就退出循环 ${i}的值保留
     Click Element    xpath=//*[@id="main"]/div/div[3]/div/div/div/div[3]/div/div[2]/div/div/div[4]/div/div[1]/div[1]/div[5]/div[2]/ul/li[1+${i}]
+    Run Keyword If    '账单'=='${button}'    Wait Until Element Contains    xpath=//*[@id="main"]/div/div[3]/div/div/div[2]/div/div[2]/div[2]/table/thead/tr/th[4]/div    账单号    10s
     [Teardown]    sleep    1s
 
 账单管理普通按钮
@@ -43,6 +44,7 @@ Resource          BaseResource.txt
     Click Button    xpath=//*[@id="main"]/div/div[3]/div/div/div[2]/div/div[1]/div/div[2]/div[1+${i}]/div[1]/button
     sleep    1s
     Click Button    xpath=//*[@id="main"]/div/div[3]/div/div/div[2]/div/div[1]/div/div[2]/div[1+${i}]/div[2]/div/div[2]/div[2]/button[2]
+    Wait Until Element Contains    xpath=/html/body/div[not(contains(@style,'display: none'))]/div/div/div[1]/div/span    操作成功！
     [Teardown]    sleep    1s
 
 新增账单上方初始按钮
@@ -59,6 +61,7 @@ Resource          BaseResource.txt
 新增账单保存账单按钮
     [Documentation]    新增账单页面，上方的按钮，保存之后出现的按钮。保存账单
     Click Button    xpath=//*[@id="main"]/div/div[3]/div/div/div/div[1]/div[1]/div/div/button
+    Wait Until Element Contains    xpath=/html/body/div[not(contains(@style,'display: none'))]/div/div[1]/div/div[2]    保存账单成功
     [Teardown]    sleep    1s
 
 新增账单删除账单按钮
@@ -96,71 +99,62 @@ Resource          BaseResource.txt
 账单明细选择费种
     [Arguments]    ${rowNum}    ${text}=海运费
     [Documentation]    新增账单页面，账单明细第一条选择费种。
-    #Click Element    xpath=//*[@id="main"]/div/div[3]/div/div/div/div[2]/div/div/div[3]/div[3]/table/tbody/tr/td[3]/div/div/div/input[2]
-    #Input Text    xpath=//*[@id="main"]/div/div[3]/div/div/div/div[2]/div/div/div[3]/div[3]/table/tbody/tr/td[3]/div/div/div/input[2]    ${text}
-    #sleep    1s
-    #Click Element    xpath=(.//*[normalize-space(text()) and normalize-space(.)='无匹配数据'])[41]/following::li[1]
     Click Element    xpath=/html/body/div[not(contains(@style,'display: none'))]//li[contains(@class,'ivu-select-item') and text()='${text}']
     [Teardown]    sleep    1s
 
 账单明细选择币种
     [Arguments]    ${rowNum}    ${text}=CNY
     [Documentation]    新增账单页面，账单明细第一条选择币种。
-    Run Keyword If    '${rowNum}' == 1    Click Element    xpath=//*[@id="main"]/div/div[3]/div/div/div/div[2]/div/div/div[3]/div[3]/table/tbody/tr/td[4]/div/div/div/input[2]
-    Run Keyword If    '${rowNum}' != 1    Click Element    xpath=//*[@id="main"]/div/div[3]/div/div/div/div[2]/div/div/div[3]/div[3]/table/tbody/tr[${rowNum}]/td[4]/div/div/div/input[2]
-    #Input Text    xpath=//*[@id="main"]/div/div[3]/div/div/div/div[2]/div/div/div[3]/div[3]/table/tbody/tr/td[4]/div/div/div/input[2]    ${text}
+    Run Keyword If    '${rowNum}' == '1'    Click Element    xpath=//*[@id="main"]/div/div[3]/div/div/div/div[2]/div/div/div[3]/div[3]/table/tbody/tr/td[4]/div/div/div/div/div/div/input[2]
+    Run Keyword If    '${rowNum}' != '1'    Click Element    xpath=//*[@id="main"]/div/div[3]/div/div/div/div[2]/div/div/div[3]/div[3]/table/tbody/tr[${rowNum}]/td[4]/div/div/div/div/div/div/input[2]
     sleep    1s
-    #Click Element    xpath=(.//*[normalize-space(text()) and normalize-space(.)='USD'])[2]/following::li[1]    #xpath=/html/body/div[101]/ul[2]/li[3]
     Click Element    xpath=/html/body/div[not(contains(@style,'display: none'))]//li[contains(@class,'ivu-select-item') and contains(text(),'${text}')]
     [Teardown]    sleep    1s
 
 账单明细选择计量单位
     [Arguments]    ${rowNum}    ${text}=票
     [Documentation]    新增账单页面，账单明细第一条选择计量单位。
-    Run Keyword If    '${rowNum}' == 1    Click Element    xpath=//*[@id="main"]/div/div[3]/div/div/div/div[2]/div/div/div[3]/div[3]/table/tbody/tr/td[6]/div/div/div/input[2]
-    Run Keyword If    '${rowNum}' != 1    Click Element    xpath=//*[@id="main"]/div/div[3]/div/div/div/div[2]/div/div/div[3]/div[3]/table/tbody/tr[${rowNum}]/td[6]/div/div/div/input[2]
-    #Input Text    xpath=//*[@id="main"]/div/div[3]/div/div/div/div[2]/div/div/div[3]/div[3]/table/tbody/tr/td[6]/div/div/div/input[2]    ${text}
+    Run Keyword If    '${rowNum}' == '1'    Click Element    xpath=//*[@id="main"]/div/div[3]/div/div/div/div[2]/div/div/div[3]/div[3]/table/tbody/tr/td[6]/div/div/div/input[2]
+    Run Keyword If    '${rowNum}' != '1'    Click Element    xpath=//*[@id="main"]/div/div[3]/div/div/div/div[2]/div/div/div[3]/div[3]/table/tbody/tr[${rowNum}]/td[6]/div/div/div/input[2]
     sleep    1s
-    #Click Element    xpath=(.//*[normalize-space(text()) and normalize-space(.)='无匹配数据'])[43]/following::li[1]    #xpath=/html/body/div[102]/ul[2]/li
     Click Element    xpath=/html/body/div[not(contains(@style,'display: none'))]/ul[2]/li[contains(@class,'ivu-select-item') and contains(text(),'${text}')]
     [Teardown]    sleep    1s
 
 账单明细输入数量
     [Arguments]    ${rowNum}    ${number}=1
     [Documentation]    新增账单页面，账单明细第一条输入数量。
-    Run Keyword If    '${rowNum}' == 1    Input Text    xpath=//*[@id="main"]/div/div[3]/div/div/div/div[2]/div/div/div[3]/div[3]/table/tbody/tr/td[7]/div/div/div/input    ${number}
-    Run Keyword If    '${rowNum}' != 1    Input Text    xpath=//*[@id="main"]/div/div[3]/div/div/div/div[2]/div/div/div[3]/div[3]/table/tbody/tr[${rowNum}]/td[7]/div/div/div/input    ${number}
+    Run Keyword If    '${rowNum}' == '1'    Input Text    xpath=//*[@id="main"]/div/div[3]/div/div/div/div[2]/div/div/div[3]/div[3]/table/tbody/tr/td[7]/div/div/div/div/div/div/input    ${number}
+    Run Keyword If    '${rowNum}' != '1'    Input Text    xpath=//*[@id="main"]/div/div[3]/div/div/div/div[2]/div/div/div[3]/div[3]/table/tbody/tr[${rowNum}]/td[7]/div/div/div/div/div/div/input    ${number}
     [Teardown]    sleep    1s
 
 账单明细输入单价
     [Arguments]    ${rowNum}    ${singlePrice}=1
     [Documentation]    新增账单页面，账单明细第一条输入单价。
-    #Click Element    xpath=//*[@id="main"]/div/div[3]/div/div/div/div[2]/div/div/div[3]/div[3]/table/tbody/tr/td[8]/div/div/div/input
-    Run Keyword If    '${rowNum}' == 1    Input Text    xpath=//*[@id="main"]/div/div[3]/div/div/div/div[2]/div/div/div[3]/div[3]/table/tbody/tr/td[8]/div/div/div/input    ${singlePrice}
-    Run Keyword If    '${rowNum}' != 1    Input Text    xpath=//*[@id="main"]/div/div[3]/div/div/div/div[2]/div/div/div[3]/div[3]/table/tbody/tr[${rowNum}]/td[8]/div/div/div/input    ${singlePrice}
+    Run Keyword If    '${rowNum}' == '1'    Input Text    xpath=//*[@id="main"]/div/div[3]/div/div/div/div[2]/div/div/div[3]/div[3]/table/tbody/tr/td[8]/div/div/div/input    ${singlePrice}
+    Run Keyword If    '${rowNum}' != '1'    Input Text    xpath=//*[@id="main"]/div/div[3]/div/div/div/div[2]/div/div/div[3]/div[3]/table/tbody/tr[${rowNum}]/td[8]/div/div/div/input    ${singlePrice}
     [Teardown]    sleep    1s
 
 账单明细选择应收
     [Arguments]    ${rowNum}
     [Documentation]    新增账单页面，账单明细第一条选择应收。
-    Run Keyword If    '${rowNum}' == 1    Click Element    xpath=//*[@id="main"]/div/div[3]/div/div/div/div[2]/div/div/div[3]/div[3]/table/tbody/tr/td[9]/div/div/div/div/div/div/input
-    Run Keyword If    '${rowNum}' != 1    Click Element    xpath=//*[@id="main"]/div/div[3]/div/div/div/div[2]/div/div/div[3]/div[3]/table/tbody/tr[${rowNum}]/td[9]/div/div/div/div/div/div/input
+    Run Keyword If    '${rowNum}' == '1'    Click Element    xpath=//*[@id="main"]/div/div[3]/div/div/div/div[2]/div/div/div[3]/div[3]/table/tbody/tr/td[9]/div/div/div/div/div/div/input
+    Run Keyword If    '${rowNum}' != '1'    Click Element    xpath=//*[@id="main"]/div/div[3]/div/div/div/div[2]/div/div/div[3]/div[3]/table/tbody/tr[${rowNum}]/td[9]/div/div/div/div/div/div/input
     [Teardown]    sleep    1s
 
 账单明细选择应付
     [Arguments]    ${rowNum}
     [Documentation]    新增账单页面，账单明细第一条选择应付。
-    Run Keyword If    '${rowNum}' == 1    Click Element    xpath=//*[@id="main"]/div/div[3]/div/div/div/div[2]/div/div/div[3]/div[3]/table/tbody/tr/td[10]/div/div/div/div/div/div/input
-    Run Keyword If    '${rowNum}' != 1    Click Element    xpath=//*[@id="main"]/div/div[3]/div/div/div/div[2]/div/div/div[3]/div[3]/table/tbody/tr[${rowNum}]/td[10]/div/div/div/div/div/div/input
+    Run Keyword If    '${rowNum}' == '1'    Click Element    xpath=//*[@id="main"]/div/div[3]/div/div/div/div[2]/div/div/div[3]/div[3]/table/tbody/tr/td[10]/div/div/div/div/div/div/input
+    Run Keyword If    '${rowNum}' != '1'    Click Element    xpath=//*[@id="main"]/div/div[3]/div/div/div/div[2]/div/div/div[3]/div[3]/table/tbody/tr[${rowNum}]/td[10]/div/div/div/div/div/div/input
     [Teardown]    sleep    1s
 
 账单明细选择客户
     [Arguments]    ${rowNum}    ${customer}=
     [Documentation]    新增账单页面，账单明细第一条选择客户。
-    Run Keyword If    '${rowNum}' == 1    Click Element    xpath=//*[@id="main"]/div/div[3]/div/div/div/div[2]/div/div/div[3]/div[3]/table/tbody/tr/td[11]/div/div/div/div/input
-    Run Keyword If    '${rowNum}' == 1    Input Text    xpath=//*[@id="main"]/div/div[3]/div/div/div/div[2]/div/div/div[3]/div[3]/table/tbody/tr/td[11]/div/div/div/div/input    ${customer}
-    Run Keyword If    '${rowNum}' != 1    Click Element    xpath=//*[@id="main"]/div/div[3]/div/div/div/div[2]/div/div/div[3]/div[3]/table/tbody/tr[${rowNum}]/td[11]/div/div/div/div/input
-    Run Keyword If    '${rowNum}' != 1    Input Text    xpath=//*[@id="main"]/div/div[3]/div/div/div/div[2]/div/div/div[3]/div[3]/table/tbody/tr[${rowNum}]/td[11]/div/div/div/div/input    ${customer}
+    Run Keyword If    '${rowNum}' == '1'    Click Element    xpath=//*[@id="main"]/div/div[3]/div/div/div/div[2]/div/div/div[3]/div[3]/table/tbody/tr/td[11]/div/div/div/div/div/div/div/input
+    Run Keyword If    '${rowNum}' == '1'    Input Text    xpath=//*[@id="main"]/div/div[3]/div/div/div/div[2]/div/div/div[3]/div[3]/table/tbody/tr/td[11]/div/div/div/div/div/div/div/input    ${customer}
+    Run Keyword If    '${rowNum}' != '1'    Click Element    xpath=//*[@id="main"]/div/div[3]/div/div/div/div[2]/div/div/div[3]/div[3]/table/tbody/tr[${rowNum}]/td[11]/div/div/div/div/div/div/div/input
+    Run Keyword If    '${rowNum}' != '1'    Input Text    xpath=//*[@id="main"]/div/div[3]/div/div/div/div[2]/div/div/div[3]/div[3]/table/tbody/tr[${rowNum}]/td[11]/div/div/div/div/div/div/div/input    ${customer}
     sleep    1s
     Click Element    xpath=/html/body/div[not(contains(@style,'display: none'))]//div[@class='flex-auto label-box' and text()='${customer}']
 

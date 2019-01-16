@@ -4,6 +4,9 @@ Library           Screenshot
 Resource          BaseResource.txt
 
 *** Keywords ***
+等待实收实付页面加载
+    Wait Until Element Contains    xpath=//*[@id="main"]/div/div[3]/div/div/div/div[3]/div/div[1]/div/div[2]/div[2]/table/thead/tr/th[4]/div    结算客户    10s
+
 实收实付选择客户
     [Arguments]    ${name}
     [Documentation]    实收实付管理页面，左侧客户菜单栏选择。
@@ -13,7 +16,8 @@ Resource          BaseResource.txt
     \    ${text}    Get Text    xpath=//*[@id="main"]/div/div[3]/div/div/div/div[2]/div[2]/div/ul/li[1+${i}]/span
     \    Exit For Loop If    '${name}'=='${text}'
     Click Element    xpath=//*[@id="main"]/div/div[3]/div/div/div/div[2]/div[2]/div/ul/li[1+${i}]/span
-    [Teardown]    sleep    3s
+    等待实收实付页面加载
+    [Teardown]    sleep    1s
 
 实收实付确认按钮
     [Arguments]    ${button}

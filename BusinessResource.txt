@@ -8,8 +8,8 @@ Resource          BaseResource.txt
     [Documentation]    进入商务管理的商务订舱页面。
     左侧菜单主菜单    商务管理    #点击商务管理
     左侧菜单子菜单    商务订舱    #点击商务订舱
-    Wait Until Page Contains    海运出口(全部)
-    [Teardown]    sleep    2s
+    Wait Until Element Contains    xpath=//*[@id="main"]/div/div[3]/div/div/div/div[3]/div/div[2]/div/div[2]/div[2]/table/thead/tr/th[2]/div    编号    10s
+    [Teardown]    sleep    1s
 
 商务订舱海运出口待接收
     [Documentation]    点击商务订舱子菜单-海运出口的子菜单-待接收 按钮。
@@ -46,6 +46,9 @@ Resource          BaseResource.txt
     \    ${text}    Get Text    xpath=//*[@id="main"]/div/div[3]/div/div/div[1]/button[${i}+1]
     \    Exit For Loop If    '${text}'=='${button}'    #如果当前循环是传入的按钮名 就退出循环 ${i}的值保留
     Click Button    xpath=//*[@id="main"]/div/div[3]/div/div/div[1]/button[${i}+1]
+    Run Keyword If    '${button}'=='接单'    Wait Until Element Contains    xpath=/html/body/div[not(contains(@style,'display: none'))]/div/div[1]/p    接单成功
+    Run Keyword If    '${button}'=='提交'    Wait Until Element Contains    xpath=/html/body/div[not(contains(@style,'display: none'))]/div/div[1]/p    提交成功！
+    Run Keyword If    '${button}'=='撤回提交'    Wait Until Element Contains    xpath=/html/body/div[not(contains(@style,'display: none'))]/div/div[1]/p    撤回成功！
     [Teardown]    sleep    2s
 
 商务订舱内部保存
@@ -54,6 +57,7 @@ Resource          BaseResource.txt
     ...    因为会有红点，所以和其他按钮样式不一样，单拉出来。
     ${text}    Get Text    xpath=//*[@id="main"]/div/div[3]/div/div/div[1]/span/button
     Click Button    xpath=//*[@id="main"]/div/div[3]/div/div/div[1]/span/button
+    Wait Until Element Contains    xpath=/html/body/div[not(contains(@style,'display: none'))]/div/div[1]/p    保存成功
     [Teardown]    sleep    2s
 
 商务订舱约号输入
@@ -75,3 +79,10 @@ Resource          BaseResource.txt
     \    商务订舱内部按钮    返回
     \    页面刷新
     [Teardown]    sleep    2s
+
+商务订舱到付地点选择
+    [Arguments]    ${text}=
+    Click Element    xpath=//*[@id="main"]/div/div[3]/div/div/div[2]/div/div/div[1]/div/div[2]/div[1]/div[3]/div/div/div/div[4]/div/div/div[1]/div/div/input
+    Input Text    xpath=//*[@id="main"]/div/div[3]/div/div/div[2]/div/div/div[1]/div/div[2]/div[1]/div[3]/div/div/div/div[4]/div/div/div[1]/div/div/input    ${text}
+    sleep    2s
+    Click Element    xpath=/html/body/div[not(contains(@style,'display: none'))]//div[@class='flex-auto label-box' and text()='${text}']

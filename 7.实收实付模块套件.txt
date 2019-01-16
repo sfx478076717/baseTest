@@ -13,7 +13,8 @@ Resource          ReallyPayResource.txt
     login    http://27.223.104.6:32880/#/login    shanfaxian    123456    实习测试公司
     左侧菜单主菜单    财务管理
     左侧菜单子菜单    实收实付管理
-    #实收实付选择客户    robot
+    等待实收实付页面加载
+    实收实付选择客户    robot
     实收实付确认按钮    收付款确认
     ${number}    Set Variable    10000918
     收付款确认输入联系单号    ${number}
@@ -33,6 +34,7 @@ Resource          ReallyPayResource.txt
     login    http://27.223.104.6:32880/#/login    shanfaxian    123456    实习测试公司
     左侧菜单主菜单    财务管理
     左侧菜单子菜单    实收实付管理
+    等待实收实付页面加载
     #实收实付选择客户    robot
     实收实付确认按钮    收付款确认
     ${number}    Set Variable    10000674
@@ -53,6 +55,7 @@ Resource          ReallyPayResource.txt
     login    http://27.223.104.6:32880/#/login    shanfaxian    123456    实习测试公司
     左侧菜单主菜单    财务管理
     左侧菜单子菜单    实收实付管理
+    等待实收实付页面加载
     实收实付确认按钮    按开票信息确认
     ${billNum}    Set Variable    25    # 27 28 29
     按开票信息确认发票检索    ${billNum}
@@ -70,6 +73,7 @@ Resource          ReallyPayResource.txt
     login    http://27.223.104.6:32880/#/login    shanfaxian    123456    实习测试公司
     左侧菜单主菜单    财务管理
     左侧菜单子菜单    实收实付管理
+    等待实收实付页面加载
     实收实付确认按钮    按开票信息确认
     ${billNum}    Set Variable    1100001
     按开票信息确认支票检索    ${billNum}
@@ -81,3 +85,5 @@ Resource          ReallyPayResource.txt
     实收实付验证结算单号    ${settlementId}
     左侧菜单子菜单    收费管理
     验证付费结算单是否实付    Y
+
+转账测试

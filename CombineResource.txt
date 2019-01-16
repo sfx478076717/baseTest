@@ -19,7 +19,7 @@ Resource          ReallyPayResource.txt
     #销售新增托单
     进入销售订舱页面
     销售订舱外部按钮    新增
-    录入数据1    ADENC    ADENC    ADENC    加勒比    ${arg1}
+    录入数据1    ESMAM    ESMAM    ESMAM    南欧    ${arg1}
     录入数据2    ${arg2}    ${arg3}    ${arg4}    ${arg5}    业务员
     录入数据3    自揽货    PP    冻柜    ${arg6}    ${arg7}
     销售订舱内部保存托单
@@ -36,9 +36,9 @@ Resource          ReallyPayResource.txt
     #点击业务流水号 使左右移动可用
     Click Element    xpath=//*[@id="main"]/div/div[3]/div/div/div/div[3]/div/div[2]/div/div/div[4]/div/div[2]/div[3]/table/tbody/tr[1]/td[4]
     ${end}    列表数据验证    4    客户    ${customer}
-    ${end}    列表数据验证    ${end}    装货港    ENCAMP
-    ${end}    列表数据验证    ${end}    卸货港    ENCAMP
-    ${end}    列表数据验证    ${end}    船名    KYPARSSIA
+    ${end}    列表数据验证    ${end}    装货港    MALGRAT
+    ${end}    列表数据验证    ${end}    卸货港    MALGRAT
+    ${end}    列表数据验证    ${end}    船名    TBN
     ${end}    列表数据验证    ${end}    航次    987564
     ${end}    列表数据验证    ${end}    商务    ${businessMan}
     ${end}    列表数据验证    ${end}    业务流水号    ${businessNum}
@@ -51,6 +51,7 @@ Resource          ReallyPayResource.txt
     商务订舱外部按钮    打开
     商务订舱内部按钮    接单
     商务订舱约号输入    ${businessNum}    #约号默认为业务流水号
+    商务订舱到付地点选择    MALGRAT
     商务订舱内部保存
     商务订舱内部按钮    提交
     选择页面标签退出    海运出口-商务编辑
@@ -72,7 +73,7 @@ Resource          ReallyPayResource.txt
     [Documentation]    船名、船代
     #操作编辑船期
     左侧菜单子菜单    订舱操作
-    sleep    10s
+    等待下货纸数据加载
     订舱操作下货纸选中框
     订舱操作海运出口按钮    打开
     下货纸主单号输入
@@ -85,7 +86,7 @@ Resource          ReallyPayResource.txt
     [Documentation]    客户简称、业务流水号、客户、商务。
     #生成收费联系单
     左侧菜单子菜单    订舱操作
-    sleep    10s
+    等待下货纸数据加载
     下货纸数据验证    ${businessNum}    ${customer}    ${businessMan}
     订舱操作下货纸选中框
     订舱操作点击账单按钮
@@ -109,7 +110,7 @@ Resource          ReallyPayResource.txt
     [Documentation]    客户简称、业务流水号、客户、商务。
     #生成付费联系单
     左侧菜单子菜单    订舱操作
-    sleep    10s
+    等待下货纸数据加载
     下货纸数据验证    ${businessNum}    ${customer}    ${businessMan}
     订舱操作下货纸选中框
     订舱操作点击账单按钮
@@ -137,6 +138,7 @@ Resource          ReallyPayResource.txt
 收费申请开发票
     #收费联系单申请开票
     左侧菜单子菜单    收费管理
+    等待收付费页面加载
     ${settlementId}    收付费管理获取结算单号
     收付费管理选中框
     收费管理二次确认按钮    申请开票
@@ -149,6 +151,7 @@ Resource          ReallyPayResource.txt
     [Arguments]    ${abbreviation}
     #付费单申请开票
     左侧菜单子菜单    付费管理
+    等待收付费页面加载
     ${settlementId}    收付费管理获取结算单号
     收付费管理客户菜单    ${abbreviation}
     收付费管理选中框
@@ -189,6 +192,7 @@ Resource          ReallyPayResource.txt
     开具普通支票确认
     sleep    2s
     send    {ESC}
+    Wait Until Element Contains    xpath=/html/body/div[not(contains(@style,'display: none'))]/div/div/div[1]/div/span    操作成功
     sleep    1s
     选择页面标签退出    支票管理
 
@@ -196,6 +200,7 @@ Resource          ReallyPayResource.txt
     [Arguments]    ${settlementId}    ${abbreviation}
     #实收落帐
     左侧菜单子菜单    实收实付管理
+    等待实收实付页面加载
     实收实付确认按钮    收付款确认
     收付款确认输入联系单号    ${settlementId}
     收付款确认点击收费
@@ -213,6 +218,7 @@ Resource          ReallyPayResource.txt
     [Arguments]    ${settlementId}    ${abbreviation}
     #实付落帐
     左侧菜单子菜单    实收实付管理
+    等待实收实付页面加载
     实收实付确认按钮    收付款确认
     收付款确认输入联系单号    ${settlementId}
     收付款确认点击付费

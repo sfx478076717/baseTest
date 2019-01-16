@@ -5,18 +5,21 @@ Library           AutoItLibrary
 Resource          BaseResource.txt
 
 *** Keywords ***
+等待收付费页面加载
+    Wait Until Element Contains    xpath=//*[@id="main"]/div/div[3]/div/div/div[1]/div[3]/div/div[1]/div/div[2]/div[2]/table/thead/tr/th[5]/div    结算单号    10s
+
 收付费管理客户菜单
     [Arguments]    ${name}
     [Documentation]    收费管理、付费管理页面的左侧客户选择栏。
     ...
     ...    “全部”，以及客户简称如“robot”
-    sleep    2s
     Click Element    xpath=//*[@id="main"]/div/div[3]/div/div/div[1]/div[2]/div[2]/div/ul//span[text()='${name}']
+    等待收付费页面加载
     #: FOR    ${i}    IN RANGE    10
     #    ${text}    get text    xpath=//*[@id="main"]/div/div[3]/div/div/div[1]/div[2]/div[2]/div/ul/li[1+${i}]/span
     #    Exit For Loop If    '${name}'=='${text}'
     #Click Element    xpath=//*[@id="main"]/div/div[3]/div/div/div[1]/div[2]/div[2]/div/ul/li[1+${i}]/span
-    [Teardown]    sleep    3s
+    [Teardown]    sleep    1s
 
 收付费管理选中框
     [Documentation]    收付费管理页面，联系单选择框，顺带获取联系单号。
@@ -65,6 +68,8 @@ Resource          BaseResource.txt
     Click Element    xpath=//*[@id="main"]/div/div[3]/div/div/div[1]/div[3]/div/div[1]/div/div[1]/div/div[7+${i}]/div[1]/button/span    #点击按钮
     sleep    1s
     Click Element    xpath=//*[@id="main"]/div/div[3]/div/div/div[1]/div[3]/div/div[1]/div/div[1]/div/div[7+${i}]/div[2]/div/div[2]/div[2]/button[2]/span    #二次确认
+    Run Keyword If    '申请开票'=='${button}'    Wait Until Element Contains    xpath=/html/body/div[not(contains(@style,'display: none'))]/div/div/div[1]/div/span    申请开票成功
+    Run Keyword If    '取消审批'=='${button}'    Wait Until Element Contains    xpath=/html/body/div[not(contains(@style,'display: none'))]/div/div/div[1]/div/span    操作成功！
     [Teardown]    sleep    1s
 
 付费管理二次确认按钮
@@ -78,6 +83,8 @@ Resource          BaseResource.txt
     Click Element    xpath=//*[@id="main"]/div/div[3]/div/div/div[1]/div[3]/div/div[1]/div/div[1]/div/div[6+${i}]/div[1]/button/span
     sleep    1s
     Click Element    xpath=//*[@id="main"]/div/div[3]/div/div/div[1]/div[3]/div/div[1]/div/div[1]/div/div[6+${i}]/div[2]/div/div[2]/div[2]/button[2]/span
+    Run Keyword If    '申请开票'=='${button}'    Wait Until Element Contains    xpath=/html/body/div[not(contains(@style,'display: none'))]/div/div/div[1]/div/span    申请开票成功
+    Run Keyword If    '取消审批'=='${button}'    Wait Until Element Contains    xpath=/html/body/div[not(contains(@style,'display: none'))]/div/div/div[1]/div/span    操作成功！
     [Teardown]    sleep    1s
 
 发票继续申请
@@ -203,18 +210,19 @@ Resource          BaseResource.txt
     ...
     ...    这是第二种不通过金税卡开票。
     #点击确定
-    Click Element    xpath=/html/body/div[not(contains(@style,'display: none'))]/div[2]/div[not(contains(@style,'display: none'))]/div/div[3]/div/button[3]/span    #xpath=(.//*[normalize-space(text()) and normalize-space(.)='普票换抬头'])[2]/following::span[1]
+    Click Element    xpath=/html/body/div[not(contains(@style,'display: none'))]/div[2]/div[not(contains(@style,'display: none'))]/div/div[3]/div/button[3]/span
     sleep    1s
     #开票信息确认
-    Click Element    xpath=/html/body/div[not(contains(@style,'display: none'))]/div[2]/div[not(contains(@style,'display: none'))]/div/div/div/div[3]/button[2]/span    #xpath=(.//*[normalize-space(text()) and normalize-space(.)='取消'])[35]/following::span[1]
+    Click Element    xpath=/html/body/div[not(contains(@style,'display: none'))]/div[2]/div[not(contains(@style,'display: none'))]/div/div/div/div[3]/button[2]/span
     sleep    1s
     #选择发票号
-    Click Element    xpath=/html/body/div[not(contains(@style,'display: none'))]/div[2]/div[not(contains(@style,'display: none'))]/div/div[2]/div/div/div[4]/div/div[2]/div/div/div[2]/div/div/div/i    #xpath=(.//*[normalize-space(text()) and normalize-space(.)='选择起始发票号码'])[3]/following::i[1]
+    Click Element    xpath=/html/body/div[not(contains(@style,'display: none'))]/div[2]/div[not(contains(@style,'display: none'))]/div/div[2]/div/div/div[4]/div/div[2]/div/div/div[2]/div/div/div/i
     sleep    1s
-    Click Element    xpath=/html/body/div[not(contains(@style,'display: none'))]/ul[2]/div/li[1]/div/div[1]    #xpath=(.//*[normalize-space(text()) and normalize-space(.)='无匹配数据'])[43]/following::div[3]
+    Click Element    xpath=/html/body/div[not(contains(@style,'display: none'))]/ul[2]/div/li[1]/div/div[1]
     sleep    1s
     #点击确定
-    Click Element    xpath=/html/body/div[not(contains(@style,'display: none'))]/div[2]/div[not(contains(@style,'display: none'))]/div/div[2]/div/div/div[4]/div/div[2]/div/div/div[3]/div/button[2]/span    #xpath=(.//*[normalize-space(text()) and normalize-space(.)='取消'])[32]/following::span[1]
+    Click Element    xpath=/html/body/div[not(contains(@style,'display: none'))]/div[2]/div[not(contains(@style,'display: none'))]/div/div[2]/div/div/div[4]/div/div[2]/div/div/div[3]/div/button[2]/span
+    Wait Until Element Contains    xpath=/html/body/div[not(contains(@style,'display: none'))]/div/div/div[1]/div/span    操作成功
     [Teardown]    sleep    2s
 
 收费审批方案选择
@@ -223,6 +231,7 @@ Resource          BaseResource.txt
     ...    TODO：审批逻辑改变：当只有一条审批方案时会不弹出该审批方案，并自动调用该审批方案。
     Click Element    xpath=(.//*[normalize-space(text()) and normalize-space(.)='收费审核'])[1]/following::div[1]    #选择审批方案
     Click Element    xpath=(.//*[normalize-space(text()) and normalize-space(.)='取消'])[9]/following::span[1]    #点击确定审批方案
+    Wait Until Element Contains    xpath=/html/body/div[not(contains(@style,'display: none'))]/div/div/div[1]/div/span    操作成功！
     [Teardown]    sleep    1s
 
 付费审批方案选择
@@ -231,6 +240,7 @@ Resource          BaseResource.txt
     ...    TODO：审批逻辑改变：当只有一条审批方案时会不弹出该审批方案，并自动调用该审批方案。
     Click Element    xpath=(.//*[normalize-space(text()) and normalize-space(.)='付费审核'])[1]/following::div[1]    #选择审批方案
     Click Element    xpath=(.//*[normalize-space(text()) and normalize-space(.)='取消'])[9]/following::span[1]    #点击确定审批方案
+    Wait Until Element Contains    xpath=/html/body/div[not(contains(@style,'display: none'))]/div/div/div[1]/div/span    操作成功！
     [Teardown]    sleep    1s
 
 进入支票申请
