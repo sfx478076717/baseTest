@@ -11,7 +11,6 @@ Resource          FinancialSettlementResource.txt
 Resource          ApproveResource.txt
 Resource          ReallyPayResource.txt
 Resource          CombineResource.txt
-Library           ExcelLibrary
 
 *** Test Cases ***
 整合收费联系单
@@ -289,9 +288,9 @@ Library           ExcelLibrary
 
 收费联系单-Excel
     [Tags]    sys_admin
-    @{value1}    获取Excel数据    C:\\Users\\ziqi\\Desktop\\data2.xls    1
-    @{value2}    获取Excel数据    C:\\Users\\ziqi\\Desktop\\data2.xls    3
-    @{value3}    获取Excel数据    C:\\Users\\ziqi\\Desktop\\data2.xls    5
+    #@{value1}    获取Excel数据    C:\\Users\\ziqi\\Desktop\\data2.xls    1
+    #@{value2}    获取Excel数据    C:\\Users\\ziqi\\Desktop\\data2.xls    3
+    #@{value3}    获取Excel数据    C:\\Users\\ziqi\\Desktop\\data2.xls    5
     #用户登录
     login    @{value1}[0]    @{value1}[1]    @{value1}[2]    @{value1}[3]    #商务需要特别注意
     ${businessNum}    销售新增托单    @{value2}[0]    @{value2}[1]    @{value2}[2]    @{value2}[3]    @{value2}[4]

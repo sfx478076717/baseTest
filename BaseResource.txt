@@ -1,6 +1,5 @@
 *** Settings ***
 Library           Selenium2Library
-Library           ExcelLibrary
 
 *** Keywords ***
 打开浏览器
